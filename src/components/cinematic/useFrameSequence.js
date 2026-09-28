@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export function useFrameSequence(frameCount, framePrefix = '/frames/frame_', padLength = 3, extension = '.jpg') {
+export function useFrameSequence(frameCount, framePrefix = '/sequences/veda/frame_', padLength = 3, extension = '.jpg') {
   const [loaded, setLoaded] = useState(false);
   const framesRef = useRef([]);
 

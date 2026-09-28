@@ -6,6 +6,7 @@ const FrameSequenceCanvas = forwardRef(({
   onLoaded = () => {}
 }, ref) => {
   const canvasRef = useRef(null);
+  const debugRef = useRef(null);
   const { frames, loaded } = useFrameSequence(frameCount);
   
   // Track current frame state without React re-renders
@@ -14,53 +15,62 @@ const FrameSequenceCanvas = forwardRef(({
   useEffect(() => {
     if (loaded) {
       onLoaded();
-      drawFrame(0); // Draw initial frame
+      drawFrame(stateRef.current.progress); // Draw initial frame based on current progress
     }
   }, [loaded, onLoaded]);
 
   const drawFrame = (progress) => {
-    if (!loaded || !frames.length || !canvasRef.current) return;
+    if (!loaded || !frames || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
     // Calculate current frame index based on progress (0 to 1)
-    const frameIndex = Math.min(
-      frameCount - 1,
-      Math.max(0, Math.floor(progress * (frameCount - 1)))
-    );
+    const frameIndex = Math.floor(progress * (frameCount - 1));
+    
+    // Map frameIndex (0 to frameCount-1) to image array index (1 to frameCount)
+    // because useFrameSequence loads frame_001.jpg into index 1.
+    const imageIndex = Math.min(frameCount, Math.max(1, frameIndex + 1));
+
+    // Update debug overlay
+    if (debugRef.current) {
+      debugRef.current.innerText = `FRAME: ${String(imageIndex).padStart(3, '0')} / ${frameCount}\nPROGRESS: ${progress.toFixed(4)}\nSCROLLTRIGGER: ACTIVE`;
+    }
 
     // Only draw if the frame actually changed
-    if (frameIndex === stateRef.current.lastDrawnIndex) return;
-    stateRef.current.lastDrawnIndex = frameIndex;
+    if (imageIndex === stateRef.current.lastDrawnIndex) return;
+    stateRef.current.lastDrawnIndex = imageIndex;
 
-    const img = frames[frameIndex + 1]; // +1 because we loaded from frame 1
+    const img = frames[imageIndex];
     
     if (img && img.complete) {
       // Avoid resizing canvas on every frame to save performance, 
       // but ensure it matches current window size
       if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Use devicePixelRatio for better rendering on high-DPI displays
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        ctx.scale(dpr, dpr);
       }
 
-      const canvasRatio = canvas.width / canvas.height;
+      const canvasRatio = window.innerWidth / window.innerHeight;
       const imgRatio = img.width / img.height;
       
-      let drawWidth = canvas.width;
-      let drawHeight = canvas.height;
+      let drawWidth = window.innerWidth;
+      let drawHeight = window.innerHeight;
       let offsetX = 0;
       let offsetY = 0;
 
       if (canvasRatio > imgRatio) {
-        drawHeight = canvas.width / imgRatio;
-        offsetY = (canvas.height - drawHeight) / 2;
+        drawHeight = window.innerWidth / imgRatio;
+        offsetY = (window.innerHeight - drawHeight) / 2;
       } else {
-        drawWidth = canvas.height * imgRatio;
-        offsetX = (canvas.width - drawWidth) / 2;
+        drawWidth = window.innerHeight * imgRatio;
+        offsetX = (window.innerWidth - drawWidth) / 2;
       }
 
-      // ctx.clearRect(0, 0, canvas.width, canvas.height); // drawImage with cover effectively clears it
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     }
   };
@@ -85,8 +95,29 @@ const FrameSequenceCanvas = forwardRef(({
 
   return (
     <div className="veda-canvas-container">
-      <canvas ref={canvasRef} />
+      <canvas ref={canvasRef} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       <div className="veda-canvas-overlay" />
+      
+      {/* Critical Debug Overlay */}
+      <div 
+        ref={debugRef}
+        style={{
+          position: 'fixed',
+          top: '20px',
+          right: '20px',
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: '#00ff00',
+          padding: '10px 15px',
+          fontFamily: 'monospace',
+          fontSize: '14px',
+          zIndex: 9999,
+          pointerEvents: 'none',
+          whiteSpace: 'pre',
+          border: '1px solid #00ff00'
+        }}
+      >
+        FRAME: 001 / {frameCount}{'\n'}PROGRESS: 0.0000{'\n'}SCROLLTRIGGER: WAITING...
+      </div>
     </div>
   );
 });

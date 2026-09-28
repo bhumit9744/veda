@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
 
 :root {
-  --color-ivory: #F3F0E8;
-  --color-ivory-muted: rgba(243, 240, 232, 0.55);
-  --color-charcoal: #181815;
+  --color-ivory: #F4F1E8;
+  --color-ivory-muted: rgba(244, 241, 232, 0.55);
+  --color-charcoal: #171714;
   
   --font-sans: 'Inter', sans-serif;
   --font-serif: 'Cormorant Garamond', serif;
@@ -42,7 +42,7 @@ body {
 
 .veda-canvas-container canvas {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   object-fit: cover;
 }
 
@@ -52,8 +52,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Very subtle gradient just for baseline legibility, mostly silence */
-  background: radial-gradient(circle at center, rgba(24,24,21,0) 50%, rgba(24,24,21,0.15) 100%);
+  background: transparent;
   z-index: 2;
   pointer-events: none;
 }
@@ -68,6 +67,7 @@ body {
   pointer-events: none;
 }
 
+/* Masking for GSAP text reveals */
 .mask-container {
   overflow: hidden;
   display: inline-block;
@@ -75,150 +75,247 @@ body {
 }
 
 .mask-inner {
-  transform: translateY(110%); /* Default hidden state for GSAP to override */
+  transform: translateY(100%);
+  will-change: transform, opacity;
 }
 
-/* Base Typographic Hierarchy */
+/* ==========================================================================
+   TYPOGRAPHY SYSTEM
+   ========================================================================== */
+
 .eyebrow {
   font-family: var(--font-sans);
   font-size: 11px;
+  font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-ivory);
-  opacity: 0.7;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eyebrow-divider {
+  width: 1px;
+  height: 32px;
+  background-color: var(--color-ivory-muted);
 }
 
 .headline-text {
   font-family: var(--font-sans);
   font-weight: 400;
-  font-size: clamp(2.5rem, 4.5vw, 4.5rem); /* roughly 72px desktop */
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
   color: var(--color-ivory);
-  max-width: 600px;
+  max-width: 500px;
 }
 
 .body-text {
   font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.1vw, 1.125rem); /* 16-18px */
-  line-height: 1.6;
+  font-size: clamp(16px, 1.1vw, 17px);
+  line-height: 1.55;
   font-weight: 300;
-  color: var(--color-ivory-muted);
-  max-width: 420px;
+  color: rgba(244, 241, 232, 0.85); /* 85% opacity warm white */
+  max-width: 440px;
 }
 
-/* Layout Grid - Used by scenes */
+.signature-text {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2vw, 32px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-ivory);
+  letter-spacing: 0.02em;
+}
+
+.final-statement {
+  max-width: 400px;
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.55;
+  font-weight: 300;
+  color: var(--color-ivory);
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   LAYOUT GRID (12 Column)
+   ========================================================================== */
+
 .editorial-layer {
   position: absolute;
   inset: 0;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 20px;
-  padding: 0 8vw; /* Strict 8vw margin */
+  padding: 0 8vw;
   visibility: hidden;
 }
 
-/* We position elements absolutely within the grid or using grid lines */
-
-/* SCENE 1: LAND */
-.sc1-eyebrow {
-  grid-column: 1 / span 3;
+.pos-top-left {
+  grid-column: 1 / span 4;
   align-self: start;
-  margin-top: 15vh;
-}
-.sc1-headline {
-  grid-column: 1 / span 6;
-  align-self: center;
+  margin-top: 18vh;
 }
 
-/* SCENE 2: PLOT / BUNGALOW */
-.sc2-headline {
-  grid-column: 1 / span 6;
-  align-self: center;
-}
-
-/* SCENE 3: BUNGALOW (Body text) */
-.sc3-body {
-  grid-column: 8 / span 4; /* Shifted to right to balance bungalow on left/center */
+.pos-bottom-left {
+  grid-column: 1 / span 5;
   align-self: end;
-  margin-bottom: 20vh;
+  margin-bottom: 22vh;
 }
 
-/* SCENE 4: INTERIOR */
-.sc4-eyebrow {
-  grid-column: 1 / span 3;
-  align-self: start;
-  margin-top: 15vh;
-}
-.sc4-statement1, .sc4-statement2, .sc4-statement3 {
-  grid-column: 1 / span 6;
-  align-self: center;
-}
-/* Aligned with interior architectural lines visually */
-.sc4-statement2 {
-  grid-column: 7 / span 5;
-}
-.sc4-statement3 {
-  grid-column: 1 / span 6;
+.pos-bottom-right {
+  grid-column: 8 / span 5;
+  align-self: end;
+  margin-bottom: 22vh;
 }
 
-/* SCENE 6: MASTERPLAN */
-.sc6-eyebrow {
-  grid-column: 1 / span 3;
+.pos-top-right {
+  grid-column: 8 / span 5;
   align-self: start;
-  margin-top: 15vh;
+  margin-top: 22vh;
 }
-.sc6-h1 {
+
+.pos-center-left {
   grid-column: 1 / span 5;
   align-self: center;
-  transform: translateY(-10vh);
 }
-.sc6-h2 {
-  grid-column: 1 / span 5;
+
+.pos-interior-align {
+  /* Architectural vertical alignment (door/window frames) */
+  grid-column: 3 / span 5;
   align-self: center;
-  transform: translateY(-10vh);
+  transform: translateY(5vh);
 }
-.sc6-final {
-  grid-column: 7 / span 5;
-  align-self: end;
-  margin-bottom: 25vh;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.2rem, 1.8vw, 2.2rem);
-  line-height: 1.4;
+
+.abs-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ==========================================================================
+   COMPONENTS
+   ========================================================================== */
+
+.text-gradient-bg {
+  /* Extremely subtle localized gradient purely for contrast where needed */
+  background: radial-gradient(circle at 0% 100%, rgba(23,23,20,0.3) 0%, rgba(23,23,20,0) 70%);
+  border-radius: 8px;
+}
+
+.editorial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.editorial-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  color: var(--color-ivory-muted);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  transition: color 0.8s ease;
+}
+
+.editorial-list-item.active {
   color: var(--color-ivory);
 }
 
-/* Subtle Progress Indicator */
-.subtle-nav {
+.editorial-list-item span {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.editorial-list-item .line {
+  height: 1px;
+  width: 24px;
+  background-color: var(--color-ivory-muted);
+  margin-top: 10px;
+  transition: background-color 0.8s ease, width 0.8s ease;
+}
+
+.editorial-list-item.active .line {
+  background-color: var(--color-ivory);
+  width: 48px;
+}
+
+/* Micro Navigation */
+.micro-nav {
   position: fixed;
-  left: 8vw;
-  bottom: 8vh;
+  left: 2vw;
+  top: 50%;
+  transform: translateY(-50%);
   font-family: var(--font-sans);
   font-size: 10px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   color: var(--color-ivory-muted);
   z-index: 100;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  gap: 16px;
+  opacity: 0.6;
 }
-.subtle-nav span {
-  display: inline-block;
+
+.micro-nav .nav-line {
+  width: 1px;
+  height: 40px;
+  background-color: var(--color-ivory-muted);
 }
-.subtle-nav .active-num {
+
+.micro-nav .active-num {
   color: var(--color-ivory);
+  font-weight: 500;
 }
+
+.scroll-indicator {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ivory-muted);
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scroll-indicator .line {
+  width: 1px;
+  height: 40px;
+  background-color: var(--color-ivory-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 
 @media (max-width: 768px) {
   .editorial-layer {
     grid-template-columns: repeat(4, 1fr);
-    padding: 0 8vw;
+    padding: 0 6vw;
   }
-  [class*="sc"] {
-    grid-column: 1 / -1 !important;
+  .pos-top-left, .pos-bottom-left, .pos-bottom-right, .pos-top-right, .pos-center-left, .pos-interior-align {
+    grid-column: 1 / -1;
   }
-  .sc6-final {
-    margin-bottom: 15vh;
+  .headline-text {
+    font-size: clamp(34px, 8vw, 42px);
+    max-width: 100%;
+  }
+  .body-text {
+    font-size: 16px;
+  }
+  .micro-nav {
+    display: none;
   }
 }
