@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+  --color-ivory: #F3F0E8;
+  --color-ivory-muted: rgba(243, 240, 232, 0.55);
+  --color-charcoal: #181815;
+  
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-charcoal);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.veda-cinematic {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.veda-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.veda-canvas-container canvas {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.veda-canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Very subtle gradient just for baseline legibility, mostly silence */
+  background: radial-gradient(circle at center, rgba(24,24,21,0) 50%, rgba(24,24,21,0.15) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.veda-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.mask-container {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.mask-inner {
+  transform: translateY(110%); /* Default hidden state for GSAP to override */
+}
+
+/* Base Typographic Hierarchy */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  opacity: 0.7;
+}
+
+.headline-text {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(2.5rem, 4.5vw, 4.5rem); /* roughly 72px desktop */
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  max-width: 600px;
+}
+
+.body-text {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.1vw, 1.125rem); /* 16-18px */
+  line-height: 1.6;
+  font-weight: 300;
+  color: var(--color-ivory-muted);
+  max-width: 420px;
+}
+
+/* Layout Grid - Used by scenes */
+.editorial-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  padding: 0 8vw; /* Strict 8vw margin */
+  visibility: hidden;
+}
+
+/* We position elements absolutely within the grid or using grid lines */
+
+/* SCENE 1: LAND */
+.sc1-eyebrow {
+  grid-column: 1 / span 3;
+  align-self: start;
+  margin-top: 15vh;
+}
+.sc1-headline {
+  grid-column: 1 / span 6;
+  align-self: center;
+}
+
+/* SCENE 2: PLOT / BUNGALOW */
+.sc2-headline {
+  grid-column: 1 / span 6;
+  align-self: center;
+}
+
+/* SCENE 3: BUNGALOW (Body text) */
+.sc3-body {
+  grid-column: 8 / span 4; /* Shifted to right to balance bungalow on left/center */
+  align-self: end;
+  margin-bottom: 20vh;
+}
+
+/* SCENE 4: INTERIOR */
+.sc4-eyebrow {
+  grid-column: 1 / span 3;
+  align-self: start;
+  margin-top: 15vh;
+}
+.sc4-statement1, .sc4-statement2, .sc4-statement3 {
+  grid-column: 1 / span 6;
+  align-self: center;
+}
+/* Aligned with interior architectural lines visually */
+.sc4-statement2 {
+  grid-column: 7 / span 5;
+}
+.sc4-statement3 {
+  grid-column: 1 / span 6;
+}
+
+/* SCENE 6: MASTERPLAN */
+.sc6-eyebrow {
+  grid-column: 1 / span 3;
+  align-self: start;
+  margin-top: 15vh;
+}
+.sc6-h1 {
+  grid-column: 1 / span 5;
+  align-self: center;
+  transform: translateY(-10vh);
+}
+.sc6-h2 {
+  grid-column: 1 / span 5;
+  align-self: center;
+  transform: translateY(-10vh);
+}
+.sc6-final {
+  grid-column: 7 / span 5;
+  align-self: end;
+  margin-bottom: 25vh;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.2rem, 1.8vw, 2.2rem);
+  line-height: 1.4;
+  color: var(--color-ivory);
+}
+
+/* Subtle Progress Indicator */
+.subtle-nav {
+  position: fixed;
+  left: 8vw;
+  bottom: 8vh;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--color-ivory-muted);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+}
+.subtle-nav span {
+  display: inline-block;
+}
+.subtle-nav .active-num {
+  color: var(--color-ivory);
+}
+
+@media (max-width: 768px) {
+  .editorial-layer {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0 8vw;
+  }
+  [class*="sc"] {
+    grid-column: 1 / -1 !important;
+  }
+  .sc6-final {
+    margin-bottom: 15vh;
+  }
+}
