@@ -9,150 +9,136 @@ export default function CinematicSection() {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [activeChapter, setActiveChapter] = useState(1);
+
+  // Debug State
+  const [debug, setDebug] = useState({ frame: 0, progress: 0, state: 'INIT' });
+  const DEBUG_MODE = true; // Temporary visual debug mode
 
   useLayoutEffect(() => {
     if (!isLoaded) return;
 
     let ctx = gsap.context(() => {
       
-      const enterText = (targets, startTime, duration = 0.9) => {
-        return masterTl.fromTo(
-          targets,
-          { y: 25, autoAlpha: 0 },
-          { y: 0, autoAlpha: 1, duration, ease: "power3.out" },
-          startTime
-        );
-      };
-
-      const exitText = (targets, startTime, duration = 0.8) => {
-        return masterTl.to(
-          targets,
-          { y: -25, autoAlpha: 0, duration, ease: "power3.out" },
-          startTime
-        );
-      };
-
       const masterTl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=8000",
+          end: "+=5000", // Length of the cinematic hero scroll
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true,
           onUpdate: (self) => {
+            const p = self.progress;
+            const frame = Math.max(1, Math.round(p * 520));
+            
             if (canvasRef.current) {
-              canvasRef.current.setProgress(self.progress);
+              canvasRef.current.setProgress(p);
             }
             
-            // Map chapters based on timeline progress
-            if (self.progress < 0.45) setActiveChapter(1);
-            else if (self.progress < 0.75) setActiveChapter(2);
-            else setActiveChapter(3);
+            // Debug state tracking
+            let currentState = "INIT";
+            if (p > 0.05 && p < 0.35) currentState = "GOOD LAND IS FOUND.";
+            else if (p >= 0.35 && p < 0.50) currentState = "TRANSITION 1";
+            else if (p >= 0.50 && p < 0.85) currentState = "GREAT OPPORTUNITIES ARE CREATED.";
+            else if (p >= 0.85 && p < 0.90) currentState = "TRANSITION 2";
+            else if (p >= 0.90) currentState = "FINAL HERO LOCKUP";
+
+            if (DEBUG_MODE) {
+              setDebug({
+                frame,
+                progress: (p * 100).toFixed(1),
+                state: currentState
+              });
+            }
           }
         }
       });
 
-      // Master timeline is 100 total units
-      
-      /* =======================================
-         SCENE 1: LAND & PLOT (0 - 24)
-         ======================================= */
-      masterTl.set(".scene-land", { autoAlpha: 1 }, 0);
-      masterTl.set([".h1-2", ".h2-2", ".h2-3", ".h3-2"], { autoAlpha: 0, y: 25 }, 0);
-      
-      masterTl.fromTo(".sc1-header", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.5, ease: "power3.out" }, 0);
-      enterText(".h1-1", 1);
-      
-      masterTl.to(".scroll-indicator", { autoAlpha: 0, duration: 1, ease: "power2.inOut" }, 5);
-      
-      // Transition: WE BELIEVE -> GREAT OPPORTUNITIES
-      exitText(".h1-1", 12);
-      enterText(".h1-2", 13.5);
-      
-      exitText(".sc1-header", 22);
-      exitText(".h1-2", 22.5);
-      masterTl.to(".scene-land", { autoAlpha: 0, duration: 1 }, 24);
-
-
-      /* =======================================
-         SCENE 2: BUNGALOW HERO (24 - 40)
-         ======================================= */
-      masterTl.set(".scene-bungalow", { autoAlpha: 1 }, 24);
-      
-      // Body Copy
-      enterText(".body-copy", 25);
-      exitText(".body-copy", 31);
-      
-      // Principles List
-      enterText(".principles-list", 32.5);
-      
-      masterTl.set(".pl-1", { className: "editorial-list-item active" }, 33);
-      masterTl.set(".pl-1", { className: "editorial-list-item" }, 35);
-      
-      masterTl.set(".pl-2", { className: "editorial-list-item active" }, 35);
-      masterTl.set(".pl-2", { className: "editorial-list-item" }, 37);
-      
-      masterTl.set(".pl-3", { className: "editorial-list-item active" }, 37);
-      masterTl.set(".pl-3", { className: "editorial-list-item" }, 39);
-      
-      exitText(".principles-list", 39.5);
-      masterTl.to(".scene-bungalow", { autoAlpha: 0, duration: 1 }, 40);
-
-
-      /* =======================================
-         SCENE 3: SIGNATURE / BEYOND LIVING (40 - 50)
-         ======================================= */
-      masterTl.set(".scene-signature", { autoAlpha: 1 }, 40);
-      
-      // Visual silence 40-44
-      enterText(".signature-block", 44, 1.5);
-      exitText(".signature-block", 48, 1.0);
-      
-      masterTl.to(".scene-signature", { autoAlpha: 0, duration: 1 }, 50);
-
-
-      /* =======================================
-         SCENE 4: INTERIOR (50 - 75)
-         ======================================= */
-      masterTl.set(".scene-interior", { autoAlpha: 1 }, 50);
-      
-      masterTl.fromTo(".sc4-header", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.5, ease: "power3.out" }, 52);
-      enterText(".h2-1", 53.5);
-      
-      exitText(".h2-1", 58);
-      enterText(".h2-2", 59.5);
-      
-      exitText(".h2-2", 64);
-      enterText(".h2-3", 65.5);
-      
-      exitText(".sc4-header", 71);
-      exitText(".h2-3", 72);
-      masterTl.to(".scene-interior", { autoAlpha: 0, duration: 1 }, 74);
-
-
-      /* =======================================
-         SCENE 5: MASTERPLAN (75 - 100)
-         ======================================= */
-      masterTl.set(".scene-masterplan", { autoAlpha: 1 }, 75);
-      
-      masterTl.fromTo(".sc5-header", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 1.5, ease: "power3.out" }, 77);
-      enterText(".h3-1", 78.5);
-      
-      exitText(".h3-1", 83);
-      enterText(".h3-2", 84.5);
-      
-      // Remove headline, let masterplan breathe
-      exitText(".sc5-header", 89);
-      exitText(".h3-2", 89);
-      
-      // Visual silence 89-94
-      
-      enterText(".final-statement", 94, 2);
-
-      // Force timeline to exactly 100 units
+      // Timeline scale 0 to 100
       masterTl.set({}, {}, 100);
+
+      // ==========================================
+      // PART 1: "GOOD LAND IS FOUND." (0 to 35)
+      // Placed Bottom-Left (Frame 0-180 negative space)
+      // ==========================================
+      masterTl.set(".hero-text-1", { 
+        autoAlpha: 0, 
+        x: "-5vw", 
+        clipPath: "inset(0 100% 0 0)",
+        filter: "blur(12px)",
+        scale: 1.02
+      }, 0);
+
+      masterTl.to(".hero-text-1", {
+        autoAlpha: 1,
+        x: "0vw",
+        clipPath: "inset(0 0% 0 0)",
+        filter: "blur(0px)",
+        scale: 1,
+        duration: 12,
+        ease: "power2.out"
+      }, 5);
+
+      // Hold until 25, then exit
+      masterTl.to(".hero-text-1", {
+        autoAlpha: 0,
+        x: "3vw",
+        filter: "blur(8px)",
+        duration: 10,
+        ease: "power2.inOut"
+      }, 25);
+
+
+      // ==========================================
+      // PART 2: "GREAT OPPORTUNITIES ARE CREATED." (50 to 85)
+      // Placed Top-Right (Frame 270-450 negative space)
+      // ==========================================
+      masterTl.set(".hero-text-2", { 
+        autoAlpha: 0, 
+        x: "5vw", 
+        clipPath: "inset(0 0 0 100%)",
+        filter: "blur(12px)",
+        scale: 1.02
+      }, 0);
+
+      masterTl.to(".hero-text-2", {
+        autoAlpha: 1,
+        x: "0vw",
+        clipPath: "inset(0 0% 0 0%)",
+        filter: "blur(0px)",
+        scale: 1,
+        duration: 12,
+        ease: "power2.out"
+      }, 50);
+
+      // Hold until 75, then exit
+      masterTl.to(".hero-text-2", {
+        autoAlpha: 0,
+        x: "-3vw",
+        filter: "blur(8px)",
+        duration: 10,
+        ease: "power2.inOut"
+      }, 75);
+
+
+      // ==========================================
+      // PART 3: FINAL LOCKUP (90 to 100)
+      // Placed Bottom-Center (Frame 480-520 negative space)
+      // Remains until frame 520 (Timeline end)
+      // ==========================================
+      masterTl.set(".hero-lockup", {
+        autoAlpha: 0,
+        y: "4vh",
+        filter: "blur(12px)"
+      }, 0);
+
+      masterTl.to(".hero-lockup", {
+        autoAlpha: 1,
+        y: "0vh",
+        filter: "blur(0px)",
+        duration: 10,
+        ease: "power2.out"
+      }, 90);
 
       // Ensure ScrollTrigger measures the layout correctly after initialization
       setTimeout(() => {
@@ -165,143 +151,61 @@ export default function CinematicSection() {
   }, [isLoaded]);
 
   return (
-    <div ref={containerRef} className="veda-cinematic">
+    <div ref={containerRef} className="bg-[#050505] relative w-full h-screen overflow-hidden">
+      
+      {/* LOADING SCREEN */}
       {!isLoaded && (
-        <div className="loading-screen" style={{
-          position: 'absolute', inset: 0, zIndex: 1000, 
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: '#171714', color: '#F4F1E8', fontSize: '11px', letterSpacing: '0.16em', fontWeight: 500
-        }}>
-          LOADING
+        <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-[#050505] text-[#F4F1E8] text-[11px] tracking-[0.16em] font-medium">
+          LOADING VEDA...
         </div>
       )}
       
-      <FrameSequenceCanvas 
-        ref={canvasRef} 
-        frameCount={520} 
-        onLoaded={() => setIsLoaded(true)} 
-      />
-
-      {isLoaded && (
-        <div className="micro-nav">
-          <div className={activeChapter === 1 ? "active-num" : ""}>01</div>
-          <div className="nav-line"></div>
-          <div className={activeChapter === 2 ? "active-num" : ""}>02</div>
-          <div className="nav-line"></div>
-          <div className={activeChapter === 3 ? "active-num" : ""}>03</div>
+      {/* DEBUG OVERLAY */}
+      {DEBUG_MODE && (
+        <div className="absolute top-24 left-8 z-[9999] bg-black/80 text-green-400 p-4 font-mono text-xs uppercase tracking-widest pointer-events-none border border-green-500/30 backdrop-blur-md">
+          <div className="mb-2 text-green-300 border-b border-green-500/30 pb-2">DEBUG MODE</div>
+          <div>FRAME: {debug.frame} / 520</div>
+          <div>PROGRESS: {debug.progress}%</div>
+          <div className="mt-2 text-yellow-300">STATE: {debug.state}</div>
         </div>
       )}
 
-      <div className="veda-content">
+      {/* CANVAS LAYER */}
+      <div className="absolute inset-0 z-0">
+        <FrameSequenceCanvas 
+          ref={canvasRef} 
+          frameCount={520} 
+          onLoaded={() => setIsLoaded(true)} 
+        />
+        {/* Subtle overlay to ensure text contrast, but not a solid box */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
+      </div>
+
+      {/* TYPOGRAPHY LAYER */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
         
-        {/* SCENE 1: LAND & PLOT */}
-        <div className="editorial-layer scene-land">
-          <div className="pos-top-left sc1-header">
-            <div className="eyebrow">
-              01 / WHO WE ARE
-              <div className="eyebrow-divider"></div>
-            </div>
-            <div className="scroll-indicator">
-              Scroll to explore
-              <div className="line"></div>
-            </div>
-          </div>
-
-          <div className="headline-text pos-bottom-left text-gradient-bg">
-            <div className="h1-1">
-              WE BELIEVE<br/>GOOD LAND IS FOUND.
-            </div>
-            <div className="abs-overlay h1-2">
-              GREAT OPPORTUNITIES<br/>ARE CREATED.
-            </div>
-          </div>
+        {/* TEXT 1: GOOD LAND IS FOUND */}
+        <div className="hero-text-1 absolute bottom-[15vh] left-[5vw] md:left-[8vw] max-w-[90vw] md:max-w-[70vw]">
+          <h1 className="text-[#F4F1E8] font-light uppercase tracking-tighter leading-[0.9] flex flex-col drop-shadow-2xl">
+            <span className="text-[clamp(48px,6vw,120px)] font-bold">GOOD LAND</span>
+            <span className="text-[clamp(24px,3vw,50px)] tracking-widest text-[#F4F1E8]/70 mt-2 ml-1">IS FOUND.</span>
+          </h1>
         </div>
 
-        {/* SCENE 2: BUNGALOW HERO */}
-        <div className="editorial-layer scene-bungalow">
-          <div className="pos-bottom-right body-copy text-gradient-bg" style={{ marginBottom: '15vh' }}>
-            <p className="body-text">
-              Veda Life Spaces identifies promising markets, carefully selects land and develops thoughtfully planned plotted communities with a focus on clarity, quality and long-term value.
-            </p>
-          </div>
-          
-          <div className="pos-center-left principles-list text-gradient-bg" style={{ marginLeft: '4vw' }}>
-            <div className="editorial-list">
-              <div className="editorial-list-item pl-1">
-                <span>01</span>
-                <div>
-                  <div className="line"></div>
-                  <p style={{marginTop: '16px'}}>Thoughtful in what we choose.</p>
-                </div>
-              </div>
-              <div className="editorial-list-item pl-2">
-                <span>02</span>
-                <div>
-                  <div className="line"></div>
-                  <p style={{marginTop: '16px'}}>Meticulous in how we work.</p>
-                </div>
-              </div>
-              <div className="editorial-list-item pl-3">
-                <span>03</span>
-                <div>
-                  <div className="line"></div>
-                  <p style={{marginTop: '16px'}}>Committed to what comes next.</p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* TEXT 2: GREAT OPPORTUNITIES ARE CREATED */}
+        <div className="hero-text-2 absolute top-[25vh] right-[5vw] md:right-[8vw] text-right max-w-[90vw] md:max-w-[70vw]">
+          <h1 className="text-[#F4F1E8] font-light uppercase tracking-tighter leading-[0.9] flex flex-col items-end drop-shadow-2xl">
+            <span className="text-[clamp(40px,5vw,90px)] font-bold">GREAT OPPORTUNITIES</span>
+            <span className="text-[clamp(24px,3vw,50px)] tracking-widest text-[#F4F1E8]/70 mt-2 mr-1">ARE CREATED.</span>
+          </h1>
         </div>
 
-        {/* SCENE 3: SIGNATURE */}
-        <div className="editorial-layer scene-signature">
-          <div className="pos-center-left signature-block" style={{ gridColumn: '2 / span 5' }}>
-            <div className="signature-text text-gradient-bg" style={{ display: 'inline-block', padding: '20px', margin: '-20px' }}>Beyond Living.</div>
-          </div>
-        </div>
-
-        {/* SCENE 4: INTERIOR */}
-        <div className="editorial-layer scene-interior">
-          <div className="pos-top-left sc4-header">
-            <div className="eyebrow">
-              02 / WHAT WE DO
-              <div className="eyebrow-divider"></div>
-            </div>
-          </div>
-          <div className="headline-text pos-interior-align text-gradient-bg">
-            <div className="h2-1">
-              WE FIND LAND<br/>WORTH OWNING.
-            </div>
-            <div className="abs-overlay h2-2">
-              WE DON'T JUST<br/>FIND LAND.
-            </div>
-            <div className="abs-overlay h2-3">
-              WE FIND THE RIGHT<br/>OPPORTUNITY.
-            </div>
-          </div>
-        </div>
-
-        {/* SCENE 5: MASTERPLAN */}
-        <div className="editorial-layer scene-masterplan">
-          <div className="pos-top-left sc5-header">
-            <div className="eyebrow">
-              03 / VEDA LIFE SPACES PROMISE
-              <div className="eyebrow-divider"></div>
-            </div>
-          </div>
-          
-          <div className="headline-text pos-bottom-left text-gradient-bg">
-            <div className="h3-1">
-              WE FIND THE<br/>OPPORTUNITY.
-            </div>
-            <div className="abs-overlay h3-2">
-              WE GIVE YOU<br/>THE CLARITY.
-            </div>
-          </div>
-          
-          <div className="pos-bottom-right final-statement text-gradient-bg" style={{ marginBottom: '12vh' }}>
-            The right opportunity is only valuable<br/>
-            when you can own it with confidence.
-          </div>
+        {/* FINAL LOCKUP */}
+        <div className="hero-lockup absolute bottom-[12vh] left-0 right-0 flex flex-col items-center text-center px-[5vw]">
+          <h1 className="text-[#F4F1E8] uppercase leading-none flex flex-col items-center drop-shadow-2xl">
+            <span className="text-[clamp(20px,3vw,40px)] font-light tracking-[0.2em] mb-4 text-[#F4F1E8]/80">GOOD LAND IS FOUND.</span>
+            <span className="text-[clamp(32px,5vw,80px)] font-bold tracking-tighter">GREAT OPPORTUNITIES ARE CREATED.</span>
+          </h1>
         </div>
 
       </div>

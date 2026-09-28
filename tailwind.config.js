@@ -40,7 +40,7 @@ export default {
         'display': ['"Neue Montreal"', '"Helvetica Neue"', 'sans-serif'],
         'body': ['"Inter"', '"Helvetica"', 'sans-serif'],
         'veda-serif': ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        'veda-sans': ['"Outfit"', 'system-ui', 'sans-serif'],
+        'veda-sans': ['"Outfit"', 'system-ui', 'sans-serif']
       }
     },
   },
