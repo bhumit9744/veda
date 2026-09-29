@@ -13,7 +13,7 @@ const ABOUT_DEBUG = false; // set to true to enable visual debug checkpoints
 export default function AboutPlantCanvas({ sceneRef }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [debugInfo, setDebugInfo] = useState({ frame: 1, progress: 0, state: 'INTRO' });
-  const frameCount = 300;
+  const frameCount = 224;
   
   const currentFrame = (index: number) => 
     `/plant_animation_frames/frame_${String(index).padStart(3, '0')}.webp`;
@@ -29,11 +29,11 @@ export default function AboutPlantCanvas({ sceneRef }: Props) {
       if (!context) return;
 
       const images: HTMLImageElement[] = [];
-      const imageSeq = { frame: prefersReducedMotion ? 300 : 1 };
+      const imageSeq = { frame: prefersReducedMotion ? 224 : 1 };
 
       const render = (frameIdx: number = Math.round(imageSeq.frame)) => {
         // Ensure index is within bounds
-        let renderIdx = Math.max(1, Math.min(300, frameIdx));
+        let renderIdx = Math.max(1, Math.min(224, frameIdx));
         
         // Find closest loaded frame if exact is not ready
         while (renderIdx > 0 && (!images[renderIdx - 1] || !images[renderIdx - 1].complete)) {
@@ -76,14 +76,14 @@ export default function AboutPlantCanvas({ sceneRef }: Props) {
       const loadFrame = (index: number) => {
         const img = new Image();
         img.src = currentFrame(index);
-        if (index === 1 || index === 300) {
+        if (index === 1 || index === 224) {
           img.onload = () => render();
         }
         images[index - 1] = img;
       };
 
       if (prefersReducedMotion) {
-        loadFrame(300);
+        loadFrame(224);
       } else {
         loadFrame(1);
         setTimeout(() => {
@@ -138,7 +138,7 @@ export default function AboutPlantCanvas({ sceneRef }: Props) {
       />
       {ABOUT_DEBUG && (
         <div className="fixed bottom-4 left-4 z-50 bg-black/80 text-white p-4 font-mono text-xs rounded border border-white/20">
-           <div>FRAME {String(debugInfo.frame).padStart(3, '0')} / 300</div>
+           <div>FRAME {String(debugInfo.frame).padStart(3, '0')} / 224</div>
            <div>PROGRESS {debugInfo.progress}%</div>
            <div>STATE: {debugInfo.state}</div>
         </div>

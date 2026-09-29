@@ -39,7 +39,7 @@ export default function AboutContent({ sceneRef }: Props) {
           if (i === 0) {
             gsap.set(block, { opacity: 1, x: 0, filter: 'blur(0px)', clipPath: 'inset(0% 0 0 0)' });
           } else {
-            const startX = isLeft ? -30 : 30;
+            const startX = isLeft ? -20 : 20;
             gsap.set(block, { opacity: 0, x: startX, filter: 'blur(4px)', clipPath: 'inset(10% 0 0 0)' });
           }
         });
@@ -58,7 +58,7 @@ export default function AboutContent({ sceneRef }: Props) {
           if (!el) return;
           const enterDur = 3;
           const exitDur = 3;
-          const exitX = isLeft ? 30 : -30; // opposite side subtle movement
+          const exitX = isLeft ? 20 : -20; // opposite side subtle movement
           
           if (!isFirst) {
             tl.to(el, { 
@@ -77,7 +77,7 @@ export default function AboutContent({ sceneRef }: Props) {
 
         // Text 0: Intro (0-15%) - LEFT
         tl.to(introBlock, { 
-          opacity: 0, x: 30, filter: 'blur(3px)', 
+          opacity: 0, x: 20, filter: 'blur(3px)', 
           duration: 3, ease: "power2.in" 
         }, 15 - 3);
 
@@ -109,7 +109,7 @@ export default function AboutContent({ sceneRef }: Props) {
       
       {/* Intro - Left */}
       <div className="about-intro absolute top-1/2 -translate-y-1/2 left-[6vw] md:left-[7vw] w-[86vw] md:w-[38vw]">
-        <p className="text-[11px] md:text-[14px] tracking-[0.2em] uppercase text-[#7C8662] mb-6 md:mb-8 font-medium">
+        <p className="text-[11px] md:text-[14px] tracking-[0.15em] uppercase text-[#7C8662] mb-6 md:mb-8 font-medium">
           ABOUT VEDA
         </p>
         <h2 className="text-[clamp(34px,10vw,52px)] md:text-[clamp(42px,5vw,78px)] font-light leading-[1.1] text-[#F1EBDD] tracking-tight">
