@@ -29,7 +29,7 @@ export default function Section06BeyondSale() {
           className="relative group h-[50vh] flex items-center justify-center overflow-hidden"
           style={{ x: buyX }}
         >
-          <img src="/assets/images/images-1.jpg" className="absolute inset-0 w-full h-full object-cover grayscale opacity-20 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" alt="" />
+          <img src="/assets/images/images-1.jpg" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-100 transition-all duration-700" alt="" />
           <h3 className="relative z-10 text-6xl md:text-8xl font-bold text-[#111] uppercase tracking-tighter mix-blend-multiply">Buy</h3>
         </motion.div>
 
@@ -38,7 +38,7 @@ export default function Section06BeyondSale() {
           className="relative group h-[50vh] flex items-center justify-center overflow-hidden"
           style={{ scale: buildScale }}
         >
-          <img src="/assets/images/images-2.jpg" className="absolute inset-0 w-full h-full object-cover grayscale opacity-20 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" alt="" />
+          <img src="/assets/images/images-2.jpg" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-100 transition-all duration-700" alt="" />
           <h3 className="relative z-10 text-6xl md:text-8xl font-bold text-[#111] uppercase tracking-tighter mix-blend-multiply">Build</h3>
         </motion.div>
 
@@ -47,7 +47,7 @@ export default function Section06BeyondSale() {
           className="relative group h-[50vh] flex items-center justify-center overflow-hidden"
           style={{ y: sellY }}
         >
-          <img src="/assets/images/img-1.jpg" className="absolute inset-0 w-full h-full object-cover grayscale opacity-20 group-hover:opacity-100 group-hover:grayscale-0 transition-all duration-700" alt="" />
+          <img src="/assets/images/img-1.jpg" className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-100 transition-all duration-700" alt="" />
           <h3 className="relative z-10 text-6xl md:text-8xl font-bold text-[#111] uppercase tracking-tighter mix-blend-multiply">Sell</h3>
         </motion.div>
 

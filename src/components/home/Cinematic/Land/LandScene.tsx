@@ -38,7 +38,7 @@ export default function LandScene() {
               gsap.set(bgImageRef.current, {
                 opacity: pReveal * (1 - pChoose * 0.4),
                 scale: 1.1 + (pChoose * 0.1),
-                filter: `blur(${(1 - pReveal) * 20}px) grayscale(${100 - pReveal * 100}%) brightness(${1 - pChoose * 0.2})`,
+                filter: `blur(${(1 - pReveal) * 20}px) brightness(${1 - pChoose * 0.2})`,
               });
             }
           }

@@ -10,10 +10,10 @@ export default function Navbar() {
   const { scrollY } = useScroll();
 
   // Scroll Transformations
-  const capsuleBg = useTransform(scrollY, [0, 200], ['rgba(245, 242, 232, 0.10)', 'rgba(245, 242, 232, 0.18)']);
-  const capsuleBlur = useTransform(scrollY, [0, 200], ['blur(18px)', 'blur(28px)']);
-  const capsuleBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(255,255,255,0.18)', '1px solid rgba(255,255,255,0.3)']);
-  const capsulePadding = useTransform(scrollY, [0, 200], ['12px 32px', '8px 28px']);
+  const navBg = useTransform(scrollY, [0, 200], ['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.95)']);
+  const navBlur = useTransform(scrollY, [0, 200], ['blur(18px)', 'blur(28px)']);
+  const navBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(0,0,0,0.05)', '1px solid rgba(0,0,0,0.1)']);
+  const navPadding = useTransform(scrollY, [0, 200], ['24px 4vw', '16px 4vw']);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,17 +58,23 @@ export default function Navbar() {
     <>
       {/* DESKTOP NAVBAR */}
       <motion.nav 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.1 }}
-        className="fixed top-6 md:top-8 left-[4vw] right-[4vw] mx-auto max-w-[1400px] z-[9999] hidden md:grid grid-cols-[1fr_auto_1fr] items-center pointer-events-none"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="fixed top-0 left-0 right-0 w-full z-[9999] hidden md:grid grid-cols-[1fr_auto_1fr] items-center pointer-events-auto transition-all"
+        style={{
+          background: navBg,
+          backdropFilter: navBlur,
+          borderBottom: navBorder,
+          padding: navPadding
+        }}
       >
         {/* LEFT: LOGO */}
         <motion.div 
           initial={{ opacity: 0, clipPath: 'inset(0 100% 0 0)' }}
           animate={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
           transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-auto h-8 flex items-center justify-start relative z-10"
+          className="h-8 flex items-center justify-start relative z-10"
         >
           <Link 
             to="/" 
@@ -80,23 +86,17 @@ export default function Navbar() {
             }} 
             className="h-full flex items-center drop-shadow-md hover:opacity-80 transition-opacity duration-300"
           >
-            <img src="/assets/images/logo.png" className="h-full object-contain brightness-0 invert" alt="Veda Lifespaces" />
+            <img src="/assets/images/logo.png" className="h-full object-contain brightness-0" alt="Veda Lifespaces" />
           </Link>
         </motion.div>
 
-        {/* CENTER: CAPSULE */}
+        {/* CENTER: LINKS */}
         <div className="flex justify-center">
           <motion.div 
-            initial={{ opacity: 0, scaleX: 0.8, clipPath: 'inset(0 50% 0 50%)' }}
-            animate={{ opacity: 1, scaleX: 1, clipPath: 'inset(0 0% 0 0%)' }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="pointer-events-auto rounded-full flex items-center gap-6 lg:gap-8 overflow-hidden whitespace-nowrap"
-            style={{
-              background: capsuleBg,
-              backdropFilter: capsuleBlur,
-              border: capsuleBorder,
-              padding: capsulePadding
-            }}
+            className="flex items-center gap-6 lg:gap-10 whitespace-nowrap"
           >
             {navLinks.map((link, i) => {
               const isActive = link.href.startsWith('/#') 
@@ -114,11 +114,11 @@ export default function Navbar() {
                     to={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
                     className={`group relative text-[10px] lg:text-[11px] xl:text-[12px] uppercase font-medium tracking-[0.14em] transition-all duration-300 block 
-                      hover:-translate-y-[2px] hover:text-white hover:opacity-100 whitespace-nowrap
-                      ${isActive ? 'text-white opacity-100' : 'text-white opacity-70'}`}
+                      hover:-translate-y-[2px] hover:text-[#0a0a0a] hover:opacity-100 whitespace-nowrap
+                      ${isActive ? 'text-[#0a0a0a] opacity-100' : 'text-[#0a0a0a] opacity-70'}`}
                   >
                     {link.name}
-                    <span className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-[1px] bg-white transition-all duration-300 ease-out 
+                    <span className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-[1px] bg-[#0a0a0a] transition-all duration-300 ease-out 
                       ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`} />
                   </Link>
                 </motion.div>
@@ -129,14 +129,14 @@ export default function Navbar() {
 
         {/* RIGHT: CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6, type: 'spring', stiffness: 50 }}
-          className="pointer-events-auto relative z-10 flex justify-end"
+          transition={{ delay: 0.8, duration: 0.6, type: 'spring', stiffness: 50 }}
+          className="relative z-10 flex justify-end"
         >
           <Link 
             to="/contact-us.php"
-            className="group flex items-center gap-2 bg-[#121212]/95 hover:bg-[#1a1a1a] text-[#F4F1E8] px-6 py-[14px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium border border-white/5 shadow-xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-7 hover:scale-[1.02] whitespace-nowrap"
+            className="group flex items-center gap-2 bg-[#121212]/95 hover:bg-[#1a1a1a] text-[#F4F1E8] px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-7 hover:scale-[1.02] whitespace-nowrap"
           >
             <span className="group-hover:-translate-x-0.5 transition-transform duration-500">Enquire</span>
             <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1.5 group-hover:-translate-y-1">↗</span>
@@ -162,14 +162,14 @@ export default function Navbar() {
           }} 
           className="pointer-events-auto h-6 drop-shadow-md z-[10000]"
         >
-          <img src="/assets/images/logo.png" className="h-full object-contain brightness-0 invert" alt="Veda" />
+          <img src="/assets/images/logo.png" className="h-full object-contain brightness-0" alt="Veda" />
         </Link>
         <button 
           onClick={() => setMobileMenuOpen(true)}
           className="pointer-events-auto flex flex-col justify-center gap-[5px] w-10 h-10 items-end drop-shadow-md z-[10000]"
         >
-          <span className="w-6 h-[1px] bg-white block" />
-          <span className="w-5 h-[1px] bg-white block" />
+          <span className="w-6 h-[1px] bg-black block" />
+          <span className="w-5 h-[1px] bg-black block" />
         </button>
       </motion.div>
 
@@ -177,18 +177,18 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
-            initial={{ clipPath: 'circle(0% at 100% 0)', backgroundColor: 'rgba(15,18,17,0)' }}
-            animate={{ clipPath: 'circle(150% at 100% 0)', backgroundColor: 'rgba(15,18,17,1)' }}
-            exit={{ clipPath: 'circle(0% at 100% 0)', backgroundColor: 'rgba(15,18,17,0)' }}
+            initial={{ clipPath: 'circle(0% at 100% 0)', backgroundColor: 'rgba(245,242,232,0)' }}
+            animate={{ clipPath: 'circle(150% at 100% 0)', backgroundColor: 'rgba(245,242,232,1)' }}
+            exit={{ clipPath: 'circle(0% at 100% 0)', backgroundColor: 'rgba(245,242,232,0)' }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[9998] text-[#F4F1E8] flex flex-col justify-between p-8 pt-24"
+            className="fixed inset-0 z-[9998] text-[#0a0a0a] flex flex-col justify-between p-8 pt-24"
           >
             {/* Mobile Header Inside Menu */}
             <div className="absolute top-6 left-6 right-6 flex items-center justify-between">
               <div className="h-6 opacity-0"></div> {/* Spacer for logo to remain visible from under */}
               <button 
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-white/60 hover:text-white uppercase text-xs tracking-widest p-2 flex flex-col gap-[5px] justify-center items-end"
+                className="text-black/60 hover:text-black uppercase text-xs tracking-widest p-2 flex flex-col gap-[5px] justify-center items-end"
               >
                 <span className="text-[10px] tracking-widest">CLOSE</span>
               </button>
@@ -207,9 +207,9 @@ export default function Navbar() {
                   <Link 
                     to={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
-                    className="text-3xl font-light uppercase tracking-widest flex items-baseline gap-6 text-white hover:text-white/60 transition-colors"
+                    className="text-3xl font-light uppercase tracking-widest flex items-baseline gap-6 text-[#0a0a0a] hover:text-black/60 transition-colors"
                   >
-                    <span className="text-sm font-serif italic text-white/40 font-normal">0{i + 1}</span>
+                    <span className="text-sm font-serif italic text-black/40 font-normal">0{i + 1}</span>
                     {link.name}
                   </Link>
                 </motion.div>
@@ -225,7 +225,7 @@ export default function Navbar() {
                   <Link 
                     to="/contact-us.php"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="inline-flex items-center justify-center bg-[#F4F1E8] text-[#0a0a0a] px-8 py-4 rounded-full text-sm uppercase tracking-widest font-medium"
+                    className="inline-flex items-center justify-center bg-[#121212] text-[#F4F1E8] px-8 py-4 rounded-full text-sm uppercase tracking-widest font-medium"
                   >
                     Enquire ↗
                   </Link>
@@ -238,9 +238,9 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ delay: 1, duration: 1 }}
-              className="mt-auto border-t border-white/10 pt-6 pb-4"
+              className="mt-auto border-t border-black/10 pt-6 pb-4"
             >
-              <span className="text-xs uppercase tracking-[0.4em] font-serif italic text-white/60">
+              <span className="text-xs uppercase tracking-[0.4em] font-serif italic text-black/60">
                 Beyond Living.
               </span>
             </motion.div>

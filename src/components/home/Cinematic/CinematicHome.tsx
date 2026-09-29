@@ -13,10 +13,6 @@ export default function CinematicHome() {
     <div ref={containerRef} className="w-full bg-[#050505] text-white">
       <MasterScrollController />
       <HeroScene />
-      <OpportunityScene />
-      <ClarityScene />
-      <LandScene />
-      <DNADevelopmentScene />
     </div>
   );
 }

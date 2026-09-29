@@ -62,7 +62,7 @@ const ClarityVisual = forwardRef((_props, ref) => {
       gsap.set(landImgRef.current, {
         opacity: pLand * 0.3, // Soft reveal
         scale: 1.1 - (pLand * 0.1),
-        filter: `blur(${(1 - pLand) * 10}px) grayscale(${100 - pLand * 100}%)`
+        filter: `blur(${(1 - pLand) * 10}px)`
       });
     }
 

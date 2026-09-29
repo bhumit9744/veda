@@ -28,7 +28,7 @@ export default function Scene03Research() {
           <img 
             src="/assets/images/images-1-big.jpg" 
             alt="Terrain Map" 
-            className="w-full h-full object-cover opacity-30 grayscale"
+            className="w-full h-full object-cover opacity-30"
           />
         </motion.div>
 

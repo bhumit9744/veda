@@ -53,7 +53,7 @@ export default function Section03What() {
           <motion.img 
             src="/assets/images/new-images/our-foundation-new.jpeg"
             alt="Land Discovery"
-            className="absolute inset-0 w-full h-[130%] object-cover object-center filter grayscale contrast-125"
+            className="absolute inset-0 w-full h-[130%] object-cover object-center filter contrast-125"
             style={{ top: imageY }}
           />
         </div>

@@ -16,7 +16,7 @@ export default function Section08Investment() {
       
       {/* Background Image Parallax */}
       <motion.div 
-        className="absolute inset-0 z-0 opacity-50 grayscale contrast-125"
+        className="absolute inset-0 z-0 opacity-50 contrast-125"
         style={{ y: imageY }}
       >
         <img src="/assets/images/new-images/our-purpose-new-image.jpeg" alt="Landscape" className="w-full h-[130%] object-cover object-bottom" />

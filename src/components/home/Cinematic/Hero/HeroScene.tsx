@@ -4,7 +4,7 @@ import Navbar from '../../../Navbar';
 import FrameSequenceCanvas from './FrameSequenceCanvas';
 import HeroTypography from './HeroTypography';
 
-const HERO_DEBUG = true;
+const HERO_DEBUG = false;
 
 export default function HeroScene() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -175,7 +175,7 @@ export default function HeroScene() {
         )}
 
         <div ref={canvasWrapperRef} className="absolute inset-0 w-full h-full origin-center">
-          <FrameSequenceCanvas ref={canvasRef} />
+          <img src="/assets/images/5b44f3a4-f6fc-46ee-b252-86ca1a95c3e2.png" className="w-full h-full object-cover" alt="Hero Background" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
         </div>
         

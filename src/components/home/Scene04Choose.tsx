@@ -25,7 +25,7 @@ export default function Scene04Choose() {
       <div className="sticky top-0 h-screen overflow-hidden flex items-center justify-center">
         
         {/* Background continuing from previous scene */}
-        <div className="absolute inset-0 opacity-30 grayscale">
+        <div className="absolute inset-0 opacity-30">
           <img src="/assets/images/images-1-big.jpg" className="w-full h-full object-cover" alt="" />
         </div>
 

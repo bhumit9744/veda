@@ -17,7 +17,7 @@ export default function Section11FinalCTA() {
       
       {/* Background Image */}
       <motion.div 
-        className="absolute inset-0 z-0 opacity-20 filter grayscale"
+        className="absolute inset-0 z-0 opacity-20 filter"
         style={{ scale: imageScale }}
       >
         <img src="/assets/images/banner.jpg" alt="Final CTA" className="w-full h-full object-cover" />

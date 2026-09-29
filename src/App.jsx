@@ -29,13 +29,6 @@ function Home() {
   return (
     <div className="w-full font-sans bg-[#050505]">
       <CinematicHome />
-      <SectionOurDevelopmentsCards />
-      <Section06BeyondSale />
-      <Section07Difference />
-      <Section08Investment />
-      <Section09FindOwnBuild />
-      <Section10BeyondLiving />
-      <Section11FinalCTA />
     </div>
   );
 }

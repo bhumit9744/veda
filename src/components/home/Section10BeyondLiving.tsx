@@ -20,7 +20,7 @@ export default function Section10BeyondLiving() {
         className="absolute inset-0 z-0 opacity-40 mix-blend-lighten"
         style={{ y: imageY }}
       >
-        <img src="/assets/images/banner-midd.jpg" alt="Atmosphere" className="w-full h-[120%] object-cover grayscale contrast-150 blur-[2px]" />
+        <img src="/assets/images/banner-midd.jpg" alt="Atmosphere" className="w-full h-[120%] object-cover contrast-150 blur-[2px]" />
         <div className="absolute inset-0 bg-[url('/assets/images/noise.png')] opacity-20 pointer-events-none"></div>
       </motion.div>
 

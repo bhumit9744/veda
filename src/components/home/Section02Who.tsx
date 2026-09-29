@@ -27,7 +27,7 @@ export default function Section02Who() {
       
       {/* Background Image Parallax */}
       <motion.div 
-        className="absolute right-0 top-[20%] w-[60%] md:w-[40%] h-[70vh] opacity-40 mix-blend-multiply filter grayscale"
+        className="absolute right-0 top-[20%] w-[60%] md:w-[40%] h-[70vh] opacity-40 mix-blend-multiply filter"
         style={{ y: imageY }}
       >
         <img src="/assets/images/images-1-big.jpg" alt="Veda Background" className="w-full h-full object-cover" />

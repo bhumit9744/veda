@@ -36,7 +36,7 @@ export default function Section04Promise() {
           <img 
             src="/assets/images/our-promise-new-img.jpeg" 
             alt="Clarity" 
-            className="w-full h-full object-cover filter brightness-75 grayscale contrast-125"
+            className="w-full h-full object-cover filter brightness-75 contrast-125"
           />
         </motion.div>
 

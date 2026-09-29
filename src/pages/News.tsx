@@ -32,11 +32,11 @@ export default function News() {
   ];
 
   return (
-    <div className="w-full bg-[#050505] text-[#F4F1E8] font-sans min-h-screen">
+    <div className="w-full bg-[#FAFAFA] text-[#0a0a0a] font-sans min-h-screen">
       <section className="py-32 md:py-48 px-[5%] max-w-7xl mx-auto">
         
         {/* Header */}
-        <div className="mb-24 flex flex-col md:flex-row justify-between items-end gap-10 border-b border-white/10 pb-12">
+        <div className="mb-24 flex flex-col md:flex-row justify-between items-end gap-10 border-b border-black/10 pb-12">
           <div className="max-w-2xl">
             <motion.span 
               initial={{ opacity: 0, y: 10 }}
@@ -50,9 +50,9 @@ export default function News() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-7xl lg:text-8xl font-light uppercase tracking-widest text-white leading-none"
+              className="text-5xl md:text-7xl lg:text-8xl font-light uppercase tracking-widest text-[#121212] leading-none"
             >
-              News & <span className="font-serif italic text-white/60 lowercase tracking-normal">Rewards</span>
+              News & <span className="font-serif italic text-black/40 lowercase tracking-normal">Rewards</span>
             </motion.h1>
           </div>
           <motion.div 
@@ -77,7 +77,7 @@ export default function News() {
               transition={{ duration: 0.8, delay: index * 0.2 }}
               className="group block relative"
             >
-              <div className="relative aspect-[4/3] overflow-hidden rounded-sm mb-6 bg-[#111]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-sm mb-6 bg-[#f0f0f0]">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
@@ -86,33 +86,33 @@ export default function News() {
                   <img 
                     src={item.img} 
                     alt={item.tag} 
-                    className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-700" 
+                    className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-700" 
                   />
                 </motion.div>
-                <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md border border-white/10 text-white text-[0.65rem] uppercase font-medium tracking-widest px-4 py-2 rounded-sm">
+                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md border border-black/5 text-[#121212] text-[0.65rem] uppercase font-bold tracking-widest px-4 py-2 rounded-sm shadow-sm">
                   {item.tag}
                 </div>
               </div>
               
               <div className="flex flex-col">
-                <div className="flex items-center gap-3 text-[0.7rem] text-white/50 uppercase tracking-widest mb-4 font-medium">
+                <div className="flex items-center gap-3 text-[0.7rem] text-black/50 uppercase tracking-widest mb-4 font-medium">
                   <span>{item.category}</span>
                   <span className="w-1 h-1 rounded-full bg-[#b89a6b]" />
                   <span>{item.date}</span>
                 </div>
                 
-                <h3 className="text-xl md:text-2xl text-white font-light leading-snug mb-4 group-hover:text-[#b89a6b] transition-colors duration-500">
+                <h3 className="text-xl md:text-2xl text-[#121212] font-medium leading-snug mb-4 group-hover:text-[#b89a6b] transition-colors duration-500">
                   {item.title}
                 </h3>
                 
-                <p className="text-sm text-white/40 leading-relaxed mb-8 line-clamp-3">
+                <p className="text-sm text-black/60 leading-relaxed mb-8 line-clamp-3">
                   {item.desc}
                 </p>
                 
                 <div className="mt-auto">
-                  <span className="inline-flex items-center gap-3 text-xs font-medium text-white uppercase tracking-[0.2em] group-hover:text-[#b89a6b] transition-colors duration-500">
+                  <span className="inline-flex items-center gap-3 text-xs font-semibold text-[#121212] uppercase tracking-[0.2em] group-hover:text-[#b89a6b] transition-colors duration-500">
                     Read Article 
-                    <span className="w-8 h-[1px] bg-white group-hover:bg-[#b89a6b] transition-colors duration-500" />
+                    <span className="w-8 h-[1px] bg-[#121212] group-hover:bg-[#b89a6b] transition-colors duration-500" />
                   </span>
                 </div>
               </div>
