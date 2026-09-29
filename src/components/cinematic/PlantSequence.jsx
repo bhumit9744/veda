@@ -130,6 +130,12 @@ export default function PlantSequence() {
     }
   }, [firstFrameLoaded]);
 
+  const text1Ref = useRef(null);
+  const text2Ref = useRef(null);
+  const text3Ref = useRef(null);
+  const text4Ref = useRef(null);
+  const text5Ref = useRef(null);
+
   // 3. GSAP ScrollTrigger
   useLayoutEffect(() => {
     if (!firstFrameLoaded) return;
@@ -147,19 +153,34 @@ export default function PlantSequence() {
         }
       });
 
-      // Animate frame object
+      // Animate frame object (takes 1 timeline unit)
       tl.to(frameObj.current, {
         frame: TOTAL_FRAMES,
         ease: "none",
-        duration: 1, // Represents the relative duration in the timeline
+        duration: 1, 
         onUpdate: () => {
           renderFrame(Math.round(frameObj.current.frame));
         }
-      });
+      }, 0); // Start at 0
+
+      // Animate texts concurrently with the frames
+      // Timeline duration is 1.0 (frames) + 0.15 (hold) = 1.15
+      tl.to(text1Ref.current, { opacity: 1, y: 0, duration: 0.1 }, 0.05)
+        .to(text1Ref.current, { opacity: 0, y: -20, duration: 0.1 }, 0.2)
+        
+        .to(text2Ref.current, { opacity: 1, y: 0, duration: 0.1 }, 0.25)
+        .to(text2Ref.current, { opacity: 0, y: -20, duration: 0.1 }, 0.4)
+        
+        .to(text3Ref.current, { opacity: 1, y: 0, duration: 0.1 }, 0.45)
+        .to(text3Ref.current, { opacity: 0, y: -20, duration: 0.1 }, 0.6)
+        
+        .to(text4Ref.current, { opacity: 1, y: 0, duration: 0.1 }, 0.65)
+        .to(text4Ref.current, { opacity: 0, y: -20, duration: 0.1 }, 0.8)
+        
+        .to(text5Ref.current, { opacity: 1, y: 0, duration: 0.1 }, 0.85)
+        .to(text5Ref.current, { opacity: 0, y: -20, duration: 0.1 }, 1.15); // Stays visible during the hold
 
       // Hold the final frame for a moment before unpinning
-      // This ensures the last few seconds of the video are fully visible and readable
-      // rather than instantly scrolling out of view when the animation completes.
       tl.to({}, { duration: 0.15 });
 
     }, containerRef);
@@ -168,12 +189,50 @@ export default function PlantSequence() {
   }, [firstFrameLoaded]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-screen bg-[#F5F1E8] overflow-hidden">
+    <div ref={containerRef} className="relative w-full h-screen bg-[#0A100D] overflow-hidden">
       
       <canvas 
         ref={canvasRef} 
-        className="w-[100vw] h-[100vh] block"
+        className="w-[100vw] h-[100vh] block opacity-80"
       />
+
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div ref={text1Ref} className="absolute text-center text-[#E8E6E1] opacity-0 translate-y-10">
+          <h2 className="text-4xl md:text-7xl font-light uppercase tracking-widest leading-tight">
+            <span className="block text-[#A3A8A4]">Land</span>
+            <span className="block">is where</span>
+            <span className="block">it begins.</span>
+          </h2>
+        </div>
+        
+        <div ref={text2Ref} className="absolute text-center text-[#E8E6E1] opacity-0 translate-y-10">
+          <h2 className="text-4xl md:text-6xl font-light uppercase tracking-widest leading-tight">
+            <span className="block text-[#A3A8A4]">Carefully</span>
+            <span className="block">chosen.</span>
+          </h2>
+        </div>
+        
+        <div ref={text3Ref} className="absolute text-center text-[#E8E6E1] opacity-0 translate-y-10">
+          <h2 className="text-4xl md:text-6xl font-light uppercase tracking-widest leading-tight">
+            <span className="block text-[#A3A8A4]">Thoughtfully</span>
+            <span className="block">planned.</span>
+          </h2>
+        </div>
+        
+        <div ref={text4Ref} className="absolute text-center text-[#E8E6E1] opacity-0 translate-y-10">
+          <h2 className="text-4xl md:text-6xl font-light uppercase tracking-widest leading-tight">
+            <span className="block text-[#A3A8A4]">Built</span>
+            <span className="block">with intention.</span>
+          </h2>
+        </div>
+        
+        <div ref={text5Ref} className="absolute text-center text-[#E8E6E1] opacity-0 translate-y-10">
+          <h2 className="text-5xl md:text-7xl font-light uppercase tracking-[0.15em] leading-tight">
+            <span className="block text-[#A3A8A4]">Made for</span>
+            <span className="block">life.</span>
+          </h2>
+        </div>
+      </div>
 
     </div>
   );
