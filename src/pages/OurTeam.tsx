@@ -33,16 +33,28 @@ export default function OurTeam() {
       image: "/assets/images/Shobnit-pic.jpg"
     },
     {
+      name: "Trupti Mishra",
+      title: "Deputy Manager",
+      linkedin: "https://www.linkedin.com/in/mishratrupti/",
+      image: "/assets/images/Trupti-pic.jpg"
+    },
+    {
       name: "Ansh Nagda",
       title: "Sales Associate",
       linkedin: "https://www.linkedin.com/in/ansh-nagda-129760307/",
       image: "/assets/images/Ansh-Pic.jpg"
     },
     {
-      name: "Trupti Mishra",
-      title: "Deputy Manager",
-      linkedin: "https://www.linkedin.com/in/mishratrupti/",
-      image: "/assets/images/Trupti-pic.jpg"
+      name: "Anshika Pandey",
+      title: "Assistant Manager Sales",
+      linkedin: "#",
+      image: "/assets/images/anshika-pandey.png"
+    },
+    {
+      name: "Abhimanyu Singh",
+      title: "Deputy Manager CRM",
+      linkedin: "#",
+      image: "/assets/images/abhimanyu-singh.png"
     }
   ];
 
@@ -81,7 +93,7 @@ export default function OurTeam() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: (index % 4) * 0.15 }}
-              className="group flex flex-col w-full sm:w-[calc(50%-2rem)] md:w-[calc(33.333%-2.5rem)] lg:w-[calc(25%-2.5rem)] max-w-[280px]"
+              className="group flex flex-col w-full sm:w-[calc(50%-2rem)] lg:w-[calc(33.333%-2.5rem)] max-w-[320px]"
             >
               <div className="relative aspect-[3/3.6] w-full overflow-hidden mb-6 bg-white rounded-2xl shadow-sm group-hover:shadow-xl transition-shadow duration-500">
                 {/* Image container */}
