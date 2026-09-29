@@ -1,39 +1,119 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ===== VEDA DESIGN TOKENS ===== */
+:root {
+  /* Dark Atmosphere */
+  --veda-black: #000201;
+  --veda-deep: #020603;
+  --veda-forest: #071109;
+  --veda-canopy: #101C0C;
+  --veda-moss: #35401B;
+
+  /* Warm Highlights */
+  --veda-gold: #B29B55;
+  --veda-amber: #9A8344;
+
+  /* Light Editorial */
+  --veda-ivory: #F3F0E8;
+  --veda-parchment: #EAE5D8;
+  --veda-paper: #F7F5EF;
+
+  /* Text */
+  --veda-text-light: #F1F0E8;
+  --veda-text-muted: #A8ADA2;
+  --veda-text-dark: #171713;
+  --veda-text-subdark: #3A3A3A;
+}
+
+/* ===== BASE LAYER ===== */
 @layer base {
+  *,
+  *::before,
+  *::after {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    @apply antialiased;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-color: #F5F1E8;
-    color: #1B1B18;
+    font-family: 'Inter', 'Helvetica Neue', 'Helvetica', system-ui, sans-serif;
+    background-color: var(--veda-black);
+    color: var(--veda-text-light);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--veda-gold);
+    color: var(--veda-black);
   }
 }
 
-.font-serif {
-  font-family: 'Playfair Display', serif;
+/* ===== TYPOGRAPHY ===== */
+.font-display {
+  font-family: 'Space Grotesk', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
-/* Lenis Scroll Structural CSS */
+.font-editorial {
+  font-family: 'Playfair Display', 'Georgia', serif;
+}
+
+.font-body {
+  font-family: 'Inter', 'Helvetica Neue', 'Helvetica', sans-serif;
+}
+
+.font-mono {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ===== ATMOSPHERIC BACKGROUND ===== */
+.veda-atmosphere {
+  background:
+    radial-gradient(ellipse 80% 60% at 25% 15%, rgba(16, 28, 12, 0.8) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 75% 70%, rgba(53, 64, 27, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #020603 0%, #000201 100%);
+}
+
+/* ===== GRAIN TEXTURE ===== */
+.veda-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== LENIS ===== */
 html.lenis, html.lenis body {
   height: auto;
 }
-
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
-
 .lenis.lenis-smooth [data-lenis-prevent] {
   overscroll-behavior: contain;
 }
-
 .lenis.lenis-stopped {
   overflow: hidden;
 }
-
 .lenis.lenis-smooth iframe {
   pointer-events: none;
+}
+
+/* ===== UTILITY ===== */
+.text-balance {
+  text-wrap: balance;
+}
+
+.clip-reveal {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.clip-hidden {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
 }

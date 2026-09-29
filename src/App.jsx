@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-// Legacy component removed
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import About from './pages/About';
@@ -16,51 +15,33 @@ import FAQ from './pages/FAQ';
 import Bellagio from './pages/Bellagio';
 import ThankYou from './pages/ThankYou';
 
-import CinematicHome from './components/home/Cinematic/CinematicHome';
-import SectionOurDevelopmentsCards from './components/home/SectionOurDevelopmentsCards';
-import Section06BeyondSale from './components/home/Section06BeyondSale';
-import Section07Difference from './components/home/Section07Difference';
-import Section08Investment from './components/home/Section08Investment';
-import Section09FindOwnBuild from './components/home/Section09FindOwnBuild';
-import Section10BeyondLiving from './components/home/Section10BeyondLiving';
-import Section11FinalCTA from './components/home/Section11FinalCTA';
-
 import VedaExperience from './components/VedaExperience';
 
-function Home() {
-  return (
-    <div className="w-full font-sans bg-[#050505]">
-      <VedaExperience />
-    </div>
-  );
-}
+gsap.registerPlugin(ScrollTrigger);
 
-import { useLocation } from 'react-router-dom';
+function Home() {
+  return <VedaExperience />;
+}
 
 function AppContent() {
   const location = useLocation();
   const isHome = location.pathname === '/' || location.pathname === '/index.php';
 
   useEffect(() => {
-    // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       direction: 'vertical',
       gestureDirection: 'vertical',
       smooth: true,
-      mouseMultiplier: 1,
+      mouseMultiplier: 0.8,
       smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
     });
 
     lenis.on('scroll', ScrollTrigger.update);
-
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
     gsap.ticker.lagSmoothing(0);
 
     return () => {
@@ -70,10 +51,8 @@ function AppContent() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#050505]">
-      {/* Conditionally render navbar if needed, or maybe it should be transparent on home. */}
+    <div className="flex flex-col min-h-screen bg-[#000201]">
       {!isHome && <Navbar />}
-      {isHome && <Navbar className="absolute top-0 w-full z-50 bg-transparent mix-blend-difference" />}
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />

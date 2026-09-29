@@ -1,209 +1,290 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { Points, PointMaterial } from '@react-three/drei';
 import { useVedaStore } from './store';
-import { Environment, Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
-import { createNoise2D } from 'simplex-noise';
 
-// Simple terrain generator
+/* ══════════════════════════════════════════════════════════════════════════════
+   ARCHITECTURAL THREE.JS TERRAIN — HERO MASTER PASS
+   
+   Aesthetic:
+   - Subtle gallery exhibition physical model emerging from deep forest atmosphere
+   - Low-contrast architectural contour relief in muted sage & antique bronze
+   - Interactive key spotlight that gently responds to cursor position
+   - Quiet, architectural presence that supports typography rather than shouting
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+const terrainVert = `
+  uniform float uTime;
+  uniform float uMorph;
+  varying float vElevation;
+  varying vec2 vUv;
+  varying vec3 vNormal;
+
+  vec3 permute(vec3 x){ return mod(((x*34.0)+1.0)*x,289.0); }
+  float snoise(vec2 v){
+    const vec4 C = vec4(0.211324865405187,0.366025403784439,
+                        -0.577350269189626,0.024390243902439);
+    vec2 i = floor(v + dot(v, C.yy));
+    vec2 x0 = v - i + dot(i, C.xx);
+    vec2 i1 = (x0.x > x0.y) ? vec2(1.0,0.0) : vec2(0.0,1.0);
+    vec4 x12 = x0.xyxy + C.xxzz;
+    x12.xy -= i1;
+    i = mod(i,289.0);
+    vec3 p = permute(permute(i.y+vec3(0.0,i1.y,1.0))+i.x+vec3(0.0,i1.x,1.0));
+    vec3 m = max(0.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.0);
+    m = m*m; m = m*m;
+    vec3 x_ = 2.0*fract(p*C.www)-1.0;
+    vec3 h = abs(x_)-0.5;
+    vec3 ox = floor(x_+0.5);
+    vec3 a0 = x_-ox;
+    m *= 1.79284291400159-0.85373472095314*(a0*a0+h*h);
+    vec3 g;
+    g.x = a0.x*x0.x + h.x*x0.y;
+    g.yz = a0.yz*x12.xz + h.yz*x12.yw;
+    return 130.0*dot(m,g);
+  }
+
+  void main(){
+    vUv = uv;
+    float t = uTime * 0.006;
+
+    // Organic rolling topography
+    float organic = snoise(uv * 1.8 + vec2(t * 0.25, -t * 0.12)) * 2.6;
+    organic += snoise(uv * 4.5 - vec2(t * 0.12, t * 0.18)) * 0.55;
+
+    // Terraced contour plateaus
+    float terraced = floor(organic * 2.8) / 2.8;
+
+    // Plotted masterplan grid relief
+    float grid = terraced + sin(uv.x * 40.0) * sin(uv.y * 40.0) * 0.08;
+
+    // Morph progression
+    float s1 = smoothstep(0.0, 0.45, uMorph);
+    float s2 = smoothstep(0.45, 1.0, uMorph);
+    float elevation = mix(organic, terraced, s1);
+    elevation = mix(elevation, grid, s2);
+
+    vElevation = elevation;
+
+    // Surface normal approximation
+    vec2 eps = vec2(0.012, 0.0);
+    float eX = snoise((uv + eps.xy) * 1.8) * 2.6 - organic;
+    float eY = snoise((uv + eps.yx) * 1.8) * 2.6 - organic;
+    vNormal = normalize(vec3(-eX, -eY, 0.38));
+
+    vec3 pos = position;
+    pos.z += elevation;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  }
+`;
+
+const terrainFrag = `
+  uniform float uMorph;
+  uniform float uOpacity;
+  varying float vElevation;
+  varying vec2 vUv;
+  varying vec3 vNormal;
+
+  void main(){
+    // Minor contour lines — thin, architectural, quiet
+    float lines = fract(vElevation * 5.8);
+    float contour = smoothstep(0.0, 0.03, lines) - smoothstep(0.03, 0.065, lines);
+
+    // Major index contours (every 4th)
+    float majorLines = fract(vElevation * 1.45);
+    float majorContour = smoothstep(0.0, 0.035, majorLines) - smoothstep(0.035, 0.08, majorLines);
+
+    // Cadastral grid lines in development phase
+    vec2 gUv = fract(vUv * 30.0);
+    float gridLine = smoothstep(0.0, 0.03, gUv.x) + smoothstep(0.0, 0.03, gUv.y);
+    gridLine = clamp(gridLine, 0.0, 1.0);
+    float s2 = smoothstep(0.45, 0.95, uMorph);
+
+    // Architectural low-contrast palette
+    vec3 deepShadow = vec3(0.004, 0.009, 0.005);     // #010201
+    vec3 baseEarth = vec3(0.015, 0.035, 0.020);      // #040905
+    vec3 contourSage = vec3(0.16, 0.24, 0.12);       // #293D1F (subtle, non-competing)
+    vec3 majorSage = vec3(0.28, 0.38, 0.20);         // #476133
+    vec3 brassAccent = vec3(0.50, 0.44, 0.26);       // #807042 (warm antique highlight)
+
+    // Soft architectural diffuse lighting
+    float diffuse = clamp(dot(vNormal, normalize(vec3(0.5, 0.7, 0.6))), 0.0, 1.0);
+    vec3 surface = mix(deepShadow, baseEarth, diffuse * 0.65 + 0.35);
+
+    // Layer contour lines with restraint
+    surface = mix(surface, contourSage, contour * 0.35);
+    surface = mix(surface, majorSage, majorContour * 0.55);
+
+    // Layer masterplan grid in development phase
+    surface = mix(surface, brassAccent, gridLine * s2 * 0.3);
+
+    // Peak highlights
+    float peak = smoothstep(1.4, 2.6, vElevation);
+    surface += brassAccent * peak * 0.07;
+
+    // Radial edge vignette falloff
+    float dist = distance(vUv, vec2(0.5));
+    float vignette = smoothstep(0.60, 0.26, dist);
+
+    gl_FragColor = vec4(surface, vignette * uOpacity);
+  }
+`;
+
 function Terrain() {
-  const meshRef = useRef();
-  const store = useVedaStore();
-  const noise2D = useMemo(() => createNoise2D(), []);
+  const matRef = useRef();
+  const uniforms = useMemo(() => ({
+    uTime:    { value: 0 },
+    uMorph:   { value: 0 },
+    uOpacity: { value: 0.6 },
+  }), []);
 
-  // Generate a plane with height map based on simplex noise
-  const geometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(30, 30, 128, 128);
-    const pos = geo.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      const x = pos.getX(i);
-      const y = pos.getY(i);
-      const z = noise2D(x * 0.1, y * 0.1) * 2;
-      pos.setZ(i, z);
+  useFrame((state) => {
+    const p = useVedaStore.getState().scrollProgress || 0;
+    const u = matRef.current?.uniforms;
+    if (!u) return;
+
+    u.uTime.value = state.clock.elapsedTime;
+
+    // Opacity: Hero (0.6), dips during Light sections, flares during Dark Land Development & Alibaug
+    let targetOpacity = 0.6;
+    if ((p >= 0.12 && p < 0.38) || (p >= 0.49 && p < 0.65) || (p >= 0.77 && p < 0.88)) {
+      targetOpacity = 0.0;
+    } else if (p >= 0.38 && p < 0.49) {
+      targetOpacity = 0.7;
+    } else if (p >= 0.65 && p < 0.77) {
+      targetOpacity = 0.65;
+    } else if (p >= 0.88) {
+      targetOpacity = Math.max(0, 1 - (p - 0.88) / 0.1);
     }
-    geo.computeVertexNormals();
-    return geo;
-  }, [noise2D]);
 
-  useFrame(() => {
-    const progress = store.getState().scrollProgress;
-    
-    // Example: modify terrain based on scroll progress
-    if (meshRef.current) {
-       // Section 1: Hero (Dark, earthy)
-       // Section 4: Grid transition
-       // Let's fade it out or change material color
-       const isHero = progress < 0.2;
-       const isGrid = progress > 0.4 && progress < 0.6;
-       const isDark = progress > 0.8; // Footer
-       
-       const targetColor = new THREE.Color(
-         isDark ? '#000000' : (isGrid ? '#F2EEE6' : '#2A2621')
-       );
-       meshRef.current.material.color.lerp(targetColor, 0.05);
+    u.uOpacity.value += (targetOpacity - u.uOpacity.value) * 0.05;
 
-       const targetWireframe = isGrid;
-       if (meshRef.current.material.wireframe !== targetWireframe && Math.abs(progress - 0.5) > 0.01) {
-          // just a rough toggle for effect
-          // meshRef.current.material.wireframe = targetWireframe;
-       }
-    }
+    const targetMorph = p < 0.3 ? 0 : (p > 0.68 ? 1 : (p - 0.3) / 0.38);
+    u.uMorph.value += (targetMorph - u.uMorph.value) * 0.03;
   });
 
   return (
-    <mesh ref={meshRef} geometry={geometry} rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]}>
-      <meshStandardMaterial 
-        color="#2A2621" 
-        roughness={0.8} 
-        metalness={0.2}
-        flatShading
+    <mesh rotation={[-Math.PI / 2.25, 0, 0]} position={[0, -1.8, -4]}>
+      <planeGeometry args={[46, 46, 180, 180]} />
+      <shaderMaterial
+        ref={matRef}
+        vertexShader={terrainVert}
+        fragmentShader={terrainFrag}
+        uniforms={uniforms}
+        transparent
+        depthWrite={false}
       />
     </mesh>
   );
 }
 
-// Contour lines simulated with edges geometry
-function ContourLines() {
-  const linesRef = useRef();
-  
-  useFrame((state) => {
-    const progress = useVedaStore.getState().scrollProgress;
-    if (linesRef.current) {
-      linesRef.current.position.y = -1.9 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
-      linesRef.current.rotation.z = state.clock.elapsedTime * 0.02;
-    }
-  });
+// Sparse, floating warm gold particles
+function DustParticles() {
+  const ref = useRef();
+  const count = 220;
 
-  return (
-    <mesh ref={linesRef} rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.9, 0]}>
-      <ringGeometry args={[5, 5.02, 64]} />
-      <meshBasicMaterial color="#9b7b5a" side={THREE.DoubleSide} transparent opacity={0.5} />
-    </mesh>
-  );
-}
-
-// Particle network for "THE VEDA ENGINE"
-function LocationPoints() {
-  const pointsRef = useRef();
-  const count = 1000;
-  
   const positions = useMemo(() => {
-    const pos = new Float32Array(count * 3);
+    const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 20;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 2;
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 20;
+      arr[i * 3]     = (Math.random() - 0.5) * 48;
+      arr[i * 3 + 1] = (Math.random() - 0.5) * 24;
+      arr[i * 3 + 2] = (Math.random() - 0.5) * 48;
     }
-    return pos;
-  }, [count]);
+    return arr;
+  }, []);
 
-  useFrame(() => {
-    const progress = useVedaStore.getState().scrollProgress;
-    if (pointsRef.current) {
-      // Appear around 0.3 (Engine section)
-      const targetOpacity = (progress > 0.25 && progress < 0.45) ? 0.8 : 0;
-      pointsRef.current.material.opacity += (targetOpacity - pointsRef.current.material.opacity) * 0.05;
-      pointsRef.current.rotation.y += 0.001;
-    }
+  useFrame((state) => {
+    if (!ref.current) return;
+    ref.current.rotation.y = state.clock.elapsedTime * 0.003;
+    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.005) * 0.025;
   });
 
   return (
-    <Points ref={pointsRef} positions={positions} stride={3} frustumCulled={false}>
-      <PointMaterial transparent color="#9b7b5a" size={0.05} sizeAttenuation={true} depthWrite={false} opacity={0} />
+    <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+      <PointMaterial
+        transparent
+        color="#B29B55"
+        size={0.022}
+        sizeAttenuation
+        depthWrite={false}
+        opacity={0.18}
+      />
     </Points>
   );
 }
 
-// Dynamic Camera that responds to scroll progress
+// Camera Rig & Interactive Gallery Spotlight
 function CameraRig() {
-  useFrame((state) => {
-    const progress = useVedaStore.getState().scrollProgress;
-    
-    // Default Hero position
-    let targetPos = new THREE.Vector3(0, 5, 10);
-    let targetLook = new THREE.Vector3(0, 0, 0);
+  const targetPos = useMemo(() => new THREE.Vector3(), []);
+  const targetLook = useMemo(() => new THREE.Vector3(), []);
+  const currentLook = useMemo(() => new THREE.Vector3(), []);
+  const keyLightRef = useRef();
 
-    if (progress < 0.15) {
-      // Hero: slow travel across the land
-      targetPos.set(Math.sin(progress * Math.PI) * 5, 5 - progress * 2, 10 - progress * 5);
-    } else if (progress < 0.3) {
-      // Why Veda: focus on a single point
-      targetPos.set(0, 8, 2);
-    } else if (progress < 0.45) {
-      // The Engine: Zoom out to see network
-      targetPos.set(0, 15, 0.1); // Top down
-    } else if (progress < 0.6) {
-      // The Difference: Architectural Grid
-      targetPos.set(-5, 2, 5);
-      targetLook.set(5, 0, -5);
-    } else if (progress < 0.72) {
-      // Alibaug: Masterplan approach
-      targetPos.set(0, 3, 8);
-    } else if (progress < 0.84) {
-      // Journey
-      targetPos.set(0, 1, 5);
+  useFrame((state) => {
+    const p = useVedaStore.getState().scrollProgress || 0;
+
+    if (p < 0.14) {
+      // 01 HERO — Elevated architectural overview
+      const t = p / 0.14;
+      targetPos.set(0, 3.6 - t * 0.8, 14.5 - t * 3.0);
+      targetLook.set(0, -0.4, 0);
+    } else if (p < 0.38) {
+      targetPos.set(1.5, 2.5, 10);
+      targetLook.set(0, -0.6, -2);
+    } else if (p < 0.49) {
+      const t = (p - 0.38) / 0.11;
+      targetPos.set(-1.0 + t * 2.0, 5.0 + t * 2.5, 7.5 - t * 2.5);
+      targetLook.set(0, 0, -2);
+    } else if (p < 0.65) {
+      targetPos.set(0, 4.5, 12);
+      targetLook.set(0, 0, 0);
+    } else if (p < 0.77) {
+      const t = (p - 0.65) / 0.12;
+      targetPos.set(1.2, 2.4 - t * 0.6, 5.8 - t * 1.5);
+      targetLook.set(0, -0.7, -4);
     } else {
-      // Philosophy & Footer: fade away
-      targetPos.set(0, 20, 20);
+      const t = Math.max(0, (p - 0.88) / 0.12);
+      targetPos.set(0, 4.0 + t * 10.0, 12.0 + t * 8.0);
+      targetLook.set(0, 0, 0);
     }
 
-    // Add subtle mouse parallax
-    const mouseX = (state.pointer.x * 0.5);
-    const mouseY = (state.pointer.y * 0.5);
-    
+    // Subtle mouse parallax
+    const mx = state.pointer.x * 0.22;
+    const my = state.pointer.y * 0.14;
+
     state.camera.position.lerp(
-      new THREE.Vector3(targetPos.x + mouseX, targetPos.y + mouseY, targetPos.z), 
-      0.05
+      targetPos.clone().add(new THREE.Vector3(mx, my, 0)),
+      0.025
     );
-    
-    // Lerp lookAt
-    const currentLookAt = new THREE.Vector3(0,0,0);
-    state.camera.getWorldDirection(currentLookAt);
-    const targetDirection = new THREE.Vector3().subVectors(targetLook, state.camera.position).normalize();
-    
-    const finalDir = currentLookAt.lerp(targetDirection, 0.05);
-    const lookAtPos = state.camera.position.clone().add(finalDir);
-    state.camera.lookAt(lookAtPos);
+
+    // Subtle spotlight position modulation following cursor
+    if (keyLightRef.current) {
+      keyLightRef.current.position.x = 8 + state.pointer.x * 3;
+      keyLightRef.current.position.y = 7 + state.pointer.y * 2;
+    }
+
+    state.camera.getWorldDirection(currentLook);
+    const dir = targetLook.clone().sub(state.camera.position).normalize();
+    currentLook.lerp(dir, 0.03);
+    state.camera.lookAt(state.camera.position.clone().add(currentLook));
   });
 
-  return null;
-}
-
-function BackgroundColor() {
-  useFrame((state) => {
-    const progress = useVedaStore.getState().scrollProgress;
-    const isDark = progress > 0.8;
-    const isHero = progress < 0.2;
-    
-    // Default ivory: #F2EEE6, Dark mode: #000000, Hero earthy: #050505
-    const targetColor = new THREE.Color(
-      isDark ? '#000000' : (isHero ? '#111111' : '#F2EEE6')
-    );
-    state.scene.background = state.scene.background || new THREE.Color('#111111');
-    state.scene.background.lerp(targetColor, 0.05);
-  });
-  return null;
+  return (
+    <>
+      <ambientLight intensity={0.14} color="#060E08" />
+      <directionalLight ref={keyLightRef} position={[8, 7, -6]} intensity={1.6} color="#2A3719" />
+      <pointLight position={[-6, 4, 5]} intensity={0.9} color="#B29B55" distance={26} decay={2} />
+    </>
+  );
 }
 
 export default function VedaScene() {
   return (
     <>
-      <BackgroundColor />
-
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1.5} color="#F2EEE6" castShadow />
-      <directionalLight position={[-10, 5, -5]} intensity={0.5} color="#9b7b5a" />
-
       <CameraRig />
-      
       <Terrain />
-      <ContourLines />
-      <LocationPoints />
-      
-      {/* Placeholder for Architectural Grid */}
-      <gridHelper args={[50, 50, '#9b7b5a', '#171713']} position={[0, -1.95, 0]} />
-      
-      <Environment preset="city" />
+      <DustParticles />
     </>
   );
 }
