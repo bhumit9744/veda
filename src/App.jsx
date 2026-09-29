@@ -25,15 +25,22 @@ import Section09FindOwnBuild from './components/home/Section09FindOwnBuild';
 import Section10BeyondLiving from './components/home/Section10BeyondLiving';
 import Section11FinalCTA from './components/home/Section11FinalCTA';
 
+import VedaExperience from './components/VedaExperience';
+
 function Home() {
   return (
     <div className="w-full font-sans bg-[#050505]">
-      <CinematicHome />
+      <VedaExperience />
     </div>
   );
 }
 
-function App() {
+import { useLocation } from 'react-router-dom';
+
+function AppContent() {
+  const location = useLocation();
+  const isHome = location.pathname === '/' || location.pathname === '/index.php';
+
   useEffect(() => {
     // Initialize Lenis for smooth scrolling
     const lenis = new Lenis({
@@ -63,27 +70,35 @@ function App() {
   }, []);
 
   return (
+    <div className="flex flex-col min-h-screen bg-[#050505]">
+      {/* Conditionally render navbar if needed, or maybe it should be transparent on home. */}
+      {!isHome && <Navbar />}
+      {isHome && <Navbar className="absolute top-0 w-full z-50 bg-transparent mix-blend-difference" />}
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/index.php" element={<Home />} />
+          <Route path="/aboutus.php" element={<About />} />
+          <Route path="/contact-us.php" element={<Contact />} />
+          <Route path="/our-team.php" element={<OurTeam />} />
+          <Route path="/news.php" element={<News />} />
+          <Route path="/carrers.php" element={<Careers />} />
+          <Route path="/faq.php" element={<FAQ />} />
+          <Route path="/codename-bellagio.php" element={<Bellagio />} />
+          <Route path="/codename-bellagio-v2.php" element={<Bellagio />} />
+          <Route path="/thank-you.php" element={<ThankYou />} />
+          <Route path="*" element={<div className="min-h-screen flex items-center justify-center pt-24 text-white"><h1 className="text-3xl">404 Not Found</h1></div>} />
+        </Routes>
+      </main>
+      {!isHome && <Footer />}
+    </div>
+  );
+}
+
+function App() {
+  return (
     <Router>
-      <div className="flex flex-col min-h-screen bg-[#050505]">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/index.php" element={<Home />} />
-            <Route path="/aboutus.php" element={<About />} />
-            <Route path="/contact-us.php" element={<Contact />} />
-            <Route path="/our-team.php" element={<OurTeam />} />
-            <Route path="/news.php" element={<News />} />
-            <Route path="/carrers.php" element={<Careers />} />
-            <Route path="/faq.php" element={<FAQ />} />
-            <Route path="/codename-bellagio.php" element={<Bellagio />} />
-            <Route path="/codename-bellagio-v2.php" element={<Bellagio />} />
-            <Route path="/thank-you.php" element={<ThankYou />} />
-            <Route path="*" element={<div className="min-h-screen flex items-center justify-center pt-24 text-white"><h1 className="text-3xl">404 Not Found</h1></div>} />
-          </Routes>
-        </main>
-        {/* <Footer /> */}
-      </div>
+      <AppContent />
     </Router>
   );
 }

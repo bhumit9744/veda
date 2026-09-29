@@ -1,17 +1,14 @@
-import { useRef } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Footer() {
   const containerRef = useRef<HTMLElement>(null);
+  const wordmarkRef = useRef<HTMLHeadingElement>(null);
   const currentYear = new Date().getFullYear();
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end end']
-  });
-
-  const wordmarkY = useTransform(scrollYProgress, [0, 1], [100, 0]);
 
   const socialLinks = [
     { name: 'X', url: 'https://x.com/vedalifespace', icon: '/assets/images/X-Icon-White.png' },
@@ -21,155 +18,190 @@ export default function Footer() {
     { name: 'YouTube', url: 'https://www.youtube.com/@Vedalifespaces', icon: '/assets/images/Youtube-Icon.png' }
   ];
 
-  return (
-    <footer ref={containerRef} className="relative bg-[#050505] text-[#F4F1E8] overflow-hidden pt-24 md:pt-32 font-sans border-t border-black">
-      
-      {/* Decorative Top Line */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/aboutus.php' },
+    { name: 'Developments', path: '/#developments' },
+    { name: 'News', path: '/news.php' },
+    { name: 'Careers', path: '/carrers.php' },
+    { name: 'Contact', path: '/contact-us.php' }
+  ];
 
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex flex-col">
+  // Restrained mouse parallax for the wordmark
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!wordmarkRef.current) return;
+    const xPos = (e.clientX / window.innerWidth - 0.5) * 2;
+    gsap.to(wordmarkRef.current, { x: xPos * -20, duration: 1.5, ease: "power2.out" });
+  };
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 60%", // Triggers when the footer strongly enters the viewport
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // 1. Headline Reveals
+      tl.fromTo('.footer-hero-word',
+        { yPercent: 110 },
+        { yPercent: 0, duration: 1.2, stagger: 0.1, ease: "expo.out" }
+      )
+      // 2. CTA appears
+      .fromTo('.footer-cta-container',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+        "-=0.8"
+      );
+
+      // 3. Architectural SVG path begins drawing
+      const activePath = document.getElementById('footer-svg-line') as any;
+      if (activePath && activePath.getTotalLength) {
+        const length = activePath.getTotalLength();
+        gsap.set(activePath, { strokeDasharray: length, strokeDashoffset: length });
+        tl.to(activePath, { strokeDashoffset: 0, duration: 2.5, ease: "power2.inOut" }, "-=1");
+      }
+
+      // 4. VEDA rises into view (clip-path + transform)
+      tl.fromTo('.veda-wordmark',
+        { clipPath: "inset(100% 0 0 0)", y: 80, opacity: 0 },
+        { clipPath: "inset(0% 0 0 0)", y: 0, opacity: 1, duration: 1.8, ease: "expo.out" },
+        "-=1.5"
+      );
+
+      // 5. Navigation / info subtly reveals
+      tl.fromTo('.footer-nav-item',
+        { opacity: 0, y: 10 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.05, ease: "power2.out" },
+        "-=1.2"
+      );
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <footer 
+      ref={containerRef} 
+      onMouseMove={handleMouseMove}
+      className="relative w-full min-h-[100svh] bg-[#F4F1E8] text-[#050505] overflow-hidden flex flex-col justify-between selection:bg-[#050505] selection:text-[#F4F1E8]"
+    >
+      
+      {/* ==============================================
+          ARCHITECTURAL SVG PATH (BACKGROUND)
+          ============================================== */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" viewBox="0 0 100 100" preserveAspectRatio="none">
+        {/* Faint Guide Contour */}
+        <path 
+          d="M 50 0 V 30 H 80 V 65 H 20 V 100" 
+          stroke="#050505" 
+          strokeOpacity="0.03"
+          strokeWidth="0.2" 
+          fill="none" 
+          vectorEffect="non-scaling-stroke" 
+        />
+        {/* Animated Architectural Contour */}
+        <path 
+          id="footer-svg-line" 
+          d="M 50 0 V 30 H 80 V 65 H 20 V 100" 
+          stroke="#b89a6b" 
+          strokeWidth="0.4" 
+          fill="none" 
+          vectorEffect="non-scaling-stroke" 
+        />
+      </svg>
+
+      {/* ==============================================
+          TOP: HERO CTA
+          ============================================== */}
+      <div className="relative z-10 flex flex-col items-center text-center pt-24 md:pt-32 px-6">
+        <div className="overflow-hidden pb-4">
+          <h2 className="footer-hero-word text-5xl md:text-8xl lg:text-[10rem] font-light leading-[0.85] tracking-tighter uppercase">
+            Let's Build
+          </h2>
+        </div>
+        <div className="overflow-hidden pb-4 mb-12">
+          <h2 className="footer-hero-word text-5xl md:text-8xl lg:text-[10rem] font-light leading-[0.85] tracking-tighter uppercase">
+            What Lasts.
+          </h2>
+        </div>
         
-        {/* Upper Footer - 3 Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-12 mb-32">
-          
-          {/* Column 01: QUICK LINKS */}
-          <div className="md:col-span-3 flex flex-col">
-            <h4 className="text-[0.65rem] uppercase tracking-[0.3em] mb-12 text-white/40 font-semibold">Navigation</h4>
-            <div className="flex flex-col gap-5">
-              {['Home', 'About', 'Developments', 'Contact', 'Careers', 'FAQ'].map((item, i) => {
-                const paths: Record<string, string> = {
-                  'Home': '/',
-                  'About': '/aboutus.php',
-                  'Developments': '/#developments',
-                  'Contact': '/contact-us.php',
-                  'Careers': '/carrers.php',
-                  'FAQ': '/faq.php'
-                };
-                return (
-                  <motion.div key={item} initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1, duration: 0.6, ease: [0.22, 1, 0.36, 1] }} viewport={{ once: true }}>
-                    <Link to={paths[item]} className="group flex items-center text-sm md:text-base font-light text-white/70 hover:text-white transition-all duration-500 w-max">
-                      <span className="w-0 h-[1px] bg-[#b89a6b] mr-0 group-hover:w-6 group-hover:mr-4 transition-all duration-500 ease-out" />
-                      <span className="group-hover:translate-x-1 transition-transform duration-500 ease-out">{item}</span>
-                    </Link>
-                  </motion.div>
-                );
-              })}
+        <div className="footer-cta-container">
+          <Link to="/contact-us.php" className="group flex items-center gap-6 border border-black/10 rounded-full px-8 py-4 hover:border-black/40 bg-[#F4F1E8]/50 backdrop-blur-sm transition-all duration-500">
+            <span className="text-xs md:text-sm tracking-[0.2em] uppercase font-semibold">Start a Conversation</span>
+            <div className="relative overflow-hidden w-6 h-[1px] bg-black/20 group-hover:w-10 transition-all duration-500 ease-out">
+              <div className="absolute inset-0 bg-[#050505] -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </div>
+            <span className="group-hover:translate-x-1 transition-transform duration-500 text-lg leading-none">→</span>
+          </Link>
+        </div>
+      </div>
+
+      {/* ==============================================
+          BOTTOM: VEDA & NAVIGATION (Unified block)
+          ============================================== */}
+      <div className="relative z-10 flex flex-col w-full mt-auto pt-16 px-4 md:px-8">
+        
+        {/* Minimal Nav / Contact sitting right above the wordmark */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end w-full max-w-[1800px] mx-auto mb-4 md:mb-[-2rem] z-20 gap-8 md:gap-0">
+          
+          {/* Left: Navigation Grid */}
+          <div className="flex flex-wrap gap-x-8 gap-y-4 max-w-lg text-[0.6rem] md:text-[0.65rem] tracking-[0.25em] uppercase font-medium text-black/60">
+            {navLinks.map((link) => (
+              <Link key={link.name} to={link.path} className="footer-nav-item group relative hover:text-black transition-colors duration-300">
+                {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-black group-hover:w-full transition-all duration-300 ease-out" />
+              </Link>
+            ))}
           </div>
 
-          {/* Column 02: CONTACT INFO */}
-          <div className="md:col-span-4 flex flex-col">
-            <h4 className="text-[0.65rem] uppercase tracking-[0.3em] mb-12 text-white/40 font-semibold">Inquiries</h4>
-            <motion.div 
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              viewport={{ once: true }}
-              className="flex flex-col gap-8 text-sm font-light text-white/70"
-            >
-              <div className="group flex flex-col gap-2 w-max cursor-pointer">
-                <span className="uppercase tracking-[0.2em] text-[0.65rem] text-[#b89a6b]">Email</span>
-                <a href="mailto:info@vedalifespaces.in" className="text-base md:text-lg group-hover:text-white transition-colors duration-500 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white group-hover:after:w-full after:transition-all after:duration-500">info@vedalifespaces.in</a>
-              </div>
-              <div className="group flex flex-col gap-2 w-max cursor-pointer">
-                <span className="uppercase tracking-[0.2em] text-[0.65rem] text-[#b89a6b]">Phone</span>
-                <a href="tel:+919619394620" className="text-base md:text-lg group-hover:text-white transition-colors duration-500 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[1px] after:bg-white group-hover:after:w-full after:transition-all after:duration-500">+91 96193 94620</a>
-              </div>
-              <div className="flex flex-col gap-2 mt-4">
-                <span className="uppercase tracking-[0.2em] text-[0.65rem] text-white/40">Office</span>
-                <span className="leading-loose text-white/70 max-w-[200px]">Mumbai, Maharashtra,<br/>India</span>
-              </div>
-            </motion.div>
-
-            {/* Premium Social Icons */}
-            <div className="flex gap-4 mt-16">
-              {socialLinks.map((social, i) => (
-                <motion.a
-                  key={social.name}
-                  href={social.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + (i * 0.1), duration: 0.5, ease: "easeOut" }}
-                  viewport={{ once: true }}
-                  className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white hover:border-white transition-all duration-500 group"
-                >
-                  <img src={social.icon} alt={social.name} className="w-4 h-4 md:w-5 md:h-5 object-contain opacity-60 group-hover:opacity-100 group-hover:invert transition-all duration-500" />
-                </motion.a>
+          {/* Right: Contact & Socials */}
+          <div className="flex flex-col items-start md:items-end gap-3 text-[0.6rem] md:text-[0.65rem] tracking-[0.25em] uppercase font-medium text-black/60">
+            <a href="mailto:info@vedalifespaces.in" className="footer-nav-item group relative hover:text-black transition-colors duration-300">
+              info@vedalifespaces.in
+              <span className="absolute -bottom-1 right-0 md:left-auto md:right-0 left-0 w-0 h-[1px] bg-black group-hover:w-full transition-all duration-300 ease-out" />
+            </a>
+            <a href="tel:+919619394620" className="footer-nav-item group relative hover:text-black transition-colors duration-300">
+              +91 96193 94620
+              <span className="absolute -bottom-1 right-0 md:left-auto md:right-0 left-0 w-0 h-[1px] bg-black group-hover:w-full transition-all duration-300 ease-out" />
+            </a>
+            
+            <div className="flex gap-4 mt-4">
+              {socialLinks.map((social) => (
+                <a key={social.name} href={social.url} target="_blank" rel="noreferrer" className="footer-nav-item hover:opacity-60 transition-opacity duration-300">
+                  <img src={social.icon} alt={social.name} className="w-4 h-4 object-contain invert" />
+                </a>
               ))}
             </div>
           </div>
 
-          {/* Column 03: FEATURED DEVELOPMENT */}
-          <div className="md:col-span-5 flex flex-col">
-            <h4 className="text-[0.65rem] uppercase tracking-[0.3em] mb-12 text-white/40 font-semibold">Featured Estate</h4>
-            <Link
-              to="/codename-bellagio.php"
-              className="relative w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden group cursor-pointer block bg-[#111]"
-            >
-              <motion.div
-                initial={{ opacity: 0, scale: 1.05 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                viewport={{ once: true, margin: "-50px" }}
-                className="w-full h-full"
-              >
-                <img 
-                  src="/assets/images/bellagio/img268.jpg" 
-                  alt="Codename Bellagio"
-                  className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-105 opacity-80 group-hover:opacity-100"
-                />
-              </motion.div>
-              {/* Refined overlay frame */}
-              <div className="absolute inset-4 border border-white/10 z-10 pointer-events-none transition-colors duration-700 group-hover:border-white/30" />
-            </Link>
-            
-            <div className="flex flex-row justify-between items-center mt-8">
-              <div className="flex flex-col">
-                <span className="text-xl md:text-2xl font-light tracking-wide text-white mb-2">Codename Bellagio</span>
-                <span className="text-[0.65rem] uppercase tracking-[0.3em] text-[#b89a6b]">Alibaug</span>
-              </div>
-              <Link to="/codename-bellagio.php" className="flex items-center justify-center w-12 h-12 rounded-full border border-white/20 text-white/70 hover:text-white hover:bg-[#b89a6b] hover:border-[#b89a6b] transition-all duration-500 group">
-                <span className="transform -rotate-45 group-hover:rotate-0 transition-transform duration-500 text-lg font-light">→</span>
-              </Link>
-            </div>
-          </div>
-
         </div>
 
-        {/* HUGE VEDA WORDMARK */}
-        <div className="w-full flex flex-col items-center justify-center relative pb-12 md:pb-24 pt-12 border-t border-white/5">
-          <motion.div 
-            style={{ y: wordmarkY }}
-            className="w-full flex justify-center overflow-hidden"
+        {/* Giant VEDA Wordmark */}
+        <div className="w-full overflow-hidden flex justify-center items-end leading-none z-10 pointer-events-none">
+          <h1 
+            ref={wordmarkRef}
+            className="veda-wordmark text-[30vw] font-light tracking-tighter text-[#050505] m-0 p-0 leading-[0.78]"
           >
-            <h1 className="text-[clamp(3rem,11vw,12rem)] font-light tracking-widest leading-none text-white/5 select-none text-center">
-              VEDA
-            </h1>
-          </motion.div>
-          
-          <div className="absolute bottom-6 md:bottom-16">
-            <span className="text-[0.65rem] md:text-xs uppercase tracking-[0.5em] text-[#b89a6b] font-medium">
-              Beyond Living
-            </span>
+            VEDA
+          </h1>
+        </div>
+
+        {/* Absolute Minimal Legal Bar */}
+        <div className="flex flex-col md:flex-row justify-between w-full max-w-[1800px] mx-auto text-[0.55rem] md:text-[0.6rem] tracking-[0.2em] uppercase text-black/40 pb-6 pt-4 z-20 border-t border-black/5 mt-4 md:mt-0 gap-4">
+          <span className="footer-nav-item">© {currentYear} Veda Lifespaces. All rights reserved.</span>
+          <div className="flex gap-8">
+            <Link to="/privacy-policy" className="footer-nav-item hover:text-black transition-colors duration-300">Privacy Policy</Link>
+            <Link to="/terms" className="footer-nav-item hover:text-black transition-colors duration-300">Terms of Service</Link>
           </div>
         </div>
 
       </div>
 
-      {/* BOTTOM BAR */}
-      <div className="w-full border-t border-white/5 bg-[#030303]">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-8 flex flex-col md:flex-row justify-between items-center gap-6 text-[0.65rem] uppercase tracking-widest text-white/40">
-          <div>
-            © {currentYear} Veda Lifespaces. All rights reserved.
-          </div>
-          <div className="flex gap-10">
-            <Link to="/privacy-policy" className="hover:text-white transition-colors duration-300">Privacy Policy</Link>
-            <Link to="/terms" className="hover:text-white transition-colors duration-300">Terms of Service</Link>
-          </div>
-        </div>
-      </div>
     </footer>
   );
 }

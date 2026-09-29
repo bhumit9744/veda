@@ -32,6 +32,11 @@ export default {
         'veda-warm-highlight': '#B29B55',
         'veda-text': '#F1F0E8',
         'veda-muted-text': '#A8ADA2',
+
+        // Veda Specific from remote
+        'veda-base': '#F2EEE6',
+        'veda-earth': '#8C7C6D',
+        'veda-accent': '#9b7b5a',
       },
       backgroundImage: {
         'veda-radial-glow': 'radial-gradient(circle at 30% 20%, #101C0C 0%, #071109 40%, #000201 100%)',
