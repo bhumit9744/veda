@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Oswald:wght@400;500;600;700&family=Bebas+Neue&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -42,7 +42,7 @@
     font-family: 'Inter', 'Helvetica Neue', 'Helvetica', system-ui, sans-serif;
     background-color: var(--veda-black);
     color: var(--veda-text-light);
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   ::selection {
@@ -58,6 +58,14 @@
 
 .font-editorial {
   font-family: 'Playfair Display', 'Georgia', serif;
+}
+
+.font-impact {
+  font-family: 'Oswald', 'Bebas Neue', 'Impact', sans-serif;
+}
+
+.font-bebas {
+  font-family: 'Bebas Neue', 'Impact', sans-serif;
 }
 
 .font-body {

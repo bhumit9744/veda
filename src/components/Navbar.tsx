@@ -9,10 +9,21 @@ export default function Navbar() {
 
   const { scrollY } = useScroll();
 
+  const isHome = location.pathname === '/' || location.pathname === '/index.php';
+
   // Scroll Transformations
-  const navBg = useTransform(scrollY, [0, 200], ['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.95)']);
-  const navBlur = useTransform(scrollY, [0, 200], ['blur(18px)', 'blur(28px)']);
-  const navBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(0,0,0,0.05)', '1px solid rgba(0,0,0,0.1)']);
+  const homeNavBg = useTransform(scrollY, [0, 200], ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.85)']);
+  const otherNavBg = useTransform(scrollY, [0, 200], ['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.95)']);
+  const navBg = isHome ? homeNavBg : otherNavBg;
+
+  const homeNavBlur = useTransform(scrollY, [0, 200], ['blur(0px)', 'blur(20px)']);
+  const otherNavBlur = useTransform(scrollY, [0, 200], ['blur(18px)', 'blur(28px)']);
+  const navBlur = isHome ? homeNavBlur : otherNavBlur;
+
+  const homeNavBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(255,255,255,0)', '1px solid rgba(255,255,255,0.05)']);
+  const otherNavBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(0,0,0,0.05)', '1px solid rgba(0,0,0,0.1)']);
+  const navBorder = isHome ? homeNavBorder : otherNavBorder;
+
   const navPadding = useTransform(scrollY, [0, 200], ['24px 4vw', '16px 4vw']);
 
   useEffect(() => {
@@ -86,7 +97,12 @@ export default function Navbar() {
             }} 
             className="h-full flex items-center drop-shadow-md hover:opacity-80 transition-opacity duration-300"
           >
-            <img src="/assets/images/logo.png" className="h-full object-contain brightness-0" alt="Veda Lifespaces" />
+            <img 
+              src="/assets/images/logo.png" 
+              className="h-full object-contain" 
+              alt="Veda Lifespaces" 
+              style={{ filter: isHome ? 'none' : 'invert(1) hue-rotate(180deg) brightness(1.2)' }}
+            />
           </Link>
         </motion.div>
 
@@ -114,11 +130,12 @@ export default function Navbar() {
                     to={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
                     className={`group relative text-[10px] lg:text-[11px] xl:text-[12px] uppercase font-medium tracking-[0.14em] transition-all duration-300 block 
-                      hover:-translate-y-[2px] hover:text-[#0a0a0a] hover:opacity-100 whitespace-nowrap
-                      ${isActive ? 'text-[#0a0a0a] opacity-100' : 'text-[#0a0a0a] opacity-70'}`}
+                      hover:-translate-y-[2px] ${isHome ? 'hover:text-white text-white' : 'hover:text-[#0a0a0a] text-[#0a0a0a]'} hover:opacity-100 whitespace-nowrap
+                      ${isActive ? 'opacity-100' : 'opacity-70'}`}
                   >
                     {link.name}
-                    <span className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-[1px] bg-[#0a0a0a] transition-all duration-300 ease-out 
+                    <span className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300 ease-out 
+                      ${isHome ? 'bg-white' : 'bg-[#0f365e]'}
                       ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`} />
                   </Link>
                 </motion.div>
@@ -136,7 +153,9 @@ export default function Navbar() {
         >
           <Link 
             to="/contact-us.php"
-            className="group flex items-center gap-2 bg-[#121212]/95 hover:bg-[#1a1a1a] text-[#F4F1E8] px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-7 hover:scale-[1.02] whitespace-nowrap"
+            className={`group flex items-center gap-2 px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-7 hover:scale-[1.02] whitespace-nowrap ${
+              isHome ? 'bg-[#F4F1E8] text-[#121212] hover:bg-white' : 'bg-[#121212]/95 hover:bg-[#1a1a1a] text-[#F4F1E8]'
+            }`}
           >
             <span className="group-hover:-translate-x-0.5 transition-transform duration-500">Enquire</span>
             <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1.5 group-hover:-translate-y-1">↗</span>
@@ -162,14 +181,19 @@ export default function Navbar() {
           }} 
           className="pointer-events-auto h-6 drop-shadow-md z-[10000]"
         >
-          <img src="/assets/images/logo.png" className="h-full object-contain brightness-0" alt="Veda" />
+          <img 
+            src="/assets/images/logo.png" 
+            className="h-full object-contain" 
+            alt="Veda" 
+            style={{ filter: isHome ? 'none' : 'invert(1) hue-rotate(180deg) brightness(1.2)' }}
+          />
         </Link>
         <button 
           onClick={() => setMobileMenuOpen(true)}
           className="pointer-events-auto flex flex-col justify-center gap-[5px] w-10 h-10 items-end drop-shadow-md z-[10000]"
         >
-          <span className="w-6 h-[1px] bg-black block" />
-          <span className="w-5 h-[1px] bg-black block" />
+          <span className={`w-6 h-[1px] ${isHome ? 'bg-white' : 'bg-black'} block`} />
+          <span className={`w-5 h-[1px] ${isHome ? 'bg-white' : 'bg-black'} block`} />
         </button>
       </motion.div>
 
