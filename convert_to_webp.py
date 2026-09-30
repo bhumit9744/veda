@@ -22,5 +22,6 @@ def convert_to_webp(directory):
                 print(f"Failed to convert {filename}: {e}")
 
 if __name__ == "__main__":
+    convert_to_webp("public/sequences/veda")
     convert_to_webp("public/plant_animation_frames")
     print("Conversion complete.")
