@@ -40,10 +40,10 @@ export default function Footer() {
         </div>
 
         {/* Links Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-12 md:gap-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24">
           
           {/* Navigation */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 items-center lg:items-start text-center lg:text-left">
             <span className="text-[0.65rem] tracking-[0.2em] uppercase text-[#F0EBDD]/40 mb-2 font-sans">Explore</span>
             {navLinks.map((link) => (
               <Link key={link.name} to={link.path} className="text-sm font-body text-[#F0EBDD]/80 hover:text-[#C7A34A] transition-colors">
@@ -53,7 +53,7 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 items-center lg:items-start text-center lg:text-left">
             <span className="text-[0.65rem] tracking-[0.2em] uppercase text-[#F0EBDD]/40 mb-2 font-sans">Contact</span>
             <a href="mailto:info@vedalifespaces.in" className="text-sm font-body text-[#F0EBDD]/80 hover:text-[#C7A34A] transition-colors">
               info@vedalifespaces.in
@@ -64,7 +64,7 @@ export default function Footer() {
           </div>
 
           {/* Social */}
-          <div className="flex flex-col gap-4 col-span-2 md:col-span-1">
+          <div className="flex flex-col gap-4 items-center lg:items-start col-span-1 md:col-span-1">
             <span className="text-[0.65rem] tracking-[0.2em] uppercase text-[#F0EBDD]/40 mb-2 font-sans">Connect</span>
             {socialLinks.map((social) => (
               <a key={social.name} href={social.url} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-sm font-body text-[#F0EBDD]/80 hover:text-[#C7A34A] transition-colors group">

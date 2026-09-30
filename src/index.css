@@ -27,6 +27,13 @@
   --veda-text-muted: #A8ADA2;
   --veda-text-dark: #171713;
   --veda-text-subdark: #3A3A3A;
+
+  /* Mobile Typography */
+  --mobile-display: clamp(32px, 9vw, 64px);
+  --mobile-heading: clamp(26px, 7vw, 48px);
+  --mobile-subheading: clamp(20px, 5vw, 24px);
+  --mobile-body: 15px;
+  --mobile-small: 11px;
 }
 
 /* ===== BASE LAYER ===== */

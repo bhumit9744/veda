@@ -1,11 +1,16 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 
-const LeafFrameCanvas = forwardRef((_props, ref) => {
+interface LeafFrameCanvasProps {
+  focusX?: number; // 0 to 1, default 0.5
+  focusY?: number; // 0 to 1, default 0.5
+}
+
+const LeafFrameCanvas = forwardRef<any, LeafFrameCanvasProps>(({ focusX = 0.5, focusY = 0.5 }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const progressRef = useRef(0);
   const imagesRef = useRef<Map<number, HTMLImageElement>>(new Map());
   const requestRef = useRef<number | undefined>(undefined);
-  const TOTAL_FRAMES = 150;
+  const TOTAL_FRAMES = 300;
 
   useImperativeHandle(ref, () => ({
     setProgress: (p: number) => {
@@ -105,10 +110,10 @@ const LeafFrameCanvas = forwardRef((_props, ref) => {
 
     if (imgRatio > canvasRatio) {
       drawWidth = rect.height * imgRatio;
-      offsetX = (rect.width - drawWidth) / 2;
+      offsetX = (rect.width - drawWidth) * focusX;
     } else {
       drawHeight = rect.width / imgRatio;
-      offsetY = (rect.height - drawHeight) / 2;
+      offsetY = (rect.height - drawHeight) * focusY;
     }
 
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);

@@ -44,12 +44,19 @@ export default function FilledTextHover({ scrollProgress }: { scrollProgress: nu
 
 function TextBlock({ text }: { text: string }) {
   return (
-    <div className="relative font-body font-light tracking-widest text-base md:text-xl lg:text-3xl xl:text-4xl uppercase leading-[1.6] md:leading-[1.5] text-[#F0EBDD]/90 md:whitespace-nowrap">
-      {text.split('\n').map((line, i) => (
-        <React.Fragment key={i}>
-          {line}<br/>
-        </React.Fragment>
-      ))}
+    <div 
+      className="relative font-body font-light tracking-widest text-[#F0EBDD]/90 uppercase leading-[0.95] md:leading-[1.5] md:whitespace-nowrap text-[length:var(--mobile-display)] md:text-[32px] lg:text-[42px] xl:text-[54px]"
+      style={{
+        maxWidth: '100vw', // Let it wrap gracefully
+        wordBreak: 'break-word'
+      }}
+    >
+      <span className="md:hidden">
+        “WE BELIEVE<br/>GOOD LAND<br/>IS FOUND.<br/><br/>GREAT<br/>OPPORTUNITIES<br/>ARE CREATED.”
+      </span>
+      <span className="hidden md:inline">
+        “WE BELIEVE GOOD LAND IS FOUND.<br/>GREAT OPPORTUNITIES ARE CREATED.”
+      </span>
     </div>
   );
 }
