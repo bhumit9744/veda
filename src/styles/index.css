@@ -1,0 +1,321 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400;1,500&family=Inter:wght@300;400;500&display=swap');
+
+:root {
+  --color-ivory: #F4F1E8;
+  --color-ivory-muted: rgba(244, 241, 232, 0.55);
+  --color-charcoal: #171714;
+  
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-charcoal);
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.veda-cinematic {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.veda-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.veda-canvas-container canvas {
+  width: 100%;
+  height: 100vh;
+  object-fit: cover;
+}
+
+.veda-canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.veda-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Masking for GSAP text reveals */
+.mask-container {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.mask-inner {
+  transform: translateY(100%);
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY SYSTEM
+   ========================================================================== */
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eyebrow-divider {
+  width: 1px;
+  height: 32px;
+  background-color: var(--color-ivory-muted);
+}
+
+.headline-text {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--color-ivory);
+  max-width: 500px;
+}
+
+.body-text {
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.1vw, 17px);
+  line-height: 1.55;
+  font-weight: 300;
+  color: rgba(244, 241, 232, 0.85); /* 85% opacity warm white */
+  max-width: 440px;
+}
+
+.signature-text {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 2vw, 32px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-ivory);
+  letter-spacing: 0.02em;
+}
+
+.final-statement {
+  max-width: 400px;
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.55;
+  font-weight: 300;
+  color: var(--color-ivory);
+  letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   LAYOUT GRID (12 Column)
+   ========================================================================== */
+
+.editorial-layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  padding: 0 8vw;
+  visibility: hidden;
+}
+
+.pos-top-left {
+  grid-column: 1 / span 4;
+  align-self: start;
+  margin-top: 18vh;
+}
+
+.pos-bottom-left {
+  grid-column: 1 / span 5;
+  align-self: end;
+  margin-bottom: 22vh;
+}
+
+.pos-bottom-right {
+  grid-column: 8 / span 5;
+  align-self: end;
+  margin-bottom: 22vh;
+}
+
+.pos-top-right {
+  grid-column: 8 / span 5;
+  align-self: start;
+  margin-top: 22vh;
+}
+
+.pos-center-left {
+  grid-column: 1 / span 5;
+  align-self: center;
+}
+
+.pos-interior-align {
+  /* Architectural vertical alignment (door/window frames) */
+  grid-column: 3 / span 5;
+  align-self: center;
+  transform: translateY(5vh);
+}
+
+.abs-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ==========================================================================
+   COMPONENTS
+   ========================================================================== */
+
+.text-gradient-bg {
+  /* Extremely subtle localized gradient purely for contrast where needed */
+  background: radial-gradient(circle at 0% 100%, rgba(23,23,20,0.3) 0%, rgba(23,23,20,0) 70%);
+  border-radius: 8px;
+}
+
+.editorial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.editorial-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  color: var(--color-ivory-muted);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  transition: color 0.8s ease;
+}
+
+.editorial-list-item.active {
+  color: var(--color-ivory);
+}
+
+.editorial-list-item span {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.editorial-list-item .line {
+  height: 1px;
+  width: 24px;
+  background-color: var(--color-ivory-muted);
+  margin-top: 10px;
+  transition: background-color 0.8s ease, width 0.8s ease;
+}
+
+.editorial-list-item.active .line {
+  background-color: var(--color-ivory);
+  width: 48px;
+}
+
+/* Micro Navigation */
+.micro-nav {
+  position: fixed;
+  left: 2vw;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--color-ivory-muted);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  opacity: 0.6;
+}
+
+.micro-nav .nav-line {
+  width: 1px;
+  height: 40px;
+  background-color: var(--color-ivory-muted);
+}
+
+.micro-nav .active-num {
+  color: var(--color-ivory);
+  font-weight: 500;
+}
+
+.scroll-indicator {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ivory-muted);
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scroll-indicator .line {
+  width: 1px;
+  height: 40px;
+  background-color: var(--color-ivory-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .editorial-layer {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 0 6vw;
+  }
+  .pos-top-left, .pos-bottom-left, .pos-bottom-right, .pos-top-right, .pos-center-left, .pos-interior-align {
+    grid-column: 1 / -1;
+  }
+  .headline-text {
+    font-size: clamp(34px, 8vw, 42px);
+    max-width: 100%;
+  }
+  .body-text {
+    font-size: 16px;
+  }
+  .micro-nav {
+    display: none;
+  }
+}
