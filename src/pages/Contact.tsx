@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { submitToHubSpot, mapFormDataToHubSpot } from '../utils/hubspot';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -30,27 +31,38 @@ export default function Contact() {
     }
 
     try {
-      const payload = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        payload.append(key, value.toString());
-      });
-      payload.append('source', 'Contact Us Form');
+      // Submit to HubSpot
+      const hubspotFormId = import.meta.env.VITE_HUBSPOT_CONTACT_FORM_ID;
+      const hubspotData = mapFormDataToHubSpot({ ...formData, source: 'Contact Us Form' });
 
-      const response = await fetch('/api/createLead.php', {
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: payload,
-      });
+      const hubspotResult = await submitToHubSpot(hubspotFormId, hubspotData);
 
-      const data = await response.json();
-      if (data.status === 'success') {
+      if (hubspotResult.success) {
         setStatus({ type: 'success', message: 'Thank you for your message. We will get back to you shortly.' });
         setFormData({ name: '', lname: '', email: '', mobile: '', message: '', checkbox: true });
       } else {
-        setStatus({ type: 'error', message: data.message || 'Something went wrong. Please try again.' });
+        setStatus({ type: 'error', message: hubspotResult.message });
       }
+
+      // Also submit to existing PHP API as backup
+      try {
+        const payload = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          payload.append(key, value.toString());
+        });
+        payload.append('source', 'Contact Us Form');
+
+        await fetch('/api/createLead.php', {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: payload,
+        });
+      } catch (phpErr) {
+        console.warn('PHP API submission failed (non-critical):', phpErr);
+      }
+
     } catch (err) {
       console.error(err);
       setStatus({ type: 'error', message: 'Failed to submit form. Please try again later.' });

@@ -45,7 +45,10 @@ def extract_and_resample(video_path, output_dir, target_frames=300):
             
     print("Done generating 300 frames.")
 
+    print("Done generating 300 frames.")
+
 if __name__ == '__main__':
-    video = "public/assets/images/Green_leaf_falling_background_1080p_20261001002105_gwr_video_mvp.mp4"
-    output = "public/leaf-frames"
-    extract_and_resample(video, output, 300)
+    mobile_video = "public/assets/images/Autumn_leaf_falling_video_produc…_20261001154458_gwr_video_mvp.mp4"
+    
+    print("Extracting Mobile Frames...")
+    extract_and_resample(mobile_video, "public/leaf-frames-mobile", 300)

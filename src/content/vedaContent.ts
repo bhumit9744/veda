@@ -1,7 +1,7 @@
 export const vedaContent = {
   hero: {
     title: "WE BELIEVE GOOD LAND IS FOUND.\nGREAT OPPORTUNITIES ARE CREATED.",
-    body: "Veda Life Spaces identifies promising markets, carefully selects land and develops thoughtfully planned plotted communities with a focus on clarity, quality and long-term value.",
+    body: "Veda Life Spaces identifies promising markets, selects the right land, and creates thoughtfully planned plotted communities built on clarity, quality, and long-term value.",
     phrases: [
       "Thoughtful in what we choose.",
       "Meticulous in how we work.",
@@ -13,33 +13,33 @@ export const vedaContent = {
     eyebrow: "02 — WHAT DO WE DO?",
     headline: "WE FIND LAND WORTH OWNING.",
     subheadline: "WE DON'T JUST FIND LAND. WE FIND THE RIGHT OPPORTUNITY.",
-    body1: "We study markets, identify high-potential land and transform it into thoughtfully planned plotted communities places where families can build, invest and create lasting value.",
-    body2: "From land selection and due diligence to planning and infrastructure, every development is designed around one goal: clear, well-developed plots positioned for long-term value.",
+    body1: "We identify locations with growth potential and transform them into thoughtfully planned communities where families can build, invest, and create lasting value.",
+    body2: "",
     steps: ["Research the market.", "Choose the land.", "Develop the opportunity."]
   },
   promise: {
     eyebrow: "03 — VEDA LIFESPACES PROMISE",
     headline: "WE FIND THE OPPORTUNITY.\nWE GIVE YOU THE CLARITY.",
-    body1: "We identify the right land in the right market evaluating location, connectivity, development and potential. Clarity comes first. From title and legal documentation to development details, we give you the information you need to invest with confidence.",
-    body3: "The right opportunity is only valuable when you can own it with confidence."
+    body1: "We look beyond the plot to identify the right land in the right market evaluating location, connectivity, development, and potential.",
+    body3: "When we bring an opportunity to you, clarity comes first. From title and legal documentation to development details, we give you the information to make a confident decision."
   },
   ourDevelopment: {
     eyebrow: "04 — OUR DEVELOPMENT",
-    headline: "ALIBAUG",
-    body: "Alibaug is where Veda Life Spaces began its journey into plotted development. Our developments here bring together carefully selected land, clear-title villa plots, thoughtful planning and the infrastructure needed to create a well-considered ownership experience.",
+    headline: "ALIBAUG IS WHERE IT BEGAN.",
+    body: "Veda Life Spaces began its plotted development journey in Alibaug — bringing together carefully selected land, clear-title villa plots, thoughtful planning, and essential infrastructure.",
     cta: "[ EXPLORE OUR DEVELOPMENTS ]"
   },
   afterYouBuy: {
     eyebrow: "05 — WHAT HAPPENS AFTER YOU BUY?",
     headline: "THE RELATIONSHIP DOESN'T END AT THE SALE.",
-    intro: "At Veda Life Spaces, we believe owning a plot is only the beginning.",
+    intro: "At Veda Life Spaces, owning a plot is only the beginning.",
     steps: [
-      { title: "BUY", desc: "Own a clear-title plot, thoughtfully developed and ready for your vision." },
-      { title: "BUILD", desc: "When you're ready to build, we assist you through the journey and help connect you with the right professionals." },
-      { title: "SELL", desc: "And when your plans change, we can assist you with the resale of your property." }
+      { title: "BUY", desc: "Clear-title plots, thoughtfully developed and ready for your vision." },
+      { title: "BUILD", desc: "Guidance through your build journey, with access to the right professionals." },
+      { title: "SELL", desc: "Support when your plans change and it's time to explore resale." }
     ],
-    outro1: "Our core business is developing plotted communities.",
-    outro2: "Our role is to assist you beyond the purchase."
+    outro1: "We develop the community.",
+    outro2: "We stay invested in your journey."
   },
   whyWeStarted: {
     headline: "WHY WE STARTED VEDA",

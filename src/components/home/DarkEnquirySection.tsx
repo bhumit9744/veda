@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { submitToHubSpot, mapFormDataToHubSpot } from '../../utils/hubspot';
 
 export default function DarkEnquirySection() {
   const [formData, setFormData] = useState({
@@ -29,25 +30,36 @@ export default function DarkEnquirySection() {
     }
 
     try {
-      const payload = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        payload.append(key, value.toString());
-      });
-      payload.append('source', 'Homepage Dark Enquiry');
+      // Submit to HubSpot
+      const hubspotFormId = import.meta.env.VITE_HUBSPOT_DARK_ENQUIRY_FORM_ID;
+      const hubspotData = mapFormDataToHubSpot({ ...formData, source: 'Homepage Dark Enquiry' });
 
-      const response = await fetch('/api/createLead.php', {
-        method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        body: payload,
-      });
+      const hubspotResult = await submitToHubSpot(hubspotFormId, hubspotData);
 
-      const data = await response.json();
-      if (data.status === 'success') {
+      if (hubspotResult.success) {
         setStatus({ type: 'success', message: 'Thank you. A Veda representative will contact you shortly.' });
         setFormData({ name: '', lname: '', email: '', mobile: '', checkbox: true });
       } else {
-        setStatus({ type: 'error', message: data.message || 'Something went wrong. Please try again.' });
+        setStatus({ type: 'error', message: hubspotResult.message });
       }
+
+      // Also submit to existing PHP API as backup
+      try {
+        const payload = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          payload.append(key, value.toString());
+        });
+        payload.append('source', 'Homepage Dark Enquiry');
+
+        await fetch('/api/createLead.php', {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+          body: payload,
+        });
+      } catch (phpErr) {
+        console.warn('PHP API submission failed (non-critical):', phpErr);
+      }
+
     } catch (err) {
       console.error(err);
       setStatus({ type: 'error', message: 'Failed to submit form. Please try again later.' });

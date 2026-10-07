@@ -5,7 +5,7 @@ export interface LeafFrameSequenceRef {
 }
 
 const TOTAL_FRAMES = 300;
-const FRAME_PREFIX = '/leaf-frames/frame_';
+const FRAME_PREFIX = '/leaf-frames-desktop/frame_';
 const FRAME_EXTENSION = '.webp';
 
 const pad = (num: number, size: number) => {

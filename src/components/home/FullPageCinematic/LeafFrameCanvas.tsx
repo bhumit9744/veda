@@ -3,9 +3,10 @@ import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 interface LeafFrameCanvasProps {
   focusX?: number; // 0 to 1, default 0.5
   focusY?: number; // 0 to 1, default 0.5
+  className?: string;
 }
 
-const LeafFrameCanvas = forwardRef<any, LeafFrameCanvasProps>(({ focusX = 0.5, focusY = 0.5 }, ref) => {
+const LeafFrameCanvas = forwardRef<any, LeafFrameCanvasProps>(({ focusX = 0.5, focusY = 0.5, className }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const progressRef = useRef(0);
   const imagesRef = useRef<Map<number, HTMLImageElement>>(new Map());
@@ -21,11 +22,13 @@ const LeafFrameCanvas = forwardRef<any, LeafFrameCanvasProps>(({ focusX = 0.5, f
     }
   }));
 
+  const folder = useRef(typeof window !== 'undefined' && window.innerWidth <= 768 ? '/leaf-frames-mobile' : '/leaf-frames-desktop');
+
   const loadFrame = (index: number) => {
     if (imagesRef.current.has(index)) return;
     const img = new Image();
     const frameStr = String(index).padStart(4, '0');
-    img.src = `/leaf-frames/frame_${frameStr}.webp`;
+    img.src = `${folder.current}/frame_${frameStr}.webp`;
     imagesRef.current.set(index, img);
     img.onload = () => {
       if (!requestRef.current) {
@@ -128,7 +131,7 @@ const LeafFrameCanvas = forwardRef<any, LeafFrameCanvasProps>(({ focusX = 0.5, f
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
+      className={className || "absolute inset-0 w-full h-full object-cover z-0 opacity-50"}
       style={{ display: 'block' }}
     />
   );

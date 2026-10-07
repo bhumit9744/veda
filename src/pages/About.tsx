@@ -50,10 +50,10 @@ export default function About() {
       const isMobile = W < 768;
       const H = window.innerHeight * (isMobile ? 6 : 5); // Increased height to prevent overlap with the header
       
-      const n1x = isMobile ? W * 0.7 : W * 0.42;
-      const n2x = isMobile ? W * 0.3 : W * 0.58;
-      const n3x = isMobile ? W * 0.7 : W * 0.42;
-      const n4x = isMobile ? W * 0.3 : W * 0.58;
+      const n1x = isMobile ? W * 0.85 : W * 0.42;
+      const n2x = isMobile ? W * 0.15 : W * 0.58;
+      const n3x = isMobile ? W * 0.85 : W * 0.42;
+      const n4x = isMobile ? W * 0.15 : W * 0.58;
       
       const y0 = 0;
       const y1 = H * 0.20; // Starts 1 full screen height below the top
@@ -208,7 +208,7 @@ export default function About() {
   }, [pathD, dimensions, nodes]);
 
   return (
-    <div className="w-full bg-[#F3F0E8] text-[#18231B] selection:bg-[#B08A3C] selection:text-[#F3F0E8] min-h-[750vh] font-sans relative" ref={containerRef}>
+    <div className="w-full bg-[#F3F0E8] text-[#18231B] selection:bg-[#B08A3C] selection:text-[#F3F0E8] min-h-[450vh] md:min-h-[750vh] font-sans relative" ref={containerRef}>
       
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         
@@ -239,6 +239,26 @@ export default function About() {
             const leftWidth = `${xRatio * 100}vw`;
             const rightWidth = `${(1 - xRatio) * 100}vw`;
 
+            const isLeftWider = xRatio > 0.5;
+
+            const renderText = () => (
+              <div className={`node-text-${i} opacity-0 w-full max-w-md lg:max-w-lg text-left`}>
+                <div className="text-[11px] tracking-[0.18em] text-[#666] mb-4 font-semibold uppercase">{node.content.num}</div>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-editorial text-[#18231B] leading-tight mb-6">
+                  {node.content.title}
+                </h2>
+                <p className="text-[#444] text-[15px] md:text-[17px] leading-relaxed font-light">
+                  {node.content.text}
+                </p>
+              </div>
+            );
+
+            const renderImage = () => (
+              <div className={`node-img-wrap-${i} relative overflow-hidden aspect-[4/3] w-full max-w-md lg:max-w-xl rounded-sm mb-6 md:mb-0`} style={{ clipPath: 'inset(0 100% 0 0)' }}>
+                <img src={node.content.img} className={`node-img-${i} w-full h-full object-cover scale-[1.05]`} alt="Veda" />
+              </div>
+            );
+
             return (
               <div key={node.id} className="absolute z-10 pointer-events-none" style={{ left: 0, top: node.y, width: '100vw' }}>
                 
@@ -252,40 +272,32 @@ export default function About() {
                 {/* Full screen layout */}
                 <div className="absolute top-0 left-0 w-full flex flex-row items-center -translate-y-1/2">
                   
-                  {/* Left Side */}
-                  <div className="flex justify-end pl-6 md:pl-12 lg:pl-[8%] pr-8 md:pr-16 lg:pr-20" style={{ width: leftWidth }}>
-                    {textFirst ? (
-                      <div className={`node-text-${i} opacity-0 w-full max-w-md lg:max-w-lg text-left`}>
-                        <div className="text-[11px] tracking-[0.18em] text-[#666] mb-4 font-semibold uppercase">{node.content.num}</div>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-editorial text-[#18231B] leading-tight mb-6">
-                          {node.content.title}
-                        </h2>
-                        <p className="text-[#444] text-[15px] md:text-[17px] leading-relaxed font-light">
-                          {node.content.text}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className={`node-img-wrap-${i} relative overflow-hidden aspect-[4/3] w-full max-w-md lg:max-w-xl rounded-sm`} style={{ clipPath: 'inset(0 100% 0 0)' }}>
-                        <img src={node.content.img} className={`node-img-${i} w-full h-full object-cover scale-[1.05]`} alt="Veda" />
+                  {/* DESKTOP LEFT SIDE */}
+                  <div className="hidden md:flex justify-end pl-12 lg:pl-[8%] pr-16 lg:pr-20" style={{ width: leftWidth }}>
+                    {textFirst ? renderText() : renderImage()}
+                  </div>
+
+                  {/* DESKTOP RIGHT SIDE */}
+                  <div className="hidden md:flex justify-start pr-12 lg:pr-[8%] pl-16 lg:pl-20" style={{ width: rightWidth }}>
+                    {!textFirst ? renderText() : renderImage()}
+                  </div>
+
+                  {/* MOBILE LEFT SIDE */}
+                  <div className="flex md:hidden justify-end pl-4 pr-8" style={{ width: leftWidth }}>
+                    {isLeftWider && (
+                      <div className="flex flex-col w-full max-w-[320px]">
+                        {renderImage()}
+                        {renderText()}
                       </div>
                     )}
                   </div>
 
-                  {/* Right Side */}
-                  <div className="flex justify-start pr-6 md:pr-12 lg:pr-[8%] pl-8 md:pl-16 lg:pl-20" style={{ width: rightWidth }}>
-                    {!textFirst ? (
-                      <div className={`node-text-${i} opacity-0 w-full max-w-md lg:max-w-lg text-left`}>
-                        <div className="text-[11px] tracking-[0.18em] text-[#666] mb-4 font-semibold uppercase">{node.content.num}</div>
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-editorial text-[#18231B] leading-tight mb-6">
-                          {node.content.title}
-                        </h2>
-                        <p className="text-[#444] text-[15px] md:text-[17px] leading-relaxed font-light">
-                          {node.content.text}
-                        </p>
-                      </div>
-                    ) : (
-                      <div className={`node-img-wrap-${i} relative overflow-hidden aspect-[4/3] w-full max-w-md lg:max-w-xl rounded-sm`} style={{ clipPath: 'inset(0 100% 0 0)' }}>
-                        <img src={node.content.img} className={`node-img-${i} w-full h-full object-cover scale-[1.05]`} alt="Veda" />
+                  {/* MOBILE RIGHT SIDE */}
+                  <div className="flex md:hidden justify-start pr-4 pl-8" style={{ width: rightWidth }}>
+                    {!isLeftWider && (
+                      <div className="flex flex-col w-full max-w-[320px]">
+                        {renderImage()}
+                        {renderText()}
                       </div>
                     )}
                   </div>

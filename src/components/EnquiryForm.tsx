@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { submitToHubSpot, mapFormDataToHubSpot } from '../utils/hubspot';
 
 export default function EnquiryForm({ inline = false }: { inline?: boolean }) {
   const [formData, setFormData] = useState({
@@ -29,28 +30,38 @@ export default function EnquiryForm({ inline = false }: { inline?: boolean }) {
     }
 
     try {
-      const payload = new FormData();
-      Object.entries(formData).forEach(([key, value]) => {
-        payload.append(key, value.toString());
-      });
-      payload.append('source', 'Enquiry Inline');
+      // Submit to HubSpot
+      const hubspotFormId = import.meta.env.VITE_HUBSPOT_ENQUIRY_FORM_ID;
+      const hubspotData = mapFormDataToHubSpot({ ...formData, source: 'Enquiry Inline' });
 
-      // Point to existing PHP API in production, but in dev it might need proxy or absolute URL
-      const response = await fetch('/api/createLead.php', {
-        method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: payload,
-      });
+      const hubspotResult = await submitToHubSpot(hubspotFormId, hubspotData);
 
-      const data = await response.json();
-      if (data.status === 'success') {
+      if (hubspotResult.success) {
         setStatus({ type: 'success', message: 'Thank you for your enquiry. We will get back to you soon.' });
         setFormData({ name: '', lname: '', email: '', mobile: '', checkbox: true });
       } else {
-        setStatus({ type: 'error', message: data.message || 'Something went wrong. Please try again.' });
+        setStatus({ type: 'error', message: hubspotResult.message });
       }
+
+      // Also submit to existing PHP API as backup
+      try {
+        const payload = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+          payload.append(key, value.toString());
+        });
+        payload.append('source', 'Enquiry Inline');
+
+        await fetch('/api/createLead.php', {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: payload,
+        });
+      } catch (phpErr) {
+        console.warn('PHP API submission failed (non-critical):', phpErr);
+      }
+
     } catch (err) {
       console.error(err);
       setStatus({ type: 'error', message: 'Failed to submit form. Please try again later.' });
