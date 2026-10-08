@@ -50,7 +50,7 @@ export default function Navbar() {
     { name: 'ABOUT US', href: '/aboutus.php' },
     { name: 'NEWS & REWARDS', href: '/news.php' },
     { name: 'OUR TEAM', href: '/our-team.php' },
-    { name: 'OUR PROJECTS', href: '/#developments' }
+    { name: 'OUR PROJECTS', href: '/projects' }
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

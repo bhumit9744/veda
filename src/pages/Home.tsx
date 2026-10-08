@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FullPageCinematic from '../components/home/FullPageCinematic';
 import MobileHome from './MobileHome';
+import HeroVideoIntro from '../components/home/HeroVideoIntro';
 
 export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
@@ -17,6 +18,7 @@ export default function Home() {
 
   return (
     <div className="w-full font-sans bg-black">
+      <HeroVideoIntro />
       {isMobile ? <MobileHome /> : <FullPageCinematic />}
     </div>
   );

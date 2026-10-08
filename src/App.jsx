@@ -18,6 +18,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Disclaimer from './pages/Disclaimer';
 
 import Home from './pages/Home';
+import Projects from './pages/Projects';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,6 +65,8 @@ function AppContent() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/codename-bellagio.php" element={<Bellagio />} />
             <Route path="/codename-bellagio-v2.php" element={<Bellagio />} />
+            <Route path="/projects.php" element={<Projects />} />
+            <Route path="/projects" element={<Projects />} />
             <Route path="/thank-you.php" element={<ThankYou />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
