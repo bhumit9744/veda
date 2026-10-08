@@ -72,9 +72,11 @@ export default function ContentTimeline({ masterProgress }: ContentTimelineProps
         <p className="text-sm md:text-lg text-white/70 max-w-3xl mx-auto mb-6 leading-relaxed">
           {vedaContent.whatWeDo.body1}
         </p>
-        <p className="text-sm md:text-lg text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed">
-          {vedaContent.whatWeDo.body2}
-        </p>
+        {vedaContent.whatWeDo.body2 && (
+          <p className="text-sm md:text-lg text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed">
+            {vedaContent.whatWeDo.body2}
+          </p>
+        )}
         <div className="flex flex-col md:flex-row justify-center gap-12 md:gap-24 text-[#C7A34A] items-center opacity-80 mt-12">
           <div className="flex flex-col items-center gap-4">
             <Search size={32} strokeWidth={1.5} />

@@ -1,11 +1,17 @@
 import { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 
-const LeafFrameCanvas = forwardRef((_props, ref) => {
+interface LeafFrameCanvasProps {
+  focusX?: number; // 0 to 1, default 0.5
+  focusY?: number; // 0 to 1, default 0.5
+  className?: string;
+}
+
+const LeafFrameCanvas = forwardRef<any, LeafFrameCanvasProps>(({ focusX = 0.5, focusY = 0.5, className }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const progressRef = useRef(0);
   const imagesRef = useRef<Map<number, HTMLImageElement>>(new Map());
   const requestRef = useRef<number | undefined>(undefined);
-  const TOTAL_FRAMES = 150;
+  const TOTAL_FRAMES = 300;
 
   useImperativeHandle(ref, () => ({
     setProgress: (p: number) => {
@@ -16,11 +22,13 @@ const LeafFrameCanvas = forwardRef((_props, ref) => {
     }
   }));
 
+  const folder = useRef(typeof window !== 'undefined' && window.innerWidth <= 768 ? '/leaf-frames-mobile' : '/leaf-frames-desktop');
+
   const loadFrame = (index: number) => {
     if (imagesRef.current.has(index)) return;
     const img = new Image();
     const frameStr = String(index).padStart(4, '0');
-    img.src = `/leaf-frames/frame_${frameStr}.webp`;
+    img.src = `${folder.current}/frame_${frameStr}.webp`;
     imagesRef.current.set(index, img);
     img.onload = () => {
       if (!requestRef.current) {
@@ -105,10 +113,10 @@ const LeafFrameCanvas = forwardRef((_props, ref) => {
 
     if (imgRatio > canvasRatio) {
       drawWidth = rect.height * imgRatio;
-      offsetX = (rect.width - drawWidth) / 2;
+      offsetX = (rect.width - drawWidth) * focusX;
     } else {
       drawHeight = rect.width / imgRatio;
-      offsetY = (rect.height - drawHeight) / 2;
+      offsetY = (rect.height - drawHeight) * focusY;
     }
 
     ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
@@ -123,7 +131,7 @@ const LeafFrameCanvas = forwardRef((_props, ref) => {
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute inset-0 w-full h-full object-cover z-0 opacity-50"
+      className={className || "absolute inset-0 w-full h-full object-cover z-0 opacity-50"}
       style={{ display: 'block' }}
     />
   );

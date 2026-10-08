@@ -15,23 +15,19 @@ export default {
         'brand-gold': '#9a7c4f',
         'bg-beige': '#f5f3f0',
         
-        // Veda Specific - Dark Cinematic Palette
-        'veda-dark-1': '#06130C', // Base deep green
-        'veda-dark-2': '#0A1D12',
-        'veda-dark-3': '#0D2417',
-        'veda-dark-4': '#193A27',
-        'veda-ivory': '#F0EBDD',  // Typography warm ivory
-        'veda-gold': '#C7A34A',   // Accent muted gold
-        
-        // Legacy colors kept for backward compatibility until fully refactored
-        'veda-black': '#000201',
-        'veda-deep-black': '#020603',
-        'veda-deep-green': '#071109',
-        'veda-forest': '#101C0C',
-        'veda-moss': '#35401B',
-        'veda-warm-highlight': '#B29B55',
-        'veda-text': '#F1F0E8',
-        'veda-muted-text': '#A8ADA2',
+        // Veda Specific - Light Theme Palette
+        'veda-ivory': '#F4F1E8',
+        'veda-limestone': '#EAE5D8',
+        'veda-white': '#FAF9F5',
+        'veda-forest': '#18231D',
+        'veda-deep-olive': '#394636',
+        'veda-olive': '#66745B',
+        'veda-text-secondary': '#687067',
+        'veda-text-muted': '#8D9188',
+        'veda-gold': '#B59A68',
+        'veda-gold-light': '#D8C9A7',
+        'veda-border': '#D8D3C6',
+        'veda-soft-green': '#E4E8DE',
 
         // Veda Specific from remote
         'veda-base': '#F2EEE6',
