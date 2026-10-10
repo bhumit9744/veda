@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 const villas = [
   { id: '01', title: 'VILLA A', image: '/villa 1 cutout.png' },
   { id: '02', title: 'VILLA B', image: '/villa 2 cutout.png' },
+  { id: '03', title: 'VILLA C', image: '/villa 3 cutout.png' },
 ];
 
 export default function DesignReadyVillas() {
@@ -25,7 +26,7 @@ export default function DesignReadyVillas() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=300%', // 300vh scroll duration for deliberate, slow movement
+          end: `+=${villas.length * 150}%`, // dynamically scale based on number of items
           pin: true,
           scrub: 1,
           onUpdate: (self) => {
@@ -47,7 +48,11 @@ export default function DesignReadyVillas() {
       tl.to(track, {
         xPercent: -100 * (villas.length - 1) / villas.length,
         ease: 'none',
+        duration: villas.length - 1
       });
+
+      // Add a small pause at the end so the last item stays pinned for a moment
+      tl.to({}, { duration: 0.5 });
 
       // Subtle cinematic image scale tied to the scroll
       const images = gsap.utils.toArray('.villa-img');
@@ -60,7 +65,7 @@ export default function DesignReadyVillas() {
              scrollTrigger: {
                trigger: sectionRef.current,
                start: 'top top',
-               end: '+=300%',
+               end: `+=${villas.length * 150}%`,
                scrub: true
              }
            }
@@ -76,7 +81,7 @@ export default function DesignReadyVillas() {
     <section ref={sectionRef} className="relative w-full h-screen bg-[#F9F8F6] overflow-hidden z-20 flex flex-col">
       
       {/* Header Info - Fixed during pin */}
-      <div className="w-full px-6 md:px-12 lg:px-24 pt-12 md:pt-16 pb-4 flex flex-col md:flex-row md:items-end justify-between z-10">
+      <div className="w-full px-6 md:px-12 lg:px-24 pt-28 md:pt-32 pb-4 flex flex-col md:flex-row md:items-end justify-between z-10">
         
         <div className="flex flex-col mb-8 md:mb-0">
           <span className="font-veda-sans text-[10px] md:text-xs tracking-[0.2em] uppercase text-[#666] mb-4">
@@ -134,12 +139,12 @@ export default function DesignReadyVillas() {
         >
           {villas.map((villa, i) => (
             <div key={i} className="w-[100vw] h-full flex items-center justify-center">
-              {/* 1:1 Square Visual Area */}
-              <div className="relative flex items-center justify-center w-[85vw] h-[85vw] md:w-[min(65vh,65vw)] md:h-[min(65vh,65vw)]">
+              {/* Maximize Visual Area */}
+              <div className="relative flex items-center justify-center w-full h-full p-4 md:p-8">
                 <img 
                   src={villa.image} 
                   alt={villa.title} 
-                  className="villa-img w-[85%] h-[85%] object-contain drop-shadow-2xl"
+                  className="villa-img w-full h-full object-contain drop-shadow-2xl"
                   style={{ willChange: 'transform' }}
                 />
               </div>
