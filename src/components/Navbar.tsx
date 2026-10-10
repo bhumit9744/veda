@@ -12,17 +12,9 @@ export default function Navbar() {
   const isHome = location.pathname === '/' || location.pathname === '/index.php';
 
   // Scroll Transformations
-  const homeNavBg = useTransform(scrollY, [0, 200], ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.85)']);
-  const otherNavBg = useTransform(scrollY, [0, 200], ['rgba(255, 255, 255, 0.8)', 'rgba(255, 255, 255, 0.95)']);
-  const navBg = isHome ? homeNavBg : otherNavBg;
-
-  const homeNavBlur = useTransform(scrollY, [0, 200], ['blur(0px)', 'blur(20px)']);
-  const otherNavBlur = useTransform(scrollY, [0, 200], ['blur(18px)', 'blur(28px)']);
-  const navBlur = isHome ? homeNavBlur : otherNavBlur;
-
-  const homeNavBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(255,255,255,0)', '1px solid rgba(255,255,255,0.05)']);
-  const otherNavBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(0,0,0,0.05)', '1px solid rgba(0,0,0,0.1)']);
-  const navBorder = isHome ? homeNavBorder : otherNavBorder;
+  const navBg = useTransform(scrollY, [0, 200], ['rgba(248, 247, 244, 0.62)', 'rgba(248, 247, 244, 0.95)']);
+  const navBlur = useTransform(scrollY, [0, 200], ['blur(14px)', 'blur(20px)']);
+  const navBorder = useTransform(scrollY, [0, 200], ['1px solid rgba(255, 255, 255, 0.18)', '1px solid rgba(255, 255, 255, 0.5)']);
 
   const navPadding = useTransform(scrollY, [0, 200], ['24px 4vw', '16px 4vw']);
 
@@ -101,7 +93,7 @@ export default function Navbar() {
               src="/assets/images/logo.png" 
               className="h-full object-contain" 
               alt="Veda Lifespaces" 
-              style={{ filter: isHome ? 'none' : 'invert(1) hue-rotate(180deg) brightness(1.2)' }}
+              style={{ filter: 'invert(1) brightness(0.2)' }}
             />
           </Link>
         </motion.div>
@@ -130,12 +122,11 @@ export default function Navbar() {
                     to={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
                     className={`group relative text-[10px] lg:text-[11px] xl:text-[12px] uppercase font-medium tracking-[0.14em] transition-all duration-300 block 
-                      hover:-translate-y-[2px] ${isHome ? 'hover:text-white text-white' : 'hover:text-[#0a0a0a] text-[#0a0a0a]'} hover:opacity-100 whitespace-nowrap
-                      ${isActive ? 'opacity-100' : 'opacity-70'}`}
+                      hover:-translate-y-[1px] text-[#1a1a1a] whitespace-nowrap
+                      ${isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`}
                   >
                     {link.name}
-                    <span className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-[1px] transition-all duration-300 ease-out 
-                      ${isHome ? 'bg-white' : 'bg-[#0f365e]'}
+                    <span className={`absolute -bottom-1.5 left-1/2 -translate-x-1/2 h-[1px] bg-[#1a1a1a] transition-all duration-300 ease-out 
                       ${isActive ? 'w-full opacity-100' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'}`} />
                   </Link>
                 </motion.div>
@@ -153,12 +144,10 @@ export default function Navbar() {
         >
           <Link 
             to="/contact-us.php"
-            className={`group flex items-center gap-2 px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:px-7 hover:scale-[1.02] whitespace-nowrap ${
-              isHome ? 'bg-[#F4F1E8] text-[#121212] hover:bg-white' : 'bg-[#121212]/95 hover:bg-[#1a1a1a] text-[#F4F1E8]'
-            }`}
+            className={`group flex items-center gap-2 px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] whitespace-nowrap bg-[#1a1a1a] hover:bg-[#2a2a2a] text-[#F8F7F4]`}
           >
-            <span className="group-hover:-translate-x-0.5 transition-transform duration-500">Enquire</span>
-            <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1.5 group-hover:-translate-y-1">↗</span>
+            <span className="transition-transform duration-500">Enquire</span>
+            <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span>
           </Link>
         </motion.div>
       </motion.nav>
