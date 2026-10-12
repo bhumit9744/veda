@@ -40,9 +40,6 @@ export default function MicrositeFooter({ progress }: MicrositeFooterProps) {
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-editorial tracking-widest uppercase mb-4 text-[#C7A34A]">
                   Veda<br/>Life Spaces
                 </h2>
-                <p className="text-sm text-[#F0EBDD]/60 max-w-sm tracking-wide font-light leading-relaxed">
-                  Transforming raw land into fully approved, infrastructure-ready residential plots that offer both peace of mind and long-term value appreciation.
-                </p>
               </div>
             </div>
 

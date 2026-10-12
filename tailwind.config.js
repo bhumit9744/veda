@@ -38,10 +38,15 @@ export default {
         'veda-radial-glow': 'radial-gradient(circle at 30% 20%, #101C0C 0%, #071109 40%, #000201 100%)',
       },
       fontFamily: {
-        'display': ['"Neue Montreal"', '"Helvetica Neue"', 'sans-serif'],
-        'body': ['"Inter"', '"Helvetica"', 'sans-serif'],
-        'veda-serif': ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        'veda-sans': ['"Outfit"', 'system-ui', 'sans-serif']
+        'codec': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'sans': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'display': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'body': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'serif': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'editorial': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'bebas': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'veda-serif': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif'],
+        'veda-sans': ['"Codec Pro"', '"Codec"', '"Outfit"', 'sans-serif']
       }
     },
   },

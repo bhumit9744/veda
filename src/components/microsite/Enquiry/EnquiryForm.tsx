@@ -140,10 +140,10 @@ export default function EnquiryForm() {
             onChange={handleChange}
             className="peer w-full bg-transparent border-b border-veda-border text-veda-forest py-2 outline-none focus:border-veda-gold transition-colors appearance-none cursor-pointer"
           >
-            <option value="" className="bg-veda-ivory text-veda-forest">Select Preference (Optional)</option>
-            <option value="Villa A" className="bg-veda-ivory text-veda-forest">Villa A</option>
-            <option value="Villa B" className="bg-veda-ivory text-veda-forest">Villa B</option>
-            <option value="Villa C" className="bg-veda-ivory text-veda-forest">Villa C</option>
+            <option value="" className="bg-transparent text-veda-forest">Select Preference (Optional)</option>
+            <option value="Villa A" className="bg-transparent text-veda-forest">Villa A</option>
+            <option value="Villa B" className="bg-transparent text-veda-forest">Villa B</option>
+            <option value="Villa C" className="bg-transparent text-veda-forest">Villa C</option>
           </select>
           <div className="absolute right-0 top-3 pointer-events-none text-veda-text-secondary">▼</div>
         </div>

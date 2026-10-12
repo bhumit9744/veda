@@ -6,9 +6,9 @@ interface MicrositeEnquiryProps {
 }
 
 export default function MicrositeEnquiry({ progress }: MicrositeEnquiryProps) {
-  // Global active between 0.75 and 1.00
+  // Global active between 0.90 and 1.00
   const localProgress = useMemo(() => {
-    return Math.min(1, Math.max(0, (progress - 0.75) / 0.25));
+    return Math.min(1, Math.max(0, (progress - 0.90) / 0.10));
   }, [progress]);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -19,7 +19,7 @@ export default function MicrositeEnquiry({ progress }: MicrositeEnquiryProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const isActive = progress >= 0.74;
+  const isActive = progress >= 0.89;
   if (!isActive) return null;
 
   // Background scales and darkens
@@ -30,10 +30,10 @@ export default function MicrositeEnquiry({ progress }: MicrositeEnquiryProps) {
   const contentOpacity = localProgress < 0.3 ? 0 : Math.min(1, (localProgress - 0.3) / 0.2);
 
   return (
-    <div className="absolute inset-0 w-full h-full z-20 bg-veda-ivory flex items-center justify-center">
+    <div className="absolute inset-0 w-full h-full z-20 bg-transparent flex items-center justify-center">
       
       {/* Clean Ivory Background - no heavy images */}
-      <div className="absolute inset-0 w-full h-full bg-veda-ivory pointer-events-none" />
+      <div className="absolute inset-0 w-full h-full bg-transparent pointer-events-none" />
 
       <div 
         className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 flex flex-col lg:flex-row items-center gap-12 lg:gap-24"
@@ -47,7 +47,7 @@ export default function MicrositeEnquiry({ progress }: MicrositeEnquiryProps) {
             Enquire
           </span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-editorial text-veda-forest uppercase leading-tight drop-shadow-none">
-            Schedule a<br/>Private Visit
+            CONTACT US
           </h2>
           <p className="mt-8 text-sm md:text-base text-veda-text-secondary font-light max-w-sm mx-auto lg:mx-0 leading-relaxed">
             Register your interest to explore the development, review architectural plans, and secure your place in Alibaug's premier lifestyle community.

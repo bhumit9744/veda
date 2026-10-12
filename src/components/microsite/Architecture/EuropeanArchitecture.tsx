@@ -17,7 +17,7 @@ export default function EuropeanArchitecture({ progress }: EuropeanArchitectureP
   const scale = 0.95 + (localProgress * 0.1); 
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none flex flex-col items-center justify-center bg-veda-ivory z-0">
+    <div className="absolute inset-0 w-full h-full pointer-events-none flex flex-col items-center justify-center bg-transparent z-0">
       <div 
         className="text-center px-6"
         style={{
@@ -25,13 +25,24 @@ export default function EuropeanArchitecture({ progress }: EuropeanArchitectureP
           transform: `scale(${scale})`
         }}
       >
-        <h2 className="text-5xl md:text-7xl lg:text-8xl font-editorial text-veda-forest uppercase leading-tight tracking-widest mb-8">
-          European<br/>Architecture
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-editorial text-veda-forest leading-tight tracking-wide mb-6">
+          A Design Ready for Your Vision.
         </h2>
-        <p className="text-lg md:text-xl text-veda-olive font-light tracking-[0.2em] uppercase">
-          Three architectural expressions.<br/>
-          One considered way of living.
-        </p>
+        <div className="text-[13px] md:text-[15px] lg:text-[17px] text-veda-olive font-light tracking-wide max-w-3xl mx-auto space-y-2">
+          {/* Mobile Text */}
+          <p className="block md:hidden">
+            Thoughtfully designed European-inspired villas, created for effortless living. Choose your design. Make it your own.
+          </p>
+          {/* Desktop Text */}
+          <div className="hidden md:block space-y-2">
+            <p>
+              Begin with a thoughtfully designed European-inspired villa and make it your own.
+            </p>
+            <p>
+              From considered floor plans to elegant elevations and seamless indoor-outdoor spaces, every design is created to make the journey from plot to home simpler and more inspiring.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

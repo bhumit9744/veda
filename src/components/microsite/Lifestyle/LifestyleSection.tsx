@@ -5,20 +5,19 @@ interface LifestyleSectionProps {
 }
 
 const slides = [
-  { title: 'Swimming Pool And Cabana', image: '/assets/images/project_image_9.jpg' },
-  { title: 'Club House With Modern Amenities', image: '/assets/images/project_image_10.jpg' },
-  { title: 'Multi-Purpose Play Court', image: '/assets/images/project_image_8.jpg' },
-  { title: 'Jogging Track', image: '/assets/images/project_image_2.jpg' },
-  { title: 'YOGA / MEDITATION ZONE', image: '/assets/images/project_image_4.jpg' },
-  { title: 'Kids Zone', image: '/assets/images/project_image_3.jpg' },
-  { title: 'Library', image: '/assets/images/project_image_11.jpg' },
-  { title: 'Co-Work Space', image: '/assets/images/project_image_14.jpg' },
-  { title: 'Pet Zone', image: '/assets/images/project_image_1.jpg' },
-  { title: 'Guest Car Park', image: '/assets/images/project_image_5.jpg' },
-  { title: 'PRAYER ZONE', image: '/assets/images/project_image_15.jpg' },
-  { title: 'MIYAWAKI FOREST POCKET', image: '/assets/images/project_image_12.jpg' },
-  { title: 'Senior Citizen Corner', image: '/assets/images/project_image_7.jpg' },
-  { title: 'STARGAZING AREA', image: '/assets/images/project_image_13.jpg' },
+  { title: 'Swimming Pool And Cabana', description: 'Dive into relaxation and luxury', image: '/assets/images/project_image_9.jpg' },
+  { title: 'Club House With Modern Amenities', description: 'A space designed for community and leisure', image: '/assets/images/project_image_10.jpg' },
+  { title: 'Multi-Purpose Play Court', description: 'Active living with versatile sports facilities', image: '/assets/images/project_image_8.jpg' },
+  { title: 'Jogging Track', description: 'Start your mornings with a refreshing run', image: '/assets/images/project_image_2.jpg' },
+  { title: 'YOGA / MEDITATION ZONE', description: 'Find inner peace in our dedicated mindful spaces', image: '/assets/images/project_image_4.jpg' },
+  { title: 'Kids Zone', description: 'Safe and engaging play areas for the little ones', image: '/assets/images/project_image_3.jpg' },
+  { title: 'Library', description: 'Quiet spaces for reading and focused work', image: '/assets/images/project_image_11.jpg' },
+  { title: 'Co-Work Space', description: 'Professional environments for remote working', image: '/assets/images/project_image_14.jpg' },
+  { title: 'Pet Creche', description: 'Bring your pets along. They\'ll be cared for and kept company while you work.', image: '/assets/images/project_image_1.jpg' },
+  { title: 'Bowling Alley', description: 'Four lanes downstairs, for evenings when you need to unwind.', image: '/assets/images/project_image_15.jpg' },
+  { title: 'MIYAWAKI FOREST POCKET', description: 'Experience dense, native greenery within the community', image: '/assets/images/project_image_12.jpg' },
+  { title: 'Senior Citizen Corner', description: 'Peaceful gathering spaces designed for comfort', image: '/assets/images/project_image_7.jpg' },
+  { title: 'STARGAZING AREA', description: 'Unobstructed views of the night sky', image: '/assets/images/project_image_13.jpg' },
 ];
 
 // Duplicate slides to allow for an infinite seamless loop
@@ -50,7 +49,7 @@ export default function LifestyleSection({ progress }: LifestyleSectionProps) {
   const slideshowOpacity = localProgress < 0.18 ? 0 : Math.min(1, (localProgress - 0.18) / 0.05);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none z-10 bg-veda-ivory overflow-hidden">
+    <div className="absolute inset-0 w-full h-full pointer-events-none z-10 bg-transparent overflow-hidden">
       
       {/* Dynamic Keyframes for Seamless Loop with GPU Acceleration */}
       <style>{`
@@ -59,7 +58,7 @@ export default function LifestyleSection({ progress }: LifestyleSectionProps) {
           100% { transform: translate3d(-50%, 0, 0); } /* Exactly half the container width (14 slides) */
         }
         .animate-continuous-scroll {
-          animation: continuousInfiniteScroll 210s linear infinite;
+          animation: continuousInfiniteScroll 50s linear infinite;
           will-change: transform;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
@@ -77,27 +76,22 @@ export default function LifestyleSection({ progress }: LifestyleSectionProps) {
           display: introOpacity === 0 ? 'none' : 'flex'
         }}
       >
-        <span className="text-xs tracking-[0.4em] text-veda-olive uppercase mb-8 font-medium">
-          Beyond the Villa
-        </span>
-        <h2 className="text-6xl md:text-8xl lg:text-9xl font-editorial text-veda-forest uppercase leading-tight tracking-widest drop-shadow-sm">
-          Lifestyle<br/>& Amenities
+
+        <h2 className="text-3xl md:text-5xl lg:text-6xl font-editorial text-veda-forest uppercase leading-tight tracking-widest drop-shadow-sm">
+          Lifestyle & Amenities
         </h2>
       </div>
 
       {/* Auto Full-Screen Continuous Carousel */}
       <div 
-        className="absolute inset-0 w-full h-full z-10 transition-opacity duration-1000 overflow-hidden"
+        className="absolute inset-0 w-full h-full z-10 transition-opacity duration-1000 overflow-hidden flex items-center"
         style={{
           opacity: slideshowOpacity,
-          display: slideshowOpacity === 0 ? 'none' : 'block'
+          display: slideshowOpacity === 0 ? 'none' : 'flex'
         }}
       >
         <div 
-          className="flex h-full animate-continuous-scroll"
-          style={{ 
-            width: `${duplicatedSlides.length * 100}vw`
-          }}
+          className="flex animate-continuous-scroll w-max"
         >
           {duplicatedSlides.map((slide, i) => {
             // We use modulo for the slide number since we duplicated the array
@@ -106,31 +100,28 @@ export default function LifestyleSection({ progress }: LifestyleSectionProps) {
             return (
               <div 
                 key={i} 
-                className="w-[100vw] h-full relative overflow-hidden shrink-0 border-r border-veda-ivory/5"
+                className="w-[85vw] md:w-[45vw] lg:w-[30vw] flex flex-col shrink-0 border-r-[4px] border-[#111111]/10"
                 style={{ transform: 'translateZ(0)' }}
               >
-                {/* Background image without ken burns since the camera is already panning */}
-                <div 
-                  className="absolute inset-0 w-full h-full bg-cover bg-center"
-                  style={{
-                    backgroundImage: `url(${slide.image})`,
-                    filter: 'brightness(0.95)'
-                  }}
-                />
-                
-                {/* Dark gradient for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-[#050505]/20 to-transparent pointer-events-none" />
-                
-                {/* Text overlay */}
-                <div className="absolute bottom-16 left-8 md:bottom-24 md:left-24 max-w-xl">
-                  <div className="flex items-end gap-6">
-                    <span className="text-4xl md:text-5xl font-editorial text-veda-ivory uppercase leading-none drop-shadow-md">
-                      {slide.title}
-                    </span>
-                    <span className="text-xl md:text-2xl font-editorial text-veda-gold pb-1 md:pb-2 drop-shadow-sm">
-                      {String(slideIndex + 1).padStart(2, '0')}
-                    </span>
-                  </div>
+                {/* Image Section */}
+                <div className="relative w-full aspect-square overflow-hidden">
+                  {/* Background image without ken burns since the camera is already panning */}
+                  <div 
+                    className="absolute inset-0 w-full h-full bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(${slide.image})`,
+                      filter: 'brightness(0.95)'
+                    }}
+                  />
+                </div>
+                {/* Bottom Description Bar */}
+                <div className="w-full h-24 md:h-28 bg-transparent flex flex-col justify-center px-6 md:px-8 shrink-0 text-left">
+                  <span className="text-[10px] tracking-[0.2em] text-[#111111]/60 uppercase mb-1">
+                    {slide.title}
+                  </span>
+                  <p className="text-[10px] text-[#111111]/90 font-sans leading-relaxed">
+                    {slide.description}
+                  </p>
                 </div>
               </div>
             );

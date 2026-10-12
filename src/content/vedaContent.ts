@@ -1,7 +1,7 @@
 export const vedaContent = {
   hero: {
     title: "WE BELIEVE GOOD LAND IS FOUND.\nGREAT OPPORTUNITIES ARE CREATED.",
-    body: "Veda Life Spaces identifies promising markets, carefully selects land and develops thoughtfully planned plotted communities with a focus on clarity, quality and long-term value.",
+    body: "Veda Life Spaces identifies promising markets, selects the right land, and creates thoughtfully planned plotted communities built on clarity, quality, and long-term value.",
     phrases: [
       "Thoughtful in what we choose.",
       "Meticulous in how we work.",

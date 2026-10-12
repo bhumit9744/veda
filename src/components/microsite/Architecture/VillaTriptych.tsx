@@ -21,160 +21,109 @@ export default function VillaTriptych({ progress }: VillaTriptychProps) {
   const isActive = progress >= 0.17 && progress <= 0.41;
   if (!isActive) return null;
 
-  const getVillaState = (index: number) => {
-    let dominantScore = 0;
-    
-    if (index === 0) { 
-      if (localProgress <= 0.25) dominantScore = 1;
-      else if (localProgress > 0.25 && localProgress < 0.41) {
-        dominantScore = 1 - ((localProgress - 0.25) / 0.16);
-      } else {
-        dominantScore = 0;
-      }
-    } else if (index === 1) { 
-      if (localProgress > 0.25 && localProgress < 0.41) {
-        dominantScore = (localProgress - 0.25) / 0.16;
-      } else if (localProgress >= 0.41 && localProgress <= 0.58) {
-        dominantScore = 1;
-      } else if (localProgress > 0.58 && localProgress < 0.75) {
-        dominantScore = 1 - ((localProgress - 0.58) / 0.17);
-      } else {
-        dominantScore = 0;
-      }
-    } else if (index === 2) { 
-      if (localProgress > 0.58 && localProgress < 0.75) {
-        dominantScore = (localProgress - 0.58) / 0.17;
-      } else if (localProgress >= 0.75) {
-        dominantScore = 1;
-      } else {
-        dominantScore = 0;
-      }
-    }
-
-    return dominantScore;
-  };
-
   const villas = [
     { 
       id: 'A', 
-      name: 'VILLA A', 
-      desc: 'Thoughtfully designed European-inspired villa layout optimizing natural light, flow, and spatial elegance.',
+      name: 'VILLA CLASSIC', 
+      size: '1500-1800 SQ.FT',
       image: '/assets/images/IMG-20261007-WA0056.jpg.jpeg' 
     },
     { 
       id: 'B', 
-      name: 'VILLA B', 
-      desc: 'Seamless indoor-outdoor living with expansive tropical landscaping, stone accents, and premium architectural finishes.',
+      name: 'VILLA PREMIUM', 
+      size: '2200-2600 SQ.FT',
       image: '/assets/images/IMG-20261007-WA0057.jpg.jpeg' 
     },
     { 
       id: 'C', 
-      name: 'VILLA C', 
-      desc: 'Our signature footprint featuring grand entertaining spaces, double-height volumes, and ultimate residential privacy.',
+      name: 'VILLA SIGNATURE', 
+      size: '3000-3500 SQ.FT',
       image: '/assets/images/IMG-20261007-WA0058.jpg.jpeg' 
     },
   ];
 
+  const opacity = localProgress < 0.05 ? localProgress / 0.05 : localProgress > 0.95 ? (1 - localProgress) / 0.05 : 1;
+
   if (isMobile) {
     return (
-      <div className="absolute inset-0 w-full h-full pointer-events-none bg-veda-ivory z-0 flex flex-col">
-        {/* TOP HALF - IMAGE */}
-        <div className="w-full h-[55vh] relative overflow-hidden">
-           {villas.map((villa, idx) => {
-             const dom = getVillaState(idx);
-             if (dom === 0) return null;
-             return (
-               <div 
-                 key={`img-m-${villa.id}`}
-                 className="absolute inset-0 w-full h-full bg-cover bg-center"
-                 style={{
-                   backgroundImage: `url(${villa.image})`,
-                   opacity: dom,
-                   transform: `scale(${1 + (1 - dom) * 0.1})`
-                 }}
-               />
-             )
-           })}
-        </div>
-        {/* BOTTOM HALF - TEXT */}
-        <div className="w-full h-[45vh] relative flex items-center px-8">
-           {villas.map((villa, idx) => {
-             const dom = getVillaState(idx);
-             if (dom === 0) return null;
-             return (
-               <div 
-                 key={`text-m-${villa.id}`}
-                 className="absolute left-8 right-8 top-1/2 text-center"
-                 style={{
-                   opacity: dom,
-                   transform: `translateY(calc(-50% + ${(1 - dom) * 15}px))`
-                 }}
-               >
-                 <span className="text-veda-olive text-xs tracking-widest uppercase mb-2 block">European Architecture</span>
-                 <h2 className="text-4xl font-editorial text-veda-forest mb-4">
-                   {villa.name}
-                 </h2>
-                 <div className="w-8 h-[1px] bg-veda-border mx-auto mb-4"></div>
-                 <p className="text-sm text-veda-text-secondary font-light leading-relaxed">
-                   {villa.desc}
-                 </p>
-               </div>
-             )
-           })}
+      <div 
+        className="absolute inset-0 w-full h-full pointer-events-none bg-transparent z-0"
+        style={{ opacity }}
+      >
+        <div 
+          className="absolute left-0 top-0 w-full flex flex-col"
+          style={{
+            height: '300%',
+            transform: `translateY(-${localProgress * 66.666}%)`
+          }}
+        >
+          {villas.map((villa) => (
+            <div key={`villa-m-${villa.id}`} className="w-full h-1/3 flex flex-col justify-center relative overflow-hidden py-8">
+              <div className="w-full h-[70vh] relative overflow-hidden">
+                <img 
+                  src={villa.image} 
+                  alt={villa.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                
+                {/* Overlay Text Box Mobile */}
+                <div className="absolute bottom-0 left-[4vw] bg-[#f4f5f0] px-8 py-6 min-w-[250px]">
+                  <div className="flex flex-col items-start text-left">
+                    <h2 className="text-2xl font-editorial text-[#111111] mb-1">{villa.name}</h2>
+                    {villa.size && (
+                      <p className="text-xs tracking-widest text-[#111111] uppercase">{villa.size}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
   }
 
-  // DESKTOP SPLIT LAYOUT
+  // DESKTOP LAYOUT (SCROLLING ZIG-ZAG / OVERLAYS)
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none flex bg-veda-ivory z-0">
-      {/* LEFT SIDE - IMAGE */}
-      <div className="w-1/2 h-full relative overflow-hidden">
+    <div 
+      className="absolute inset-0 w-full h-full pointer-events-none bg-transparent z-0 overflow-hidden"
+      style={{ opacity }}
+    >
+      <div 
+        className="w-full h-[300%] flex flex-col"
+        style={{ 
+          transform: `translateY(-${localProgress * (200 / 3)}%)`,
+          willChange: 'transform'
+        }}
+      >
         {villas.map((villa, idx) => {
-          const dom = getVillaState(idx);
-          if (dom === 0) return null;
           return (
             <div 
-              key={`img-${villa.id}`}
-              className="absolute inset-0 w-full h-full bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${villa.image})`,
-                opacity: dom,
-                transform: `scale(${1 + (1 - dom) * 0.05})`
-              }}
-            />
-          )
-        })}
-      </div>
-
-      {/* RIGHT SIDE - TEXT */}
-      <div className="w-1/2 h-full flex flex-col justify-center bg-[#151716] relative overflow-hidden">
-        {villas.map((villa, idx) => {
-          const dom = getVillaState(idx);
-          if (dom === 0) return null;
-          return (
-            <div 
-              key={`text-${villa.id}`}
-              className="absolute left-16 lg:left-24 right-16 top-1/2"
-              style={{
-                opacity: dom,
-                transform: `translateY(calc(-50% + ${(1 - dom) * 20}px))`
-              }}
+              key={`villa-desktop-${villa.id}`}
+              className="w-full h-1/3 relative overflow-hidden"
             >
-              <span className="text-veda-gold text-sm tracking-widest uppercase mb-4 block italic opacity-90 font-serif">A high street on the promenade</span>
-              <h2 className="text-5xl lg:text-7xl font-editorial text-veda-ivory mb-6 leading-tight">
-                {villa.name}
-              </h2>
-              <div className="w-12 h-[1px] bg-veda-border/30 mb-6"></div>
-              <p className="text-lg lg:text-xl text-veda-ivory/80 font-light leading-relaxed mb-12 max-w-lg">
-                {villa.desc}
-              </p>
-              
-              <div className="flex flex-col gap-4 text-veda-ivory/90 text-sm font-medium tracking-widest uppercase">
-                <div className="flex items-center gap-4"><span className="w-4 h-[1px] bg-veda-gold"></span> Front Elevation</div>
-                <div className="flex items-center gap-4"><span className="w-4 h-[1px] bg-veda-gold"></span> Rear Elevation</div>
-                <div className="flex items-center gap-4"><span className="w-4 h-[1px] bg-veda-gold"></span> Floor Plan</div>
+              {/* IMAGE (FULL WIDTH) */}
+              <div className="absolute inset-0 w-full h-full">
+                <div className="w-full h-full relative overflow-hidden">
+                  <img 
+                    src={villa.image} 
+                    alt={villa.name}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  
+                  {/* TEXT OVERLAY */}
+                  <div className="absolute bottom-0 left-[4vw] bg-[#f4f5f0] px-12 py-10 min-w-[350px]">
+                    <div className="flex flex-col items-start text-left">
+                      <h2 className="text-3xl font-editorial text-[#111111] mb-2 tracking-wide whitespace-nowrap">
+                        {villa.name}
+                      </h2>
+                      <div className="w-8 h-[1px] bg-[#111111]/20 my-3"></div>
+                      <p className="text-sm tracking-[0.1em] text-[#111111] uppercase font-medium">
+                        {villa.size}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )

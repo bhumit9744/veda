@@ -61,7 +61,7 @@ export default function EnquiryForm({ inline = false }: { inline?: boolean }) {
     <div className={`bg-bg-beige ${inline ? 'w-full' : 'p-6 border border-gray-200 shadow-sm'}`}>
       {!inline && (
         <>
-          <p className="text-primary mb-2 text-sm text-left font-medium">Get In Touch</p>
+          <p className="text-primary mb-2 text-sm text-left font-medium">CONTACT US</p>
           <h2 className="text-2xl text-left mb-4 text-text-dark font-medium">Register Your Interest</h2>
         </>
       )}

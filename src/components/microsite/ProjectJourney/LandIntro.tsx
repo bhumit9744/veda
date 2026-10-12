@@ -31,21 +31,14 @@ export default function LandIntro({ progress }: LandIntroProps) {
           filter: `blur(${blur}px)`,
         }}
       >
-        <span className="text-xs tracking-[0.3em] text-veda-olive uppercase mb-6 font-medium">
-          Veda Life Spaces
-        </span>
-        
         <h1 
-          className="text-5xl md:text-7xl lg:text-8xl font-editorial text-veda-forest uppercase leading-tight mb-8"
-          style={{ letterSpacing: `${letterSpacing}em` }}
+          className="text-3xl md:text-5xl lg:text-6xl font-editorial text-white leading-tight mb-8 px-8 py-4 rounded-xl"
+          style={{
+            textShadow: '0px 4px 20px rgba(0,0,0,0.9), 0px 2px 8px rgba(0,0,0,0.8)'
+          }}
         >
-          Land Worth<br/>Owning.
+          A European Way of Life, Reimagined in Alibaug.
         </h1>
-        
-        <p className="text-lg md:text-xl text-veda-text-secondary font-light max-w-lg mx-auto">
-          We don't just find land.<br/>
-          We find the right opportunity.
-        </p>
       </div>
     </div>
   );

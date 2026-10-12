@@ -26,17 +26,14 @@ export default function LocationJourney({ progress }: LocationJourneyProps) {
 
   return (
     <div 
-      className="absolute inset-0 w-full h-full bg-veda-ivory flex flex-col items-center justify-center z-0 pointer-events-auto px-6"
+      className="absolute inset-0 w-full h-full bg-transparent flex flex-col items-center justify-center z-0 pointer-events-auto px-6"
       style={{ opacity }}
     >
       <div 
         className="w-full flex flex-col items-center text-center mb-10"
         style={{ transform: `translateY(${(1 - localProgress) * 20}px)` }}
       >
-        <span className="text-xs md:text-sm tracking-[0.3em] text-veda-olive uppercase mb-4 font-medium drop-shadow-sm">
-          Alibaug, Maharashtra
-        </span>
-        <h2 className="text-5xl md:text-7xl font-editorial text-veda-forest uppercase tracking-widest drop-shadow-sm">
+        <h2 className="text-3xl md:text-5xl font-editorial text-veda-forest uppercase tracking-widest drop-shadow-sm">
           Location
         </h2>
       </div>

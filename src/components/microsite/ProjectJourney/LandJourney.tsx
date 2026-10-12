@@ -34,63 +34,8 @@ export default function LandJourney({ progress }: LandJourneyProps) {
   const heroTextScale = 0.95 + (localProgress - 0.9);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-veda-ivory">
-      
-      <div 
-        className="absolute inset-0 w-full h-full bg-center bg-cover"
-        style={{
-          backgroundImage: "url('/assets/images/generated/aerial.jpg')",
-          transform: `translateY(${aerialY}%) scale(${aerialScale})`,
-          opacity: Math.max(0, aerialOpacity),
-          filter: `blur(${aerialBlur}px)`,
-          transformOrigin: 'center 60%'
-        }}
-      />
-      <div className="absolute inset-0 bg-veda-ivory/10" style={{ opacity: Math.max(0, aerialOpacity) }} />
-
-      {roadsActive && (
-        <div 
-          className="absolute inset-0 w-full h-full bg-center bg-cover"
-          style={{
-            backgroundImage: "url('/assets/images/generated/roads.jpg')",
-            transform: `scale(${roadsScale})`,
-            opacity: Math.max(0, roadsOpacity),
-            filter: `blur(${roadsBlur}px)`,
-            transformOrigin: 'center center'
-          }}
-        />
-      )}
-      {roadsActive && <div className="absolute inset-0 bg-veda-ivory/10" style={{ opacity: Math.max(0, roadsOpacity) }} />}
-
-      {villaActive && (
-        <div 
-          className="absolute inset-0 w-full h-full bg-center bg-cover"
-          style={{
-            backgroundImage: "url('/assets/images/generated/villa.jpg')",
-            transform: `scale(${villaScale})`,
-            opacity: Math.max(0, villaOpacity),
-            transformOrigin: 'center center'
-          }}
-        />
-      )}
-      {villaActive && <div className="absolute inset-0 bg-veda-ivory/10" style={{ opacity: Math.max(0, villaOpacity) }} />}
-
-      {heroTextActive && (
-        <div 
-          className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
-          style={{
-            opacity: Math.min(1, heroTextOpacity),
-            transform: `scale(${heroTextScale})`
-          }}
-        >
-          <span className="text-xs tracking-[0.3em] text-veda-olive uppercase mb-6 font-medium">
-            The Concept
-          </span>
-          <h2 className="text-5xl md:text-7xl font-editorial text-veda-forest uppercase leading-tight">
-            Design Ready<br/>Villas
-          </h2>
-        </div>
-      )}
+    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden bg-transparent">
+      {/* Text removed per user request */}
     </div>
   );
 }

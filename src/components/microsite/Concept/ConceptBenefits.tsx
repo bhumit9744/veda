@@ -66,7 +66,7 @@ export default function ConceptBenefits({ progress }: ConceptBenefitsProps) {
   const contentY = (1 - revealP) * 30 - (exitP * 30);
 
   return (
-    <div className="absolute inset-0 w-full h-full bg-veda-ivory overflow-hidden z-10">
+    <div className="absolute inset-0 w-full h-full bg-transparent overflow-hidden z-10">
       
       {/* BACKGROUND GRID (Subtle architectural feel) */}
       <div 
@@ -79,20 +79,22 @@ export default function ConceptBenefits({ progress }: ConceptBenefitsProps) {
         }}
       />
 
-      {/* INITIAL LARGE TYPOGRAPHY (Behind the image) */}
+      {/* INITIAL LARGE TYPOGRAPHY (Over the image) */}
       <div 
-        className="absolute inset-0 z-[2] flex flex-col items-center justify-center pointer-events-none"
+        className="absolute inset-0 z-[10] flex flex-col items-center justify-center pointer-events-none"
         style={{
           opacity: textOpacity,
           transform: `scale(${textScale}) translateY(${textY}px)`
         }}
       >
-        <span className="text-xs md:text-sm tracking-[0.4em] text-veda-olive uppercase mb-6 font-medium">
-          The Philosophy
-        </span>
-        <h2 className="text-[14vw] md:text-[10vw] font-editorial text-veda-forest uppercase leading-[0.85] tracking-widest text-center whitespace-nowrap">
-          The <span className="italic font-light text-veda-gold">Concept</span>
-        </h2>
+        <div className="relative flex flex-col items-center justify-center">
+          <span className="absolute bottom-full mb-6 text-xs md:text-sm tracking-[0.4em] text-veda-olive uppercase font-medium drop-shadow-sm whitespace-nowrap">
+            The Philosophy
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-editorial text-veda-forest leading-tight tracking-wide text-center px-4 drop-shadow-sm">
+            A European Way of Life
+          </h2>
+        </div>
       </div>
 
       {/* FULL SCREEN IMAGE LAYER (z-[5]) with clip-path mask */}
@@ -105,7 +107,7 @@ export default function ConceptBenefits({ progress }: ConceptBenefitsProps) {
         }}
       >
         <img 
-          src="/assets/images/generated/villa_a.jpg" 
+          src="/assets/images/Symmetrical 3×3 Greenfield Subdivision.png" 
           alt="Design Ready Villas"
           className="absolute inset-0 w-full h-full object-cover"
           style={{
@@ -120,58 +122,23 @@ export default function ConceptBenefits({ progress }: ConceptBenefitsProps) {
         />
       </div>
 
-      {/* INITIAL METADATA (02) */}
-      <div 
-        className="absolute z-[10] top-[15%] md:top-[15%] right-[5%] md:right-[10%]"
-        style={{
-          opacity: numOpacity,
-          transform: `translateY(${numY}px)`
-        }}
-      >
-        <span className="font-editorial text-6xl md:text-8xl lg:text-[120px] text-veda-gold mix-blend-multiply opacity-60 drop-shadow-sm">
-          02
-        </span>
-      </div>
+
 
       {/* REVEALED CONTENT (Fades in after expand) */}
       <div 
-        className="absolute inset-0 w-full h-full z-[30] flex flex-col md:flex-row items-center justify-center px-6 md:px-16 lg:px-32 gap-8 md:gap-24"
+        className="absolute inset-0 w-full h-full z-[30] flex items-center justify-center px-6 md:px-16 lg:px-32"
         style={{
           opacity: contentOpacity,
           transform: `translateY(${contentY}px)`
         }}
       >
-        <div className="w-full md:w-1/2 text-left">
-          <div className="flex items-center gap-4 mb-6">
-             <div className="w-12 h-[1px] bg-veda-gold"></div>
-             <span className="text-xs tracking-[0.4em] text-veda-gold uppercase font-medium">
-               02 — The Concept
-             </span>
-          </div>
-          <h3 className="font-editorial text-5xl md:text-7xl text-veda-ivory uppercase leading-tight mb-8 drop-shadow-md">
-            Design Ready<br/>Villas
-          </h3>
-          <p className="text-veda-ivory/90 font-light text-base md:text-lg leading-relaxed max-w-lg mb-8 drop-shadow-sm">
-            Unlike traditional plotted developments where you start from scratch, Veda offers thoughtfully designed European-inspired villas. You own the land while we bring your dream home to life with curated architecture, efficient planning, and premium execution.
+        <div className="max-w-4xl text-center">
+          <p className="text-veda-ivory font-light text-[15px] md:text-[17px] lg:text-xl leading-relaxed drop-shadow-md mb-2">
+            A plot gives you ownership. A considered design gives it direction.
           </p>
-        </div>
-
-        <div className="w-full md:w-1/3 flex flex-col gap-6 backdrop-blur-sm bg-[#050505]/20 p-8 border border-veda-ivory/10 rounded-xl">
-          <div className="flex flex-col gap-6">
-            {[
-              "Design Ready",
-              "Hassle-Free Construction",
-              "European Architecture",
-              "One Trusted Developer"
-            ].map((highlight, idx) => (
-              <div key={idx} className="flex items-center gap-5">
-                <div className="w-2 h-2 rounded-full bg-veda-gold shadow-[0_0_10px_rgba(181,154,104,0.5)]"></div>
-                <span className="text-veda-ivory tracking-[0.15em] uppercase text-sm md:text-base font-medium drop-shadow-md">
-                  {highlight}
-                </span>
-              </div>
-            ))}
-          </div>
+          <p className="text-veda-ivory font-light text-[15px] md:text-[17px] lg:text-xl leading-relaxed drop-shadow-md">
+            Choose your land. Choose your villa design. And bring it to life through a streamlined construction journey, thoughtfully managed from beginning to end.
+          </p>
         </div>
       </div>
 
