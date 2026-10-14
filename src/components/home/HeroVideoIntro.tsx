@@ -49,7 +49,7 @@ export default function HeroVideoIntro() {
           {/* VIDEO 01 */}
           <div className="w-[100vw] h-full relative overflow-hidden">
              <video 
-               src="/veda hero.mp4" 
+               src="/assets/images/veda hero.mp4" 
                autoPlay 
                muted 
                loop 
@@ -62,7 +62,7 @@ export default function HeroVideoIntro() {
           {/* VIDEO 02 */}
           <div className="w-[100vw] h-full relative overflow-hidden">
              <video 
-               src="/Veda land.mp4" 
+               src="/assets/images/Veda land.mp4" 
                autoPlay 
                muted 
                loop 

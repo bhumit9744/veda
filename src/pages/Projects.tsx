@@ -6,6 +6,7 @@ import DesignReadyVillas from '../components/projects/DesignReadyVillas';
 import EnquirySection from '../components/projects/EnquirySection';
 import LandShowcaseSection from '../components/projects/LandShowcaseSection';
 import LocationSection from '../components/projects/LocationSection';
+import OwnershipJourneySection from '../components/projects/OwnershipJourneySection';
 import VideoSliderIntro from '../components/projects/VideoSliderIntro';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -24,7 +25,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full bg-[#0a0a0a] text-white font-sans min-h-screen">
+    <div ref={containerRef} className="project-section font-codec w-full bg-[#0a0a0a] text-white font-sans min-h-screen">
 
       {/* 01. Video Slider Sequence */}
       <VideoSliderIntro />
@@ -41,7 +42,10 @@ export default function Projects() {
       {/* 05. Premium Location & Connectivity */}
       <LocationSection />
 
-      {/* 06. Enquiry Section */}
+      {/* 06. Ownership Journey: BUY → BUILD → SELL */}
+      <OwnershipJourneySection />
+
+      {/* 07. Enquiry Section */}
       <EnquirySection />
     </div>
   );

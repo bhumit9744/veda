@@ -203,7 +203,7 @@ export default function EnquirySection() {
                         className="w-full bg-transparent border-b border-[#2d2d2d]/20 text-[#2d2d2d] py-2 outline-none focus:border-[#b89a6b] font-veda-sans text-base transition-colors rounded-none appearance-none cursor-pointer"
                       >
                         <option value="" disabled>Please select a villa</option>
-                        <option value="The Classic">The Classic</option>
+                        <option value="Villa Classic">Villa Classic</option>
                         <option value="Villa Grande">Villa Grande</option>
                         <option value="Villa Royale">Villa Royale</option>
                         <option value="Not decided yet">Not decided yet</option>

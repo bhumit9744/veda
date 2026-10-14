@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -6,23 +6,27 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function LocationSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [activePillar, setActivePillar] = useState<number>(0);
 
   useEffect(() => {
     if (!sectionRef.current) return;
     const ctx = gsap.context(() => {
-      // Add staggered animations for lists and headings
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse'
-        }
+      gsap.utils.toArray<HTMLElement>('.loc-fade').forEach((el) => {
+        gsap.fromTo(el,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: el,
+              start: 'top 85%',
+              toggleActions: 'play none none reverse'
+            }
+          }
+        );
       });
-
-      tl.fromTo('.loc-fade',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, stagger: 0.1, ease: 'power2.out' }
-      );
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -30,139 +34,236 @@ export default function LocationSection() {
   const googleMapsUrl = "https://www.google.com/maps/place/Veda+Life+Spaces/@18.7230031,72.9024155,785m/data=!3m2!1e3!4b1!4m6!3m5!1s0x3be8775acf11c0ad:0xbc9ddc948e3bcd7e!8m2!3d18.7230031!4d72.9024155!16s%2Fg%2F11yxqld22c?hl=en&entry=ttu";
   const embedUrl = "https://maps.google.com/maps?q=18.7230031,72.9024155&hl=en&z=15&output=embed";
 
-  const renderListItem = (name: string, time?: string) => (
-    <div className="flex items-baseline justify-between py-2 loc-fade">
-      <span className="font-veda-sans text-sm md:text-base text-[#444] whitespace-nowrap">{name}</span>
-      {time && (
-        <>
-          <div className="flex-grow mx-4 border-b border-dotted border-[#aaa] opacity-60"></div>
-          <span className="font-veda-sans text-sm md:text-base text-[#444] whitespace-nowrap text-right">{time}</span>
-        </>
-      )}
+  const renderListItem = (name: string, time: string) => (
+    <div className="group flex items-center justify-between py-2 border-b border-black/[0.06] last:border-b-0 hover:bg-black/[0.02] -mx-1.5 px-1.5 rounded transition-colors">
+      <span className="font-codec text-xs sm:text-[13px] text-[#2d2d2d] font-normal tracking-wide group-hover:text-[#9b7b5a] transition-colors truncate pr-2">
+        {name}
+      </span>
+      <span className="font-codec text-[11px] sm:text-xs text-[#7c7365] font-medium tracking-wider tabular-nums whitespace-nowrap">
+        {time}
+      </span>
     </div>
   );
 
+  const pillars = [
+    {
+      step: '01',
+      title: 'BUY',
+      phase: 'ACQUISITION',
+      copy: 'Expert guidance to help you find the right plot.',
+      image: '/assets/images/veda_land.jpg',
+      badge: 'Step 01 • Advisory',
+      coords: 'LAT 18.7230° N',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+        </svg>
+      )
+    },
+    {
+      step: '02',
+      title: 'BUILD',
+      phase: 'ARCHITECTURE',
+      copy: 'Assistance to bring your vision to life.',
+      image: '/assets/images/alibaug_villa.jpg',
+      badge: 'Step 02 • Execution',
+      coords: 'ELEV 48M MSL',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 21h18" />
+          <path d="M5 21V9l7-6 7 6v12" />
+          <path d="M9 21v-6h6v6" />
+          <line x1="9" y1="9" x2="9" y2="9.01" />
+          <line x1="15" y1="9" x2="15" y2="9.01" />
+        </svg>
+      )
+    },
+    {
+      step: '03',
+      title: 'RESALE',
+      phase: 'REALISATION',
+      copy: 'Support to help you realise your plot’s value.',
+      image: '/assets/images/veda_beyond_living.jpg',
+      badge: 'Step 03 • Value',
+      coords: 'ROI STRATEGY',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+          <polyline points="17 6 23 6 23 12" />
+        </svg>
+      )
+    }
+  ];
+
   return (
-    <section ref={sectionRef} className="w-full bg-[#f1f3ec] py-24 md:py-32 z-20 relative">
+    <section ref={sectionRef} className="w-full bg-[#f1f3ec] py-20 md:py-28 z-20 relative font-codec">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
 
-        {/* Intro */}
-        <div className="text-center mb-24 max-w-3xl mx-auto loc-fade">
-          <h2 className="font-veda-serif text-3xl md:text-5xl lg:text-6xl text-[#2d2d2d] leading-[1.1] tracking-tight mb-8">
-            A Privileged Location.<br />For the Privileged 42.
+        {/* Section Intro - Centered & Refined */}
+        <div className="text-center mb-14 md:mb-16 max-w-3xl mx-auto loc-fade">
+          <span className="font-codec text-xs uppercase tracking-[0.25em] text-[#9b7b5a] font-semibold block mb-3">
+            Location & Connectivity
+          </span>
+          <h2 className="font-codec text-3xl md:text-5xl lg:text-5xl text-[#2d2d2d] font-normal leading-[1.15] tracking-tight mb-4">
+            A Privileged Location.<br />
+            <span className="italic font-light text-[#555]">For the Privileged 42.</span>
           </h2>
-          <p className="font-veda-sans text-base md:text-lg text-[#555] leading-relaxed font-light mb-6">
-
-          </p>
-          <p className="font-veda-sans text-base md:text-lg text-[#555] leading-relaxed font-light">
-
+          <p className="font-codec text-sm md:text-base text-[#666] max-w-xl mx-auto leading-relaxed font-light">
+            Secluded in Mapgaon, Alibaug — positioned with effortless proximity to tranquil beaches, luxury resorts, and key transit hubs.
           </p>
         </div>
 
-        {/* Side by side layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        {/* Side-by-Side 50/50 Layout: Directory Card (Left Half) + Map Card (Right Half) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
           
-          {/* Left Column - Details (55% ~ 7 cols) */}
-          <div className="lg:col-span-7 w-full">
-            <h3 className="font-veda-serif text-3xl md:text-4xl text-[#2d2d2d] mb-12 tracking-tight loc-fade text-left">
-              Project Location
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 lg:gap-x-12 gap-y-12">
+          {/* 1. Destinations & Distance Directory Card (Left Half) */}
+          <div className="w-full h-full loc-fade flex flex-col">
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 sm:p-8 md:p-10 border border-black/[0.06] shadow-xs flex flex-col justify-between h-full">
               
-              {/* Inner Left Column */}
-              <div className="flex flex-col gap-12">
-                {/* Category 1: Tourism */}
-                <div>
-                  <h4 className="font-veda-sans text-xs md:text-sm tracking-[0.2em] uppercase text-[#b89a6b] font-semibold mb-6 loc-fade">
-                    TOURISM AND LIFESTYLE
-                  </h4>
-                  <div className="flex flex-col gap-1">
-                    {renderListItem('Kihim Beach', '7 Mins.')}
-                    {renderListItem('Awas Beach', '13 Mins.')}
-                    {renderListItem('Alibaug Beach', '13 Mins.')}
-                  </div>
-                </div>
-
-                <div className="h-px w-full bg-[#dce0d6] loc-fade"></div>
-
-                {/* Category 2: Transport */}
-                <div>
-                  <h4 className="font-veda-sans text-xs md:text-sm tracking-[0.2em] uppercase text-[#b89a6b] font-semibold mb-6 loc-fade">
-                    TRANSPORT
-                  </h4>
-                  <div className="flex flex-col gap-1">
-                    {renderListItem('Mandwa Jetty', '22 Mins.')}
-                    {renderListItem('Navi Mumbai')}
-                    {renderListItem('International Airport', '1 hr. 50 Mins.')}
-                  </div>
-                </div>
+              {/* Header Bar */}
+              <div className="pb-5 mb-6 border-b border-black/[0.06]">
+                <h3 className="font-codec text-2xl md:text-3xl text-[#2d2d2d] font-normal tracking-tight">
+                  Destinations & Distance
+                </h3>
+                <p className="font-codec text-xs md:text-sm text-[#777] mt-1 font-light">
+                  Travel times calculated from Codename Bellagio
+                </p>
               </div>
 
-              {/* Inner Right Column */}
-              <div className="flex flex-col gap-12">
-                {/* Category 3: Hotels */}
-                <div>
-                  <h4 className="font-veda-sans text-xs md:text-sm tracking-[0.2em] uppercase text-[#b89a6b] font-semibold mb-6 loc-fade">
-                    HOTELS AND RESORTS
-                  </h4>
-                  <div className="flex flex-col gap-1">
-                    {renderListItem('Tropicana Resort & Spa', '4 Mins.')}
-                    {renderListItem('Outpost at Alibag', '4 Mins.')}
-                    {renderListItem('Kiki Restobar', '19 Mins.')}
-                    {renderListItem('Tai Hotel', '23 Mins.')}
-                    {renderListItem('Aparanta', '23 Mins.')}
-                    {renderListItem('Boardwalk by flamboyante', '26 Mins.')}
+              {/* Balanced 2-Column Category Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 lg:gap-x-8 gap-y-6 flex-grow">
+                
+                {/* Left Sub-Column: Tourism + Transport + Markets (7 items total) */}
+                <div className="flex flex-col gap-5">
+                  
+                  {/* Category 1: Tourism & Lifestyle */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9b7b5a]/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#9b7b5a]"></span>
+                      <h4 className="font-codec text-[11px] tracking-[0.2em] uppercase text-[#9b7b5a] font-semibold">
+                        Tourism & Lifestyle
+                      </h4>
+                    </div>
+                    <div className="flex flex-col">
+                      {renderListItem('Kihim Beach', '7 Mins.')}
+                      {renderListItem('Awas Beach', '13 Mins.')}
+                      {renderListItem('Alibaug Beach', '13 Mins.')}
+                    </div>
+                  </div>
+
+                  {/* Category 2: Transport & Transit */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9b7b5a]/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#9b7b5a]"></span>
+                      <h4 className="font-codec text-[11px] tracking-[0.2em] uppercase text-[#9b7b5a] font-semibold">
+                        Transport
+                      </h4>
+                    </div>
+                    <div className="flex flex-col">
+                      {renderListItem('Mandwa Jetty', '22 Mins.')}
+                      {renderListItem('Navi Mumbai Airport', '1 hr. 50 Mins.')}
+                    </div>
+                  </div>
+
+                  {/* Category 3: Markets & Essentials */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9b7b5a]/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#9b7b5a]"></span>
+                      <h4 className="font-codec text-[11px] tracking-[0.2em] uppercase text-[#9b7b5a] font-semibold">
+                        Markets & Essentials
+                      </h4>
+                    </div>
+                    <div className="flex flex-col">
+                      {renderListItem('Chondhi Bazaar', '7 Mins.')}
+                      {renderListItem('Alibag Market', '13 Mins.')}
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Right Sub-Column: Hotels & Resorts (6 items) */}
+                <div className="flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2 pb-1 border-b border-[#9b7b5a]/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#9b7b5a]"></span>
+                      <h4 className="font-codec text-[11px] tracking-[0.2em] uppercase text-[#9b7b5a] font-semibold">
+                        Hotels & Resorts
+                      </h4>
+                    </div>
+                    <div className="flex flex-col">
+                      {renderListItem('Tropicana Resort & Spa', '4 Mins.')}
+                      {renderListItem('Outpost at Alibag', '4 Mins.')}
+                      {renderListItem('Kiki Restobar', '19 Mins.')}
+                      {renderListItem('Taj Hotel', '23 Mins.')}
+                      {renderListItem('Aparanta', '23 Mins.')}
+                      {renderListItem('Boardwalk by Flamboyante', '26 Mins.')}
+                    </div>
                   </div>
                 </div>
 
-                <div className="h-px w-full bg-[#dce0d6] loc-fade"></div>
+              </div>
 
-                {/* Category 4: Markets */}
-                <div>
-                  <h4 className="font-veda-sans text-xs md:text-sm tracking-[0.2em] uppercase text-[#b89a6b] font-semibold mb-6 loc-fade">
-                    MARKETS AND ESSENTIALS
-                  </h4>
-                  <div className="flex flex-col gap-1">
-                    {renderListItem('Chondhi Bazaar', '7 Mins.')}
-                    {renderListItem('Alibag Market', '13 Mins.')}
-                  </div>
-                </div>
+              {/* Bottom Balancer Note */}
+              <div className="mt-6 pt-4 border-t border-black/[0.06] flex items-center justify-between text-xs text-[#888]">
+                <span className="font-codec">Alibaug Coastal Belt</span>
+                <span className="font-codec text-[#9b7b5a] font-medium">All timings approximate</span>
               </div>
 
             </div>
           </div>
 
-          {/* Right Column - Map (45% ~ 5 cols) */}
-          <div className="lg:col-span-5 flex flex-col items-center lg:items-start loc-fade w-full mt-4 lg:mt-0">
-            <div className="w-full h-[400px] lg:h-[650px] min-h-[400px] rounded-sm overflow-hidden border border-black/5 shadow-xl bg-[#e5e3df] relative mb-8">
-              <iframe
-                title="Veda Life Spaces Location"
-                src={embedUrl}
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen={false}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 w-full h-full grayscale-[20%] contrast-100"
-              ></iframe>
-              <div className="absolute inset-0 bg-[#f1f3ec]/5 pointer-events-none mix-blend-overlay"></div>
-            </div>
+          {/* 2. Interactive Map Card (Right Half) */}
+          <div className="w-full h-full min-h-[520px] loc-fade flex flex-col">
+            <div className="w-full h-full rounded-2xl overflow-hidden border border-black/[0.08] shadow-xs bg-[#e8e6e1] relative flex flex-col justify-between">
+              
+              {/* Floating Pin Badge */}
+              <div className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-xl border border-black/[0.06] shadow-xs flex items-center gap-2.5 pointer-events-none">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9b7b5a] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#9b7b5a]"></span>
+                </span>
+                <span className="font-codec text-xs font-medium text-[#2d2d2d] tracking-wide">
+                  Codename Bellagio • Mapgaon, Alibaug
+                </span>
+              </div>
 
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 pb-2 border-b border-[#2d2d2d]/30 hover:border-[#2d2d2d] transition-colors duration-300 w-fit"
-            >
-              <span className="font-veda-sans text-xs md:text-sm tracking-[0.15em] uppercase text-[#2d2d2d] font-semibold">
-                OPEN IN GOOGLE MAPS
-              </span>
-              <span className="text-[#2d2d2d] transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
-                ↗
-              </span>
-            </a>
+              {/* Map Iframe */}
+              <div className="relative w-full flex-grow min-h-[440px]">
+                <iframe
+                  title="Veda Life Spaces Location"
+                  src={embedUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="absolute inset-0 w-full h-full grayscale-[15%] contrast-[102%]"
+                ></iframe>
+              </div>
+
+              {/* Map Footer Bar */}
+              <div className="bg-white/95 backdrop-blur-md px-6 py-4 border-t border-black/[0.06] flex items-center justify-between z-10">
+                <div className="flex items-center gap-2 text-xs text-[#777]">
+                  <svg className="w-3.5 h-3.5 text-[#9b7b5a]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="font-codec font-mono">18.7230° N, 72.9024° E</span>
+                </div>
+
+                <a
+                  href={googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-codec text-xs uppercase tracking-[0.15em] text-[#2d2d2d] hover:text-[#9b7b5a] font-semibold inline-flex items-center gap-1.5 transition-colors group"
+                >
+                  <span>Open in Google Maps</span>
+                  <span className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 text-[#9b7b5a]">↗</span>
+                </a>
+              </div>
+
+            </div>
           </div>
 
         </div>

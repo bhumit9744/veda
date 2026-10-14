@@ -53,58 +53,51 @@ export default function ContentTimeline({ masterProgress }: ContentTimelineProps
   };
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none flex flex-col items-center justify-center p-6 md:p-12 z-20 text-[#F0EBDD] text-center">
+    <div className="absolute inset-0 w-full h-full pointer-events-none flex flex-col items-center justify-center p-6 md:p-12 z-20 text-veda-forest text-center">
       
       {/* 1. HERO (0-30) */}
-      <div className="absolute w-full h-full max-w-[1400px] flex flex-col items-center justify-center" style={getPhaseStyles(progressBetween(0, 30), 0.2, 0.8, true)}>
+      <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center" style={getPhaseStyles(progressBetween(0, 30), 0.2, 0.8, true)}>
         <FilledTextHover scrollProgress={progressBetween(0, 30)} />
       </div>
 
-      {/* 2. WHAT DO WE DO (31-60) */}
-      <div className="absolute w-full px-4 max-w-5xl" style={getPhaseStyles(progressBetween(31, 60))}>
-        <div className="text-xs tracking-[0.3em] uppercase text-[#C7A34A] mb-4">
-          {vedaContent.whatWeDo.eyebrow}
-        </div>
-
-        <h2 className="text-3xl md:text-5xl font-light tracking-widest mb-8 uppercase">
-          {vedaContent.whatWeDo.subheadline}
-        </h2>
-        <p className="text-sm md:text-lg text-white/70 max-w-3xl mx-auto mb-6 leading-relaxed">
-          {vedaContent.whatWeDo.body1}
-        </p>
-        {vedaContent.whatWeDo.body2 && (
-          <p className="text-sm md:text-lg text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed">
-            {vedaContent.whatWeDo.body2}
-          </p>
-        )}
-        <div className="flex flex-col md:flex-row justify-center gap-12 md:gap-24 text-[#C7A34A] items-center opacity-80 mt-12">
-          <div className="flex flex-col items-center gap-4">
-            <Search size={32} strokeWidth={1.5} />
-            <span className="text-xs tracking-[0.2em] uppercase font-light text-[#F0EBDD]/80">Research the market</span>
-          </div>
-          <div className="flex flex-col items-center gap-4">
-            <MapPin size={32} strokeWidth={1.5} />
-            <span className="text-xs tracking-[0.2em] uppercase font-light text-[#F0EBDD]/80">Choose the land</span>
-          </div>
-          <div className="flex flex-col items-center gap-4">
-            <Pickaxe size={32} strokeWidth={1.5} />
-            <span className="text-xs tracking-[0.2em] uppercase font-light text-[#F0EBDD]/80">Develop the opportunity</span>
+      {/* 2. OPPORTUNITY SHOWCASE (26-62) */}
+      <div 
+        className="absolute inset-0 w-full h-full flex items-center justify-center px-5 sm:px-8 lg:px-10 xl:px-12 pointer-events-none" 
+        style={getPhaseStyles(progressBetween(26, 62), 0.18, 0.82)}
+      >
+        <div className="relative w-full max-w-[1580px] mx-auto flex items-center justify-center">
+          <div className="relative w-full aspect-[16/9] h-[360px] sm:h-[440px] md:h-[500px] lg:h-[540px] xl:h-[590px] 2xl:h-[630px] max-h-[70vh] overflow-hidden rounded-sm shadow-2xl border border-neutral-200/90 group pointer-events-auto">
+            <img 
+              src="/assets/images/Golden Villa Driveway at Sunset.png" 
+              alt="Veda Opportunity" 
+              className="w-full h-full object-cover object-center scale-100 group-hover:scale-105 transition-transform duration-1000 ease-out" 
+              loading="eager"
+            />
+            {/* Subtle soft dark gradient overlay at bottom for optimal text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none" />
+            
+            {/* Overlay content in small below and left */}
+            <div className="absolute bottom-5 left-5 sm:bottom-7 sm:left-7 md:bottom-9 md:left-10 z-20 max-w-xl text-left">
+              <h2 className="font-codec font-normal text-xs sm:text-sm md:text-base lg:text-[17px] tracking-[0.06em] sm:tracking-[0.08em] text-white uppercase leading-[1.38] drop-shadow-md select-none">
+                WE DON’T JUST FIND LAND. WE FIND THE RIGHT OPPORTUNITY.
+              </h2>
+            </div>
           </div>
         </div>
       </div>
 
       {/* 3. PROMISE (61-90) */}
       <div className="absolute w-full px-4 max-w-5xl" style={getPhaseStyles(progressBetween(61, 90))}>
-        <div className="text-xs tracking-[0.3em] uppercase text-[#C7A34A] mb-4">
+        <div className="text-xs tracking-[0.3em] uppercase text-[#B59A68] mb-4 font-medium">
           {vedaContent.promise.eyebrow}
         </div>
-        <h2 className="text-3xl md:text-5xl font-light tracking-widest mb-12 uppercase leading-tight">
+        <h2 className="text-3xl md:text-5xl font-light tracking-widest mb-12 uppercase leading-tight text-veda-forest">
           {vedaContent.promise.headline.split('\n').map((line, i) => <div key={i}>{line}</div>)}
         </h2>
-        <p className="text-sm md:text-lg text-white/70 max-w-2xl mx-auto mb-8 leading-relaxed">
+        <p className="text-sm md:text-lg text-veda-forest/75 max-w-2xl mx-auto mb-8 leading-relaxed font-light">
           {vedaContent.promise.body1}
         </p>
-        <p className="text-lg md:text-xl font-serif italic text-white">
+        <p className="text-lg md:text-xl font-serif italic text-veda-forest">
           {vedaContent.promise.body3}
         </p>
       </div>
@@ -112,48 +105,48 @@ export default function ContentTimeline({ masterProgress }: ContentTimelineProps
       {/* 4. OUR DEVELOPMENT (91-115) */}
       <div className="absolute w-full px-4 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center text-left" style={getPhaseStyles(progressBetween(91, 115))}>
         <div>
-          <div className="text-xs tracking-[0.3em] uppercase text-[#C7A34A] mb-4">
+          <div className="text-xs tracking-[0.3em] uppercase text-[#B59A68] mb-4 font-medium">
             {vedaContent.ourDevelopment.eyebrow}
           </div>
-          <h2 className="text-5xl md:text-7xl font-bebas uppercase tracking-widest text-[#F0EBDD] mb-8">
+          <h2 className="text-5xl md:text-7xl font-bebas uppercase tracking-widest text-veda-forest mb-8">
             {vedaContent.ourDevelopment.headline}
           </h2>
-          <p className="text-base md:text-xl text-white/80 max-w-xl leading-relaxed mb-12">
+          <p className="text-base md:text-xl text-veda-forest/80 max-w-xl leading-relaxed mb-12 font-light">
             {vedaContent.ourDevelopment.body}
           </p>
-          <button className="text-sm tracking-[0.2em] uppercase text-[#C7A34A] hover:text-white transition-colors pointer-events-auto border border-[#C7A34A]/30 px-6 py-3 rounded-sm">
+          <button className="text-sm tracking-[0.2em] uppercase text-veda-forest hover:text-white transition-colors pointer-events-auto border border-[#B59A68] hover:bg-[#B59A68] px-6 py-3 rounded-sm">
             {vedaContent.ourDevelopment.cta}
           </button>
         </div>
-        <div className="relative aspect-[4/3] rounded-sm overflow-hidden shadow-2xl opacity-90 border border-white/10">
-           <img src="/alibaug.png" alt="Alibaug Development" className="object-cover w-full h-full hover:scale-105 transition-transform duration-1000" />
+        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-[#B59A68]/30 group">
+           <img src="/alibaug.png" alt="Alibaug Development" className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-1000" />
         </div>
       </div>
 
       {/* 5. AFTER YOU BUY (116-150) */}
       <div className="absolute w-full px-4 max-w-5xl" style={getPhaseStyles(progressBetween(116, 150))}>
-        <div className="text-xs tracking-[0.3em] uppercase text-[#C7A34A] mb-4">
+        <div className="text-xs tracking-[0.3em] uppercase text-[#B59A68] mb-4 font-medium">
           {vedaContent.afterYouBuy.eyebrow}
         </div>
-        <h2 className="text-3xl md:text-5xl font-light tracking-widest mb-6 uppercase">
+        <h2 className="text-3xl md:text-5xl font-light tracking-widest mb-6 uppercase text-veda-forest">
           {vedaContent.afterYouBuy.headline}
         </h2>
-        <p className="text-lg md:text-2xl font-serif italic text-[#C7A34A] mb-12">
+        <p className="text-lg md:text-2xl font-serif italic text-[#B59A68] mb-12">
           {vedaContent.afterYouBuy.intro}
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16 px-4">
           {vedaContent.afterYouBuy.steps.map((step, i) => (
-            <div key={i} className="flex flex-col items-center bg-black/40 border border-white/10 p-8 rounded-sm hover:bg-white/5 hover:border-[#C7A34A]/40 transition-all duration-500 shadow-2xl backdrop-blur-sm group">
-              <h3 className="text-2xl font-bebas tracking-widest text-[#C7A34A] mb-4 group-hover:scale-105 transition-transform duration-500">{step.title}</h3>
-              <p className="text-sm text-white/70 leading-relaxed text-center group-hover:text-white/90 transition-colors duration-500">{step.desc}</p>
+            <div key={i} className="flex flex-col items-center bg-white/80 border border-[#D8D3C6] p-8 rounded-sm hover:border-[#B59A68] transition-all duration-500 shadow-md hover:shadow-xl backdrop-blur-sm group">
+              <h3 className="text-2xl font-bebas tracking-widest text-[#B59A68] mb-4 group-hover:scale-105 transition-transform duration-500">{step.title}</h3>
+              <p className="text-sm text-veda-forest/75 leading-relaxed text-center group-hover:text-veda-forest transition-colors duration-500 font-light">{step.desc}</p>
             </div>
           ))}
         </div>
         
-        <div className="text-sm uppercase tracking-widest text-white/60 space-y-2">
+        <div className="text-sm uppercase tracking-widest text-veda-forest/60 space-y-2">
           <p>{vedaContent.afterYouBuy.outro1}</p>
-          <p className="text-white">{vedaContent.afterYouBuy.outro2}</p>
+          <p className="text-veda-forest font-medium">{vedaContent.afterYouBuy.outro2}</p>
         </div>
       </div>
 

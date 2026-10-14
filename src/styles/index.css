@@ -5,8 +5,8 @@
   --color-ivory-muted: rgba(244, 241, 232, 0.55);
   --color-charcoal: #171714;
   
-  --font-sans: 'Inter', sans-serif;
-  --font-serif: 'Cormorant Garamond', serif;
+  --font-sans: 'Codec Pro', 'Codec', 'Outfit', sans-serif;
+  --font-serif: 'Codec Pro', 'Codec', 'Outfit', sans-serif;
 }
 
 * {

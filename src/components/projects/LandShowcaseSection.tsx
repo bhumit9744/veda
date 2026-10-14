@@ -35,11 +35,6 @@ export default function LandShowcaseSection() {
         { opacity: 0, y: 20 }, 
         { opacity: 1, y: 0, duration: 1, ease: 'power2.out' },
         '-=0.9'
-      )
-      .fromTo(q('.land-supporting'), 
-        { opacity: 0, y: 15 }, 
-        { opacity: 1, y: 0, duration: 1, ease: 'power2.out' },
-        '-=0.8'
       );
 
       // Parallax for the background
@@ -102,16 +97,11 @@ export default function LandShowcaseSection() {
           </div>
 
           {/* Secondary statement */}
-          <div className="land-secondary mb-10 max-w-full">
+          <div className="land-secondary max-w-full">
             <h3 className="font-veda-sans text-sm md:text-lg lg:text-xl tracking-[0.2em] md:tracking-[0.3em] uppercase text-white/95 border-l-2 border-[#b89a6b] pl-4 md:pl-6 py-1 leading-loose">
               42 DISTINCTIVE PLOTS FOR THE PRIVILEGED 42
             </h3>
           </div>
-
-          {/* Supporting line */}
-          <p className="land-supporting font-veda-sans text-base md:text-lg text-white/75 font-light tracking-wide max-w-md leading-relaxed ml-6 md:ml-8">
-            A considered collection. A more exceptional way to belong.
-          </p>
         </div>
       </div>
     </section>

@@ -187,11 +187,11 @@ export default function AmenitiesSection() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
               </div>
               
-              <div className="relative z-10 mt-auto p-6 md:p-8">
-                <span className="font-veda-sans text-[10px] md:text-xs tracking-[0.25em] uppercase text-white/70 mb-2 md:mb-3 block">
+              <div className="relative z-10 mt-auto p-5 md:p-6">
+                <span className="font-codec text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-white/75 mb-1.5 md:mb-2 block font-medium">
                   {item.category}
                 </span>
-                <h3 className="font-veda-serif text-2xl md:text-3xl text-white tracking-wide font-light">
+                <h3 className="font-codec text-lg md:text-xl lg:text-[22px] text-white tracking-wide font-normal leading-snug drop-shadow-sm">
                   {item.title}
                 </h3>
               </div>
