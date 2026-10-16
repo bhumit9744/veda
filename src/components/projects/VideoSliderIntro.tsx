@@ -113,10 +113,10 @@ export default function VideoSliderIntro() {
               <div
                 className="absolute z-20 pointer-events-auto flex items-center justify-center"
                 style={{
-                  left: '61.6%',
-                  width: '33.0%',
-                  top: '73.2%',
-                  height: '9.2%',
+                  left: '64.9%',
+                  width: '27.0%',
+                  top: '75.3%',
+                  height: '6.6%',
                 }}
               >
                 <button
@@ -125,22 +125,22 @@ export default function VideoSliderIntro() {
                     e.stopPropagation();
                     openModal();
                   }}
-                  className="w-full h-full flex items-center justify-center gap-1.5 sm:gap-2.5 md:gap-3 px-2 sm:px-4
+                  className="w-full h-full flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-1.5 sm:px-3
                              bg-[#9e7138] hover:bg-[#aa7d39] active:bg-[#94692f]
-                             text-white font-medium uppercase tracking-[0.11em] sm:tracking-[0.14em]
-                             text-[7px] xs:text-[8.5px] sm:text-[10px] md:text-[11.5px] lg:text-[12.5px] xl:text-[13px]
-                             rounded-[8px] sm:rounded-[11px] md:rounded-[14px]
+                             text-white font-medium uppercase tracking-[0.08em] sm:tracking-[0.11em] md:tracking-[0.13em]
+                             text-[6px] xs:text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[11px] xl:text-[11.5px]
+                             rounded-[6px] sm:rounded-[8px] md:rounded-[10px]
                              border border-[#edd5a4]/75
-                             shadow-[0_4px_18px_rgba(164,119,52,0.22)]
-                             hover:shadow-[0_6px_22px_rgba(164,119,52,0.40)]
-                             hover:-translate-y-[2px] active:translate-y-0
+                             shadow-[0_3px_14px_rgba(164,119,52,0.22)]
+                             hover:shadow-[0_5px_18px_rgba(164,119,52,0.38)]
+                             hover:-translate-y-[1.5px] active:translate-y-0
                              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9e7138] focus-visible:ring-offset-2
                              transition-all duration-300 ease-out select-none cursor-pointer group"
                   aria-label="Get Price & Floor Plans"
                 >
                   <span className="truncate">GET PRICE &amp; FLOOR PLANS</span>
                   <svg
-                    className="w-2 h-2 sm:w-2.5 sm:h-2.5 md:w-3.5 md:h-3.5 transition-transform duration-300 ease-out group-hover:translate-x-1 shrink-0"
+                    className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 transition-transform duration-300 ease-out group-hover:translate-x-0.5 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"

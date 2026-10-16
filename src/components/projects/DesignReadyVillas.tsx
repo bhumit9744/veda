@@ -515,11 +515,11 @@ export default function DesignReadyVillas() {
                {/* Typography for Villa Classic (i === 0) */}
                {i === 0 && (
                  <div className="villa-a-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
+                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight uppercase">
                      VILLA CLASSIC
                    </h2>
-                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
-                     1500 SQUARE FEET
+                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
+                     Plot Size (1,500–1,800 sq. ft.)
                    </p>
                  </div>
                )}
@@ -527,11 +527,11 @@ export default function DesignReadyVillas() {
                {/* Typography for Villa Grande (i === 1) */}
                {i === 1 && (
                  <div className="villa-b-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
+                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight uppercase">
                      VILLA GRANDE
                    </h2>
-                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
-                     2300 SQUARE FEET
+                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
+                     Plot Size (2,300–5,000 sq. ft.)
                    </p>
                  </div>
                )}
@@ -539,11 +539,11 @@ export default function DesignReadyVillas() {
                {/* Typography for Villa Royale (i === 2) */}
                {i === 2 && (
                  <div className="villa-c-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
+                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight uppercase">
                      VILLA ROYALE
                    </h2>
-                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
-                     3000 SQUARE FEET
+                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
+                     Plot Size (1,900–2,300 sq. ft.)
                    </p>
                  </div>
                )}

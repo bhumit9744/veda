@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -312,11 +311,6 @@ export default function OwnershipJourneySection() {
 
             </div>
 
-            {/* Desktop Enquire CTA */}
-            <div className="mt-10 flex justify-center">
-              <EnquireButton text="ENQUIRE NOW" variant="primary" />
-            </div>
-
           </div>
 
         </div>
@@ -390,10 +384,6 @@ export default function OwnershipJourneySection() {
               <p className="font-codec text-sm text-[#555] leading-relaxed font-light max-w-xs mb-3">
                 Support to help you realise your plot’s value.
               </p>
-
-              <div className="mt-2">
-                <EnquireButton text="ENQUIRE NOW" variant="compact" />
-              </div>
             </div>
 
           </div>
