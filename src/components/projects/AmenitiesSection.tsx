@@ -28,7 +28,7 @@ const amenitiesList = [
   {
     category: '',
     title: 'Coworking',
-    image: '/Sunlit Poolside Coworking Café.png'
+    image: '/Sunlit Poolside Coworking Cafe.png'
   },
   {
     category: '',
