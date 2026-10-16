@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { submitToHubSpot, mapFormDataToHubSpot } from '../../utils/hubspot';
+import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
+
+interface FormErrors {
+  name?: string;
+  mobile?: string;
+  email?: string;
+  configuration?: string;
+}
 
 export default function EnquirySection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -14,8 +21,11 @@ export default function EnquirySection() {
     email: '',
     configuration: ''
   });
-  const [status, setStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<{ [K in keyof typeof formData]?: boolean }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [whatsappUrl, setWhatsappUrl] = useState<string>('');
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -41,67 +51,134 @@ export default function EnquirySection() {
     return () => ctx.revert();
   }, []);
 
+  const validateField = (field: keyof typeof formData, value: string): string | undefined => {
+    switch (field) {
+      case 'name':
+        if (!value.trim()) return 'Please enter your full name.';
+        if (value.trim().length < 2) return 'Name must be at least 2 characters.';
+        return undefined;
+
+      case 'mobile': {
+        const clean = value.replace(/[\s\-()]/g, '').replace(/^\+91|^91|^0/, '');
+        if (!value.trim()) return 'Please enter your phone number.';
+        if (!/^[0-9]{10}$/.test(clean)) return 'Please enter a valid 10-digit phone number.';
+        return undefined;
+      }
+
+      case 'email':
+        if (!value.trim()) return 'Please enter your email address.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())) return 'Please enter a valid email address.';
+        return undefined;
+
+      case 'configuration':
+        if (!value) return 'Please select your preferred configuration.';
+        return undefined;
+
+      default:
+        return undefined;
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleBlur = (field: keyof typeof formData) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+    const error = validateField(field, formData[field]);
+    setErrors(prev => ({ ...prev, [field]: error }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus({ type: null, message: '' });
+    if (isSubmitting) return;
 
-    if (!/^[0-9]{10}$/.test(formData.mobile)) {
-      setStatus({ type: 'error', message: 'Please enter a valid 10-digit phone number.' });
+    // Validate all fields
+    const newErrors: FormErrors = {};
+    (Object.keys(formData) as (keyof typeof formData)[]).forEach(field => {
+      const err = validateField(field, formData[field]);
+      if (err) newErrors[field] = err;
+    });
+
+    setTouched({
+      name: true,
+      mobile: true,
+      email: true,
+      configuration: true
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
-    
-    if (!formData.configuration) {
-      setStatus({ type: 'error', message: 'Please select your preferred configuration.' });
-      return;
-    }
 
+    setErrors({});
     setIsSubmitting(true);
 
+    const cleanMobile = formData.mobile.replace(/[\s\-()]/g, '').replace(/^\+91|^91|^0/, '');
+    const formattedPhone = `+91 ${cleanMobile}`;
+
+    // Prefilled message per specifications
+    const messageLines = [
+      'Hello Veda Life Spaces Team,',
+      '',
+      'I would like to schedule a site visit.',
+      '',
+      `Name: ${formData.name.trim()}`,
+      `Phone: ${formattedPhone}`,
+      `Email: ${formData.email.trim()}`,
+      `Preferred Villa: ${formData.configuration}`,
+      '',
+      'Please contact me to coordinate a convenient visit.',
+      '',
+      'Thank you.'
+    ];
+
+    const message = messageLines.join('\n');
+    const encodedMessage = encodeURIComponent(message);
+    const destination = '919619394620';
+    const url = `https://wa.me/${destination}?text=${encodedMessage}`;
+
+    setWhatsappUrl(url);
+    setIsSubmitted(true);
+
+    // Open WhatsApp in a new tab safely
     try {
-      const hubspotFormId = import.meta.env.VITE_HUBSPOT_ENQUIRY_FORM_ID;
-      const hubspotData = mapFormDataToHubSpot({ 
-        name: formData.name, 
-        email: formData.email, 
-        mobile: formData.mobile,
-        message: `Configuration: ${formData.configuration}`,
-        source: 'Projects Page Enquiry Form' 
-      });
-
-      const hubspotResult = await submitToHubSpot(hubspotFormId, hubspotData);
-
-      if (hubspotResult.success) {
-        setStatus({ type: 'success', message: 'Thank you for your interest. Our team will contact you shortly to arrange your visit.' });
-        setFormData({ name: '', mobile: '', email: '', configuration: '' });
-      } else {
-        setStatus({ type: 'error', message: hubspotResult.message });
-      }
-
-      // PHP Fallback
-      try {
-        const payload = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-          payload.append(key, value.toString());
-        });
-        payload.append('preferredVilla', formData.configuration);
-        payload.append('source', 'Projects Page Enquiry Form');
-        await fetch('/api/createLead.php', {
-          method: 'POST',
-          headers: { 'X-Requested-With': 'XMLHttpRequest' },
-          body: payload,
-        });
-      } catch (phpErr) {
-        // non-critical error, silently fail fallback
-      }
-    } catch (err) {
-      setStatus({ type: 'error', message: 'Failed to submit form. Please try again later.' });
-    } finally {
-      setIsSubmitting(false);
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } catch {
+      // Browser popup blocked, user can click the visible fallback button
     }
+
+    // Optional silent backup lead creation
+    try {
+      const payload = new FormData();
+      payload.append('name', formData.name.trim());
+      payload.append('mobile', cleanMobile);
+      payload.append('email', formData.email.trim());
+      payload.append('preferredVilla', formData.configuration);
+      payload.append('source', 'Projects Page Schedule Visit Form');
+      fetch('/api/createLead.php', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: payload,
+      }).catch(() => {});
+    } catch {
+      // Non-critical, ignore
+    }
+
+    setIsSubmitting(false);
+  };
+
+  const handleReset = () => {
+    setIsSubmitted(false);
+    setFormData({ name: '', mobile: '', email: '', configuration: '' });
+    setTouched({});
+    setErrors({});
   };
 
   return (
@@ -122,9 +199,13 @@ export default function EnquirySection() {
               Your European<br className="hidden md:block"/> Villa Awaits.
             </h2>
             
-            <p className="enq-fade font-veda-sans text-base md:text-lg text-[#555] leading-relaxed font-light mb-12 max-w-md">
+            <p className="enq-fade font-veda-sans text-base md:text-lg text-[#555] leading-relaxed font-light mb-8 max-w-md">
               Discover a more considered way of living. Share your details and our team will help you explore the right villa for you.
             </p>
+
+            <div className="enq-fade mb-10">
+              <EnquireButton text="ENQUIRE NOW" variant="primary" />
+            </div>
             
             {/* Minimal architectural decoration */}
             <div className="enq-fade w-24 h-[120px] border border-[#b89a6b]/30 rounded-t-full mt-auto hidden lg:block opacity-60"></div>
@@ -133,24 +214,44 @@ export default function EnquirySection() {
           {/* Form Column */}
           <div className="flex flex-col justify-center">
             <div className="enq-fade bg-white/40 p-8 md:p-12 rounded-sm border border-[#2d2d2d]/5 backdrop-blur-sm shadow-sm">
-              {status.type === 'success' ? (
-                <div className="flex flex-col items-center justify-center text-center py-12">
-                  <div className="w-16 h-16 rounded-full border border-[#b89a6b] flex items-center justify-center mb-6">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b89a6b" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              {isSubmitted ? (
+                <div className="flex flex-col items-center justify-center text-center py-8">
+                  <div className="w-14 h-14 rounded-full border border-[#b89a6b] flex items-center justify-center mb-5 text-[#b89a6b]">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
                   </div>
-                  <h3 className="font-veda-serif text-2xl text-[#2d2d2d] mb-4">Enquiry Received</h3>
-                  <p className="font-veda-sans text-sm text-[#555] leading-relaxed">{status.message}</p>
+                  <h3 className="font-veda-serif text-2xl text-[#2d2d2d] mb-3">Redirecting to WhatsApp</h3>
+                  <p className="font-veda-sans text-sm text-[#555] leading-relaxed max-w-sm mb-6">
+                    Your visit request details have been prepared for <strong className="text-[#1f1f1f]">{formData.configuration}</strong>. Please press <strong>Send</strong> in WhatsApp to submit your request to our advisory team.
+                  </p>
+
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#1a1a1a] text-[#F8F7F4] hover:bg-[#2a2a2a] text-xs uppercase tracking-[0.15em] font-medium transition-all shadow-sm group"
+                  >
+                    <span>CONTINUE TO WHATSAPP</span>
+                    <span className="transition-transform duration-200 group-hover:translate-x-1">↗</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={handleReset}
+                    className="mt-6 text-xs font-veda-sans text-[#888] hover:text-[#2d2d2d] underline uppercase tracking-wider transition-colors cursor-pointer"
+                  >
+                    Edit details or schedule another visit
+                  </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6 md:gap-8">
-                  {status.type === 'error' && (
-                    <div className="p-4 bg-red-50 text-red-700 text-sm font-veda-sans rounded-sm border border-red-100">
-                      {status.message}
-                    </div>
-                  )}
+                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6 md:gap-8">
                   
-                  <div className="flex flex-col gap-2 relative">
-                    <label htmlFor="name" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">Full Name</label>
+                  {/* Full Name */}
+                  <div className="flex flex-col gap-1.5 relative">
+                    <label htmlFor="name" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">
+                      Full Name
+                    </label>
                     <input
                       type="text"
                       id="name"
@@ -158,12 +259,23 @@ export default function EnquirySection() {
                       required
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full bg-transparent border-b border-[#2d2d2d]/20 text-[#2d2d2d] py-2 outline-none focus:border-[#b89a6b] font-veda-sans text-base transition-colors rounded-none"
+                      onBlur={() => handleBlur('name')}
+                      className={`w-full bg-transparent border-b ${
+                        touched.name && errors.name ? 'border-red-400 focus:border-red-500' : 'border-[#2d2d2d]/20 focus:border-[#b89a6b]'
+                      } text-[#2d2d2d] py-2 outline-none font-veda-sans text-base transition-colors rounded-none`}
                     />
+                    {touched.name && errors.name && (
+                      <p className="text-[11px] text-red-600 mt-0.5 font-veda-sans flex items-center gap-1">
+                        <span>⚠</span> {errors.name}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="flex flex-col gap-2 relative">
-                    <label htmlFor="mobile" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">Phone Number</label>
+                  {/* Phone Number */}
+                  <div className="flex flex-col gap-1.5 relative">
+                    <label htmlFor="mobile" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">
+                      Phone Number
+                    </label>
                     <div className="relative">
                       <span className="absolute left-0 top-2 font-veda-sans text-base text-[#888] pointer-events-none">+91</span>
                       <input
@@ -174,13 +286,24 @@ export default function EnquirySection() {
                         maxLength={10}
                         value={formData.mobile}
                         onChange={handleChange}
-                        className="w-full bg-transparent border-b border-[#2d2d2d]/20 text-[#2d2d2d] py-2 pl-10 outline-none focus:border-[#b89a6b] font-veda-sans text-base transition-colors rounded-none"
+                        onBlur={() => handleBlur('mobile')}
+                        className={`w-full bg-transparent border-b ${
+                          touched.mobile && errors.mobile ? 'border-red-400 focus:border-red-500' : 'border-[#2d2d2d]/20 focus:border-[#b89a6b]'
+                        } text-[#2d2d2d] py-2 pl-10 outline-none font-veda-sans text-base transition-colors rounded-none`}
                       />
                     </div>
+                    {touched.mobile && errors.mobile && (
+                      <p className="text-[11px] text-red-600 mt-0.5 font-veda-sans flex items-center gap-1">
+                        <span>⚠</span> {errors.mobile}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="flex flex-col gap-2 relative">
-                    <label htmlFor="email" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">Email Address</label>
+                  {/* Email Address */}
+                  <div className="flex flex-col gap-1.5 relative">
+                    <label htmlFor="email" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">
+                      Email Address
+                    </label>
                     <input
                       type="email"
                       id="email"
@@ -188,12 +311,23 @@ export default function EnquirySection() {
                       required
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full bg-transparent border-b border-[#2d2d2d]/20 text-[#2d2d2d] py-2 outline-none focus:border-[#b89a6b] font-veda-sans text-base transition-colors rounded-none"
+                      onBlur={() => handleBlur('email')}
+                      className={`w-full bg-transparent border-b ${
+                        touched.email && errors.email ? 'border-red-400 focus:border-red-500' : 'border-[#2d2d2d]/20 focus:border-[#b89a6b]'
+                      } text-[#2d2d2d] py-2 outline-none font-veda-sans text-base transition-colors rounded-none`}
                     />
+                    {touched.email && errors.email && (
+                      <p className="text-[11px] text-red-600 mt-0.5 font-veda-sans flex items-center gap-1">
+                        <span>⚠</span> {errors.email}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="flex flex-col gap-2 relative">
-                    <label htmlFor="configuration" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">Select Configuration</label>
+                  {/* Select Configuration */}
+                  <div className="flex flex-col gap-1.5 relative">
+                    <label htmlFor="configuration" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">
+                      Select Configuration
+                    </label>
                     <div className="relative">
                       <select
                         id="configuration"
@@ -201,7 +335,10 @@ export default function EnquirySection() {
                         required
                         value={formData.configuration}
                         onChange={handleChange}
-                        className="w-full bg-transparent border-b border-[#2d2d2d]/20 text-[#2d2d2d] py-2 outline-none focus:border-[#b89a6b] font-veda-sans text-base transition-colors rounded-none appearance-none cursor-pointer"
+                        onBlur={() => handleBlur('configuration')}
+                        className={`w-full bg-transparent border-b ${
+                          touched.configuration && errors.configuration ? 'border-red-400 focus:border-red-500' : 'border-[#2d2d2d]/20 focus:border-[#b89a6b]'
+                        } text-[#2d2d2d] py-2 outline-none font-veda-sans text-base transition-colors rounded-none appearance-none cursor-pointer`}
                       >
                         <option value="" disabled className="bg-[#FAF8F5] text-[#888]">Select your preferred configuration</option>
                         <option value="1,500–1,800 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">1,500–1,800 sq. ft.</option>
@@ -212,14 +349,19 @@ export default function EnquirySection() {
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                       </div>
                     </div>
+                    {touched.configuration && errors.configuration && (
+                      <p className="text-[11px] text-red-600 mt-0.5 font-veda-sans flex items-center gap-1">
+                        <span>⚠</span> {errors.configuration}
+                      </p>
+                    )}
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group mt-4 bg-[#1a1a1a] text-[#F8F7F4] hover:bg-[#2a2a2a] px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-medium flex items-center justify-between transition-all duration-300 w-full sm:w-auto self-start shadow-sm disabled:opacity-70"
+                    className="group mt-4 bg-[#1a1a1a] text-[#F8F7F4] hover:bg-[#2a2a2a] px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-medium flex items-center justify-between transition-all duration-300 w-full sm:w-auto self-start shadow-sm disabled:opacity-70 cursor-pointer"
                   >
-                    <span>{isSubmitting ? 'SUBMITTING...' : 'SCHEDULE YOUR VISIT'}</span>
+                    <span>{isSubmitting ? 'PREPARING WHATSAPP...' : 'SCHEDULE YOUR VISIT'}</span>
                     <span className="transition-transform duration-300 group-hover:translate-x-1">↗</span>
                   </button>
                 </form>

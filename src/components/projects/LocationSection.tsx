@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function LocationSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const [activePillar, setActivePillar] = useState<number>(0);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -44,57 +44,6 @@ export default function LocationSection() {
       </span>
     </div>
   );
-
-  const pillars = [
-    {
-      step: '01',
-      title: 'BUY',
-      phase: 'ACQUISITION',
-      copy: 'Expert guidance to help you find the right plot.',
-      image: '/assets/images/veda_land.jpg',
-      badge: 'Step 01 • Advisory',
-      coords: 'LAT 18.7230° N',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-        </svg>
-      )
-    },
-    {
-      step: '02',
-      title: 'BUILD',
-      phase: 'ARCHITECTURE',
-      copy: 'Assistance to bring your vision to life.',
-      image: '/assets/images/alibaug_villa.jpg',
-      badge: 'Step 02 • Execution',
-      coords: 'ELEV 48M MSL',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 21h18" />
-          <path d="M5 21V9l7-6 7 6v12" />
-          <path d="M9 21v-6h6v6" />
-          <line x1="9" y1="9" x2="9" y2="9.01" />
-          <line x1="15" y1="9" x2="15" y2="9.01" />
-        </svg>
-      )
-    },
-    {
-      step: '03',
-      title: 'RESALE',
-      phase: 'REALISATION',
-      copy: 'Support to help you realise your plot’s value.',
-      image: '/assets/images/veda_beyond_living.jpg',
-      badge: 'Step 03 • Value',
-      coords: 'ROI STRATEGY',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-          <polyline points="17 6 23 6 23 12" />
-        </svg>
-      )
-    }
-  ];
 
   return (
     <section ref={sectionRef} className="w-full bg-[#f1f3ec] py-20 md:py-28 z-20 relative font-codec">
@@ -266,6 +215,16 @@ export default function LocationSection() {
             </div>
           </div>
 
+        </div>
+
+        {/* Location Enquiry CTA Banner */}
+        <div className="mt-12 md:mt-16 text-center loc-fade">
+          <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 bg-white/80 backdrop-blur-md px-6 sm:px-8 py-4 sm:py-5 rounded-2xl border border-black/[0.06] shadow-sm max-w-2xl mx-auto">
+            <span className="font-codec text-xs sm:text-sm text-[#444] font-medium tracking-wide text-center sm:text-left">
+              Plan your private visit to experience the scenic Alibaug location in person.
+            </span>
+            <EnquireButton text="ENQUIRE NOW" variant="primary" className="whitespace-nowrap flex-shrink-0" />
+          </div>
         </div>
 
       </div>

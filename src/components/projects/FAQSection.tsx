@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import EnquiryModal from './EnquiryModal';
+import { useEnquiryModal } from '../../context/EnquiryModalContext';
 
 interface FAQItem {
   id: string;
@@ -11,8 +11,8 @@ interface FAQItem {
 }
 
 export default function FAQSection() {
+  const { openModal } = useEnquiryModal();
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleAccordion = (index: number) => {
     setOpenIndex(prev => (prev === index ? null : index));
@@ -23,7 +23,7 @@ export default function FAQSection() {
   };
 
   const handleOpenModal = () => {
-    setIsModalOpen(true);
+    openModal();
   };
 
   const handleScheduleVisit = (e: React.MouseEvent) => {
@@ -153,14 +153,14 @@ export default function FAQSection() {
             coordinate the visit.
           </p>
           <div className="pt-1">
-            <a
-              href="#enquiry-section"
-              onClick={handleScheduleVisit}
+            <button
+              type="button"
+              onClick={handleOpenModal}
               className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.16em] text-[#9e7138] hover:text-[#7a5628] font-medium transition-colors cursor-pointer group"
             >
-              <span>SCHEDULE A VISIT</span>
+              <span>ENQUIRE NOW</span>
               <span className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span>
-            </a>
+            </button>
           </div>
         </div>
       ),
@@ -309,20 +309,20 @@ export default function FAQSection() {
                 <button
                   type="button"
                   onClick={handleOpenModal}
-                  className="w-full py-3 px-4 rounded-[2px] bg-[#9e7138] hover:bg-[#88602c] text-white text-xs uppercase tracking-[0.15em] font-medium transition-all duration-200 text-center flex items-center justify-center gap-2 cursor-pointer shadow-sm hover:shadow"
+                  className="w-full py-3.5 px-4 rounded-full bg-[#9e7138] hover:bg-[#88602c] active:bg-[#745023] text-white text-xs uppercase tracking-[0.16em] font-medium transition-all duration-200 text-center flex items-center justify-center gap-2 cursor-pointer shadow-[0_2px_8px_rgba(158,113,56,0.25)] hover:shadow-[0_4px_14px_rgba(158,113,56,0.4)] hover:-translate-y-0.5 border border-[#d8b075]/40"
+                >
+                  <span>ENQUIRE NOW</span>
+                  <span>↗</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOpenModal}
+                  className="w-full py-2.5 px-4 rounded-full border border-[#9e7138]/50 hover:border-[#9e7138] text-[#9e7138] hover:text-[#745023] text-xs uppercase tracking-[0.15em] font-medium transition-all duration-200 text-center flex items-center justify-center gap-2 cursor-pointer bg-transparent hover:bg-[#9e7138]/5"
                 >
                   <span>GET PRICE &amp; FLOOR PLANS</span>
                   <span>↗</span>
                 </button>
-
-                <a
-                  href="#enquiry-section"
-                  onClick={handleScheduleVisit}
-                  className="w-full py-2.5 px-4 rounded-[2px] border border-[#2d2d2d]/20 hover:border-[#9e7138] text-[#2d2d2d] hover:text-[#9e7138] text-xs uppercase tracking-[0.15em] font-medium transition-all duration-200 text-center flex items-center justify-center gap-2 cursor-pointer bg-transparent"
-                >
-                  <span>SCHEDULE A VISIT</span>
-                  <span>↓</span>
-                </a>
               </div>
 
               {/* Phone Helpline */}
@@ -341,12 +341,6 @@ export default function FAQSection() {
 
         </div>
       </div>
-
-      {/* Enquiry Modal Reuse */}
-      <EnquiryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </section>
   );
 }

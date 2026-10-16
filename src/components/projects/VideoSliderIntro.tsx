@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import EnquiryModal from './EnquiryModal';
+import { useEnquiryModal } from '../../context/EnquiryModalContext';
 
 interface SlideItem {
   id: string;
@@ -22,9 +22,9 @@ const slides: SlideItem[] = [
 ];
 
 export default function VideoSliderIntro() {
+  const { openModal } = useEnquiryModal();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -123,7 +123,7 @@ export default function VideoSliderIntro() {
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIsModalOpen(true);
+                    openModal();
                   }}
                   className="w-full h-full flex items-center justify-center gap-1.5 sm:gap-2.5 md:gap-3 px-2 sm:px-4
                              bg-[#9e7138] hover:bg-[#aa7d39] active:bg-[#94692f]
@@ -203,13 +203,6 @@ export default function VideoSliderIntro() {
         </div>
 
       </div>
-
-      {/* Enquiry Modal */}
-      <EnquiryModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-
     </section>
   );
 }

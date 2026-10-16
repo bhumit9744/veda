@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -492,71 +493,95 @@ export default function DesignReadyVillas() {
         className="absolute w-[92vw] md:w-[85vw] lg:w-[75vw] max-w-[1100px] text-center pointer-events-none z-10 flex flex-col items-center justify-center gap-5 md:gap-6"
       >
         <h2 className="font-codec text-2xl sm:text-4xl md:text-5xl lg:text-[46px] text-[#2d2d2d] font-normal leading-[1.2] tracking-tight max-w-[920px] mx-auto">
-          European-Inspired Architecture<br className="hidden sm:inline" /> for the Privileged 42.
+          A European-Inspired Vision<br className="hidden sm:inline" /> for the Privileged 42
         </h2>
         
-        <p className="text-[#555] font-codec text-sm md:text-base lg:text-[17px] font-light tracking-wide max-w-[620px] mx-auto leading-relaxed mt-1 md:mt-2">
-          Unlike traditional plotted developments where you start from scratch, Veda offers thoughtfully designed European-inspired villas.
+        <p className="text-[#555] font-codec text-sm md:text-base lg:text-[17px] font-light tracking-wide max-w-[640px] mx-auto leading-relaxed mt-1 md:mt-2">
+          Choose the plot that feels right to you, and discover a European-inspired design that complements your space and your vision.
         </p>
 
-        <p className="text-[#777] font-codec text-xs md:text-sm lg:text-[15px] font-light tracking-wide max-w-[560px] mx-auto leading-relaxed">
-          You own the land while we bring your dream home to life with curated architecture, efficient planning, and premium execution.
+        <p className="text-[#777] font-codec text-xs md:text-sm lg:text-[15px] font-light tracking-wide max-w-[600px] mx-auto leading-relaxed">
+          A place that begins with your choice, reflects your taste, and becomes a world entirely your own.
         </p>
       </div>
 
       {/* CARDS LAYER */}
-      <div className="absolute top-[8vh] md:top-[12vh] lg:top-[15vh] left-0 w-full h-full pointer-events-none z-0">
-         {villas.map((villa, i) => (
-           <div 
-             key={i} 
-             className={`villa-card-${i} absolute w-[85vw] md:w-[60vw] max-w-[900px] aspect-video flex flex-col`}
-           >
-             {/* Typography for Villa Classic (i === 0) */}
-             {i === 0 && (
-               <div className="villa-a-text absolute -top-24 md:-top-32 lg:-top-40 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-4 md:pt-6">
-                 <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-3 md:mb-4 font-normal tracking-tight">
-                   VILLA CLASSIC
-                 </h2>
-                 <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
-                   1500 SQUARE FEET
-                 </p>
-               </div>
-             )}
+      <div className="absolute top-[6vh] md:top-[8vh] lg:top-[10vh] left-0 w-full h-full pointer-events-none z-20">
+         {villas.map((villa, i) => {
+           const villaName = i === 0 ? 'Villa Classic' : i === 1 ? 'Villa Grande' : 'Villa Royale';
+           return (
+             <div 
+               key={i} 
+               className={`villa-card-${i} absolute w-[85vw] md:w-[60vw] max-w-[900px] aspect-video flex flex-col`}
+             >
+               {/* Typography for Villa Classic (i === 0) */}
+               {i === 0 && (
+                 <div className="villa-a-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
+                   <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
+                     VILLA CLASSIC
+                   </h2>
+                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase mb-3">
+                     1500 SQUARE FEET
+                   </p>
+                   <div className="pointer-events-auto">
+                     <EnquireButton
+                       text="ENQUIRE ABOUT VILLA CLASSIC"
+                       villa="Villa Classic"
+                       variant="compact"
+                     />
+                   </div>
+                 </div>
+               )}
 
-             {/* Typography for Villa Grande (i === 1) */}
-             {i === 1 && (
-               <div className="villa-b-text absolute -top-24 md:-top-32 lg:-top-40 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-4 md:pt-6">
-                 <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-3 md:mb-4 font-normal tracking-tight">
-                   VILLA GRANDE
-                 </h2>
-                 <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
-                   2300 SQUARE FEET
-                 </p>
-               </div>
-             )}
+               {/* Typography for Villa Grande (i === 1) */}
+               {i === 1 && (
+                 <div className="villa-b-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
+                   <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
+                     VILLA GRANDE
+                   </h2>
+                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase mb-3">
+                     2300 SQUARE FEET
+                   </p>
+                   <div className="pointer-events-auto">
+                     <EnquireButton
+                       text="ENQUIRE ABOUT VILLA GRANDE"
+                       villa="Villa Grande"
+                       variant="compact"
+                     />
+                   </div>
+                 </div>
+               )}
 
-             {/* Typography for Villa Royale (i === 2) */}
-             {i === 2 && (
-               <div className="villa-c-text absolute -top-24 md:-top-32 lg:-top-40 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-4 md:pt-6">
-                 <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-3 md:mb-4 font-normal tracking-tight">
-                   VILLA ROYALE
-                 </h2>
-                 <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
-                   3000 SQUARE FEET
-                 </p>
-               </div>
-             )}
+               {/* Typography for Villa Royale (i === 2) */}
+               {i === 2 && (
+                 <div className="villa-c-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
+                   <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
+                     VILLA ROYALE
+                   </h2>
+                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase mb-3">
+                     3000 SQUARE FEET
+                   </p>
+                   <div className="pointer-events-auto">
+                     <EnquireButton
+                       text="ENQUIRE ABOUT VILLA ROYALE"
+                       villa="Villa Royale"
+                       variant="compact"
+                     />
+                   </div>
+                 </div>
+               )}
 
-             <div className="relative w-full h-full flex items-center justify-center">
-               <img 
-                 src={villa.image} 
-                 alt={villa.title} 
-                 className="w-full h-full object-contain" 
-               />
+               <div className="relative w-full h-full flex items-center justify-center">
+                 <img 
+                   src={villa.image} 
+                   alt={villa.title} 
+                   className="w-full h-full object-contain" 
+                 />
+               </div>
+
              </div>
-
-           </div>
-         ))}
+           );
+         })}
       </div>
 
     </section>

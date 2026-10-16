@@ -19,6 +19,10 @@ import Disclaimer from './pages/Disclaimer';
 
 import Home from './pages/Home';
 import Projects from './pages/Projects';
+import ScrollEnquiryPopup from './components/common/ScrollEnquiryPopup';
+import { EnquiryModalProvider, useEnquiryModal } from './context/EnquiryModalContext';
+import EnquiryModal from './components/projects/EnquiryModal';
+import FloatingEnquireButton from './components/common/FloatingEnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,15 +79,31 @@ function AppContent() {
           </Routes>
         </main>
         <Footer />
+        <ScrollEnquiryPopup />
       </div>
     </div>
+  );
+}
+
+function GlobalEnquiryModal() {
+  const { isOpen, closeModal, selectedVilla } = useEnquiryModal();
+  return (
+    <EnquiryModal
+      isOpen={isOpen}
+      onClose={closeModal}
+      preselectedVilla={selectedVilla}
+    />
   );
 }
 
 function App() {
   return (
     <Router>
-      <AppContent />
+      <EnquiryModalProvider>
+        <AppContent />
+        <GlobalEnquiryModal />
+        <FloatingEnquireButton />
+      </EnquiryModalProvider>
     </Router>
   );
 }

@@ -3,30 +3,32 @@ import React, { useState, useEffect, useRef } from 'react';
 interface EnquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  preselectedVilla?: string;
 }
 
 interface FormState {
   name: string;
   email: string;
   mobile: string;
-  configuration: string;
+  villa: string;
 }
 
 interface FormErrors {
   name?: string;
   email?: string;
   mobile?: string;
-  configuration?: string;
+  villa?: string;
 }
 
-const CONFIGURATION_OPTIONS = [
-  '1,500–1,800 sq. ft.',
-  '1,900–2,300 sq. ft.',
-  '2,300–5,000 sq. ft.',
+const VILLA_OPTIONS = [
+  'Villa Classic',
+  'Villa Grande',
+  'Villa Royale',
+  'Not Sure Yet',
 ] as const;
 
 export const validateIndianMobile = (value: string): { isValid: boolean; cleanNumber: string } => {
-  const cleaned = value.replace(/[\s\-\(\)]/g, '');
+  const cleaned = value.replace(/[\s\-()]/g, '');
   let digits = cleaned;
   if (digits.startsWith('+91')) {
     digits = digits.slice(3);
@@ -36,7 +38,7 @@ export const validateIndianMobile = (value: string): { isValid: boolean; cleanNu
     digits = digits.slice(1);
   }
 
-  const isValid = /^[6-9]\d{9}$/.test(digits);
+  const isValid = /^[6-9]\d{9}$/.test(digits) || /^[0-9]{10}$/.test(digits);
   return { isValid, cleanNumber: digits };
 };
 
@@ -44,22 +46,34 @@ export const validateEmail = (value: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 };
 
-export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
+export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: EnquiryModalProps) {
   const [formData, setFormData] = useState<FormState>({
     name: '',
     email: '',
     mobile: '',
-    configuration: '',
+    villa: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<{ [K in keyof FormState]?: boolean }>({});
   const [whatsappUrl, setWhatsappUrl] = useState<string | null>(null);
-  const [popupBlocked, setPopupBlocked] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const modalRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync preselected villa when modal opens or preselection changes
+  useEffect(() => {
+    if (isOpen) {
+      setIsSubmitted(false);
+      setWhatsappUrl(null);
+      setErrors({});
+      setTouched({});
+      if (preselectedVilla) {
+        setFormData(prev => ({ ...prev, villa: preselectedVilla }));
+      }
+    }
+  }, [isOpen, preselectedVilla]);
 
   // Lock background scrolling and handle Escape key
   useEffect(() => {
@@ -88,22 +102,12 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
     };
   }, [isOpen, onClose]);
 
-  // Reset submitted state when modal re-opens
-  useEffect(() => {
-    if (isOpen) {
-      setIsSubmitted(false);
-      setWhatsappUrl(null);
-      setPopupBlocked(false);
-    }
-  }, [isOpen]);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
-    // Clear error for field if any
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
@@ -140,14 +144,14 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
         } else {
           const { isValid } = validateIndianMobile(value);
           if (!isValid) {
-            error = 'Please enter a valid 10-digit Indian mobile number.';
+            error = 'Please enter a valid 10-digit mobile number.';
           }
         }
         break;
 
-      case 'configuration':
+      case 'villa':
         if (!value) {
-          error = 'Please select a preferred configuration.';
+          error = 'Please select your preferred villa.';
         }
         break;
     }
@@ -175,11 +179,11 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
     if (!formData.mobile.trim()) {
       newErrors.mobile = 'Please enter your mobile number.';
     } else if (!isMobileValid) {
-      newErrors.mobile = 'Please enter a valid 10-digit Indian mobile number.';
+      newErrors.mobile = 'Please enter a valid 10-digit mobile number.';
     }
 
-    if (!formData.configuration) {
-      newErrors.configuration = 'Please select a preferred configuration.';
+    if (!formData.villa) {
+      newErrors.villa = 'Please select your preferred villa.';
     }
 
     setErrors(newErrors);
@@ -187,7 +191,7 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
       name: true,
       email: true,
       mobile: true,
-      configuration: true,
+      villa: true,
     });
 
     const isValid = Object.keys(newErrors).length === 0;
@@ -201,19 +205,20 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
     const { isValid, cleanMobile } = validateAll();
     if (!isValid) return;
 
-    // Exact WhatsApp message format per specifications
     const formattedMobile = `+91 ${cleanMobile}`;
     const messageLines = [
       'Hello Veda Life Spaces Team,',
       '',
-      'I am interested in getting the price details and floor plans for Veda Life Spaces.',
+      'I would like to enquire about Veda Life Spaces.',
       '',
       `Name: ${formData.name.trim()}`,
+      `Phone: ${formattedMobile}`,
       `Email: ${formData.email.trim()}`,
-      `Mobile: ${formattedMobile}`,
-      `Preferred Configuration: ${formData.configuration}`,
+      `Preferred Villa: ${formData.villa}`,
       '',
-      'Please share the pricing details, floor plan, and further information about the selected configuration.',
+      'I would like to receive the pricing, floor plans and details about scheduling a site visit.',
+      '',
+      'Please contact me to discuss the next steps.',
       '',
       'Thank you.'
     ];
@@ -227,12 +232,26 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
     setIsSubmitted(true);
 
     try {
-      const newTab = window.open(url, '_blank', 'noopener,noreferrer');
-      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
-        setPopupBlocked(true);
-      }
+      window.open(url, '_blank', 'noopener,noreferrer');
     } catch {
-      setPopupBlocked(true);
+      // Browser popup blocked, visible Continue to WhatsApp button provided below
+    }
+
+    // Optional silent backup lead logging
+    try {
+      const payload = new FormData();
+      payload.append('name', formData.name.trim());
+      payload.append('mobile', cleanMobile);
+      payload.append('email', formData.email.trim());
+      payload.append('preferredVilla', formData.villa);
+      payload.append('source', 'Shared Site-wide Enquiry Modal');
+      fetch('/api/createLead.php', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: payload,
+      }).catch(() => {});
+    } catch {
+      // Non-critical, ignore
     }
   };
 
@@ -242,7 +261,6 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/60 backdrop-blur-sm transition-opacity duration-300 pointer-events-auto"
       onClick={(e) => {
-        // Close on backdrop click
         if (e.target === e.currentTarget) {
           e.stopPropagation();
           onClose();
@@ -255,7 +273,7 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
       <div
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-[#FAF8F5] text-[#1f1f1f] rounded-lg sm:rounded-xl border border-[#e5decb] shadow-[0_20px_50px_rgba(0,0,0,0.35)] overflow-hidden transition-all duration-300 transform scale-100 my-auto p-6 sm:p-8"
+        className="relative w-full max-w-lg bg-[#FAF8F5] text-[#1f1f1f] rounded-lg sm:rounded-xl border border-[#e5decb] shadow-[0_20px_50px_rgba(0,0,0,0.35)] overflow-hidden transition-all duration-300 transform scale-100 my-auto p-6 sm:p-8 max-h-[92vh] overflow-y-auto"
         style={{
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(158, 113, 56, 0.15)',
         }}
@@ -270,7 +288,7 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
             e.stopPropagation();
             onClose();
           }}
-          className="absolute top-5 right-5 p-2 text-[#7a746e] hover:text-[#1f1f1f] hover:bg-black/[0.05] rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9e7138]"
+          className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 text-[#7a746e] hover:text-[#1f1f1f] hover:bg-black/[0.05] rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9e7138] cursor-pointer"
           aria-label="Close modal"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -283,18 +301,18 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
           <>
             {/* Modal Header */}
             <div className="pr-8 mb-6">
-              <span className="block text-[11px] font-medium tracking-[0.22em] uppercase text-[#9e7138] mb-1.5">
-                Veda Life Spaces • Monteza
+              <span className="block text-[10px] sm:text-[11px] font-medium tracking-[0.22em] uppercase text-[#9e7138] mb-1.5">
+                Veda Life Spaces • Private Advisory
               </span>
               <h2
                 id="enquiry-modal-title"
                 className="font-serif text-2xl sm:text-3xl text-[#1f1f1f] font-normal tracking-tight"
               >
-                Get Price &amp; Floor Plans
+                Let&apos;s Plan Your Visit
               </h2>
               <div className="w-12 h-[1.5px] bg-[#9e7138]/60 my-2.5" />
               <p className="text-xs sm:text-sm text-[#5f5a54] leading-relaxed">
-                Share your details to receive villa configurations and pricing information from our team.
+                Share your details to receive customized pricing, architectural floor plans, or arrange a private site visit in Alibaug.
               </p>
             </div>
 
@@ -303,7 +321,7 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
               {/* Name Field */}
               <div>
                 <label htmlFor="enquiry-name" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
-                  Name <span className="text-[#9e7138]">*</span>
+                  Full Name <span className="text-[#9e7138]">*</span>
                 </label>
                 <input
                   ref={firstInputRef}
@@ -328,10 +346,43 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
                 )}
               </div>
 
+              {/* Phone Number Field */}
+              <div>
+                <label htmlFor="enquiry-mobile" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
+                  Phone Number <span className="text-[#9e7138]">*</span>
+                </label>
+                <div className="relative flex rounded">
+                  <span className="inline-flex items-center px-3 text-xs sm:text-sm font-medium text-[#5f5a54] bg-[#f0eae1] border border-r-0 border-[#d8d0c2] rounded-l select-none">
+                    +91
+                  </span>
+                  <input
+                    id="enquiry-mobile"
+                    type="tel"
+                    name="mobile"
+                    maxLength={10}
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur('mobile')}
+                    placeholder="Enter your 10-digit mobile number"
+                    className={`w-full px-3.5 py-2.5 sm:py-3 text-sm bg-white text-[#1f1f1f] rounded-r border ${
+                      touched.mobile && errors.mobile
+                        ? 'border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500'
+                        : 'border-[#d8d0c2] hover:border-[#b8ad9b] focus:border-[#9e7138] focus:ring-1 focus:ring-[#9e7138]'
+                    } focus:outline-none transition-colors placeholder:text-[#a09a90]`}
+                    required
+                  />
+                </div>
+                {touched.mobile && errors.mobile && (
+                  <p className="text-[11px] text-rose-600 mt-1 font-normal flex items-center gap-1">
+                    <span>⚠</span> {errors.mobile}
+                  </p>
+                )}
+              </div>
+
               {/* Email Field */}
               <div>
                 <label htmlFor="enquiry-email" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
-                  Email <span className="text-[#9e7138]">*</span>
+                  Email Address <span className="text-[#9e7138]">*</span>
                 </label>
                 <input
                   id="enquiry-email"
@@ -355,61 +406,29 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
                 )}
               </div>
 
-              {/* Mobile Number Field */}
+              {/* Preferred Villa Dropdown */}
               <div>
-                <label htmlFor="enquiry-mobile" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
-                  Mobile Number <span className="text-[#9e7138]">*</span>
-                </label>
-                <div className="relative flex rounded">
-                  <span className="inline-flex items-center px-3 text-xs sm:text-sm font-medium text-[#5f5a54] bg-[#f0eae1] border border-r-0 border-[#d8d0c2] rounded-l">
-                    +91
-                  </span>
-                  <input
-                    id="enquiry-mobile"
-                    type="tel"
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur('mobile')}
-                    placeholder="Enter your mobile number"
-                    className={`w-full px-3.5 py-2.5 sm:py-3 text-sm bg-white text-[#1f1f1f] rounded-r border ${
-                      touched.mobile && errors.mobile
-                        ? 'border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500'
-                        : 'border-[#d8d0c2] hover:border-[#b8ad9b] focus:border-[#9e7138] focus:ring-1 focus:ring-[#9e7138]'
-                    } focus:outline-none transition-colors placeholder:text-[#a09a90]`}
-                    required
-                  />
-                </div>
-                {touched.mobile && errors.mobile && (
-                  <p className="text-[11px] text-rose-600 mt-1 font-normal flex items-center gap-1">
-                    <span>⚠</span> {errors.mobile}
-                  </p>
-                )}
-              </div>
-
-              {/* Configuration Dropdown */}
-              <div>
-                <label htmlFor="enquiry-config" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
-                  Select Configuration <span className="text-[#9e7138]">*</span>
+                <label htmlFor="enquiry-villa" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
+                  Preferred Villa <span className="text-[#9e7138]">*</span>
                 </label>
                 <div className="relative">
                   <select
-                    id="enquiry-config"
-                    name="configuration"
-                    value={formData.configuration}
+                    id="enquiry-villa"
+                    name="villa"
+                    value={formData.villa}
                     onChange={handleChange}
-                    onBlur={() => handleBlur('configuration')}
+                    onBlur={() => handleBlur('villa')}
                     className={`w-full appearance-none px-3.5 py-2.5 sm:py-3 text-sm bg-white text-[#1f1f1f] rounded border ${
-                      touched.configuration && errors.configuration
+                      touched.villa && errors.villa
                         ? 'border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500'
                         : 'border-[#d8d0c2] hover:border-[#b8ad9b] focus:border-[#9e7138] focus:ring-1 focus:ring-[#9e7138]'
                     } focus:outline-none transition-colors cursor-pointer`}
                     required
                   >
                     <option value="" disabled className="text-[#a09a90]">
-                      Select your preferred configuration
+                      Select your preferred villa
                     </option>
-                    {CONFIGURATION_OPTIONS.map((opt) => (
+                    {VILLA_OPTIONS.map((opt) => (
                       <option key={opt} value={opt} className="text-[#1f1f1f]">
                         {opt}
                       </option>
@@ -421,9 +440,9 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
                     </svg>
                   </div>
                 </div>
-                {touched.configuration && errors.configuration && (
+                {touched.villa && errors.villa && (
                   <p className="text-[11px] text-rose-600 mt-1 font-normal flex items-center gap-1">
-                    <span>⚠</span> {errors.configuration}
+                    <span>⚠</span> {errors.villa}
                   </p>
                 )}
               </div>
@@ -432,7 +451,7 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
               <div className="bg-[#f3ede3]/80 border border-[#e5decb] rounded p-3 text-[11px] sm:text-xs text-[#5e5850] leading-relaxed flex items-start gap-2">
                 <span className="text-[#9e7138] text-sm shrink-0">💬</span>
                 <span>
-                  You will be redirected to WhatsApp with your prefilled enquiry details. Please tap send in WhatsApp to share with our advisory team.
+                  You will be redirected to WhatsApp with your prefilled enquiry details. Please press send in WhatsApp to submit to our advisory team.
                 </span>
               </div>
 
@@ -440,14 +459,14 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-[3px] bg-[#9e7138] hover:bg-[#8b632f] active:bg-[#7a5628]
+                  className="w-full py-3.5 px-6 rounded-full bg-[#9e7138] hover:bg-[#8b632f] active:bg-[#7a5628]
                              text-white font-medium uppercase tracking-[0.16em] text-xs sm:text-sm
                              border border-[#d8b075]/70 shadow-[0_2px_8px_rgba(158,113,56,0.3)]
                              hover:shadow-[0_4px_16px_rgba(158,113,56,0.45)] hover:-translate-y-0.5 active:translate-y-0
                              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9e7138] focus-visible:ring-offset-2
                              transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer group"
                 >
-                  <span>SEND ENQUIRY ON WHATSAPP</span>
+                  <span>CONTINUE TO WHATSAPP</span>
                   <span className="text-base leading-none transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                     ↗
                   </span>
@@ -456,68 +475,47 @@ export default function EnquiryModal({ isOpen, onClose }: EnquiryModalProps) {
             </form>
           </>
         ) : (
-          /* Confirmation & Fallback View */
-          <div className="py-6 text-center space-y-5">
-            <div className="w-14 h-14 rounded-full bg-[#9e7138]/10 text-[#9e7138] mx-auto flex items-center justify-center text-2xl border border-[#9e7138]/20">
-              💬
+          /* Submission Screen */
+          <div className="py-6 sm:py-8 text-center flex flex-col items-center justify-center animate-fade-in">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#9e7138]/10 text-[#9e7138] flex items-center justify-center mb-4 sm:mb-5 border border-[#9e7138]/25">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
             </div>
-
-            <div>
-              <h3 className="font-serif text-2xl text-[#1f1f1f] font-normal mb-1">
-                Redirecting to WhatsApp
-              </h3>
-              <p className="text-xs sm:text-sm text-[#5f5a54] max-w-sm mx-auto leading-relaxed">
-                Your enquiry message has been prepared for configuration{' '}
-                <strong className="text-[#1f1f1f]">{formData.configuration}</strong>. Please press send in WhatsApp to submit to our team.
-              </p>
-            </div>
+            
+            <h3 className="font-serif text-2xl sm:text-3xl text-[#1f1f1f] mb-2 sm:mb-3">
+              Redirecting to WhatsApp
+            </h3>
+            
+            <p className="text-xs sm:text-sm text-[#5f5a54] max-w-sm mb-6 sm:mb-7 leading-relaxed">
+              Your enquiry has been prepared for <strong className="text-[#1f1f1f]">{formData.villa}</strong>. Please press send in WhatsApp to submit to our team.
+            </p>
 
             {whatsappUrl && (
-              <div className="space-y-3 pt-2">
+              <div className="w-full flex flex-col items-center gap-3">
                 <a
                   href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-[3px]
-                             bg-[#9e7138] hover:bg-[#8b632f] active:bg-[#7a5628]
-                             text-white font-medium uppercase tracking-[0.16em] text-xs sm:text-sm
-                             border border-[#d8b075]/70 shadow-[0_2px_8px_rgba(158,113,56,0.3)]
-                             hover:shadow-[0_4px_16px_rgba(158,113,56,0.45)] hover:-translate-y-0.5
-                             transition-all duration-200"
+                  className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-medium text-xs sm:text-sm uppercase tracking-[0.14em] shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
                 >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.312.045-.634.077-1.745-.371-.84-.339-1.488-.859-2.072-1.442-.647-.648-1.042-1.424-1.189-1.67-.147-.247-.023-.429.1-.552.11-.11.247-.282.37-.424.124-.143.165-.244.248-.405.082-.161.041-.302-.021-.424-.062-.122-.555-1.336-.761-1.831-.2-.482-.405-.417-.555-.425-.143-.008-.309-.01-.475-.01s-.436.062-.664.312c-.228.249-.871.851-.871 2.076 0 1.224.892 2.408 1.017 2.573.124.165 1.755 2.68 4.252 3.757.594.256 1.058.409 1.42.524.597.189 1.14.162 1.569.098.479-.071 1.474-.602 1.681-1.184.207-.582.207-1.08.145-1.185-.062-.104-.228-.166-.476-.289z"/>
+                  </svg>
                   <span>CONTINUE TO WHATSAPP</span>
-                  <span className="text-base leading-none">↗</span>
+                  <span>↗</span>
                 </a>
 
-                {popupBlocked && (
-                  <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded p-2.5">
-                    Your browser blocked the popup tab. Please tap the button above to continue directly.
-                  </p>
-                )}
-
-                <p className="text-[11px] text-[#7a746e]">
-                  Destination: <span className="font-mono text-[#1f1f1f] font-medium">+91 96193 94620</span>
-                </p>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-3 text-xs text-[#7a746e] hover:text-[#1f1f1f] underline transition-colors cursor-pointer"
+                >
+                  Close Window
+                </button>
               </div>
             )}
-
-            <div className="pt-2 flex justify-center gap-4">
-              <button
-                type="button"
-                onClick={() => setIsSubmitted(false)}
-                className="text-xs text-[#9e7138] hover:underline cursor-pointer"
-              >
-                ← Edit Details
-              </button>
-              <span className="text-[#d8d0c2]">|</span>
-              <button
-                type="button"
-                onClick={onClose}
-                className="text-xs text-[#7a746e] hover:text-[#1f1f1f] cursor-pointer"
-              >
-                Close Window
-              </button>
-            </div>
           </div>
         )}
       </div>

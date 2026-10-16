@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -68,6 +69,21 @@ export default function AmenitiesSection() {
           opacity: 1, 
           y: 0, 
           duration: 1, 
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+      gsap.fromTo(q('.amenities-cta'), 
+        { opacity: 0, y: 20 }, 
+        { 
+          opacity: 1, 
+          y: 0, 
+          duration: 1, 
+          delay: 0.2,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -169,6 +185,14 @@ export default function AmenitiesSection() {
             <h3 className="font-veda-sans text-sm md:text-base lg:text-lg tracking-[0.4em] uppercase text-[#d1cec7] font-light ml-2 md:ml-4 border-l border-white/20 pl-6">
               FOR THE PRIVILEGED 42
             </h3>
+          </div>
+
+          {/* CTA */}
+          <div className="amenities-cta mt-6 md:mt-8 ml-2 md:ml-4 pointer-events-auto">
+            <EnquireButton 
+              text="ENQUIRE ABOUT AMENITIES"
+              variant="primary"
+            />
           </div>
         </div>
       </div>

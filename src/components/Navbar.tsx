@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { useEnquiryModal } from '../context/EnquiryModalContext';
 
 export default function Navbar() {
+  const { openModal } = useEnquiryModal();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const location = useLocation();
@@ -142,13 +144,14 @@ export default function Navbar() {
           transition={{ delay: 0.8, duration: 0.6, type: 'spring', stiffness: 50 }}
           className="relative z-10 flex justify-end"
         >
-          <Link 
-            to="/contact-us.php"
-            className={`group flex items-center gap-2 px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] whitespace-nowrap bg-[#1a1a1a] hover:bg-[#2a2a2a] text-[#F8F7F4]`}
+          <button 
+            type="button"
+            onClick={() => openModal()}
+            className="group flex items-center gap-2 px-6 py-[12px] rounded-full text-[11px] md:text-[12px] uppercase tracking-[0.14em] font-medium shadow-sm transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] whitespace-nowrap bg-[#9e7138] hover:bg-[#88602c] active:bg-[#745023] text-white cursor-pointer border border-[#d8b075]/40"
           >
-            <span className="transition-transform duration-500">Enquire</span>
+            <span className="transition-transform duration-500">Enquire Now</span>
             <span className="transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span>
-          </Link>
+          </button>
         </motion.div>
       </motion.nav>
 
@@ -235,13 +238,16 @@ export default function Navbar() {
                   transition={{ delay: 0.8, duration: 0.5 }}
                   className="mt-8"
                 >
-                  <Link 
-                    to="/contact-us.php"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="inline-flex items-center justify-center bg-[#121212] text-[#F4F1E8] px-8 py-4 rounded-full text-sm uppercase tracking-widest font-medium"
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openModal();
+                    }}
+                    className="inline-flex items-center justify-center bg-[#9e7138] hover:bg-[#88602c] active:bg-[#745023] text-white px-8 py-4 rounded-full text-sm uppercase tracking-widest font-medium cursor-pointer shadow-md"
                   >
-                    Enquire ↗
-                  </Link>
+                    Enquire Now ↗
+                  </button>
               </motion.div>
             </div>
 
