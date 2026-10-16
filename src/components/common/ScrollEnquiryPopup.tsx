@@ -7,15 +7,17 @@ const SESSION_KEY = 'veda_scroll_enquiry_shown';
 /**
  * ScrollEnquiryPopup
  * Automatically opens the shared EnquiryModal once per browser session when
- * the second website section reaches approximately 50% visibility in the viewport.
+ * the second website section occupies at least approximately 50% of the viewport height.
  *
- * Trigger logic:
- * - Identifies the actual second section element (#land-showcase-section, [data-section="second-section"], or second <section>)
- * - Calculates the visible intersection between the section and viewport
- * - Triggers when approximately half of the section's height is visible (or occupies >= 50% of the viewport)
- * - Safe against initial page load and when still in section 1
- * - Only sets sessionStorage when the modal actually opens
- * - Supports ?fresh=true / ?reset=true and window.__resetEnquiryPopup() for test resets
+ * Exact trigger condition:
+ * - Identifies the actual second section (#land-showcase-section, [data-section="second-section"], or second <section>)
+ * - Calculates the visible intersection height of that section with the viewport:
+ *     visibleHeight = Math.max(0, Math.min(vh, rect.bottom) - Math.max(0, rect.top))
+ * - Triggers when visibleHeight >= window.innerHeight * 0.48 (approx 50% of viewport height)
+ * - Strict guard against initial load: scrollY must be > 80px and user must have scrolled into section 2
+ * - Sets sessionStorage only when the modal actually opens
+ * - In development, reloading at the top of the page (scrollY < 80) clears stale storage for easy re-testing
+ * - Supports ?fresh=true / ?reset=true and window.__resetEnquiryPopup()
  */
 export default function ScrollEnquiryPopup() {
   const { openModal } = useEnquiryModal();
@@ -25,26 +27,31 @@ export default function ScrollEnquiryPopup() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    // Check URL parameters for development / testing reset override
+    const isDev = Boolean(import.meta.env && import.meta.env.DEV);
+
+    // Check URL parameters for explicit reset override
     const searchParams = new URLSearchParams(window.location.search);
     const isResetRequested =
       searchParams.get('fresh') === 'true' ||
       searchParams.get('reset') === 'true' ||
       searchParams.get('debug_popup') === 'true';
 
-    if (isResetRequested) {
+    // In development mode, if user loads/reloads at the top of the page (scrollY < 80),
+    // automatically clear any stale session flag so the trigger can be tested repeatedly
+    const initialScrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || 0;
+    if (isResetRequested || (isDev && initialScrollY < 80)) {
       sessionStorage.removeItem(SESSION_KEY);
       hasTriggeredRef.current = false;
     }
 
-    // Expose window helper for debugging
+    // Expose window helper for debugging in console
     (window as unknown as { __resetEnquiryPopup: () => void }).__resetEnquiryPopup = () => {
       sessionStorage.removeItem(SESSION_KEY);
       hasTriggeredRef.current = false;
-      console.log('[ScrollEnquiryPopup] Session flag cleared. Scroll to second section (50% visible) to trigger modal.');
+      console.log('[ScrollEnquiryPopup] Session flag cleared. Scroll down to second section to trigger modal.');
     };
 
-    // If already triggered in this browser session and no reset was requested, do not attach listeners
+    // If already shown in this browser session and no reset was requested, do not attach listeners
     if (!isResetRequested && sessionStorage.getItem(SESSION_KEY) === 'true') {
       return;
     }
@@ -58,21 +65,21 @@ export default function ScrollEnquiryPopup() {
       openModal();
     };
 
-    // Find the second section element
+    // Find the actual second section element
     const findSecondSection = (): HTMLElement | null => {
-      // 1. Direct explicit identifier
+      // 1. Direct verified ID or data-section attribute
       const explicit = document.querySelector<HTMLElement>('#land-showcase-section, [data-section="second-section"]');
       if (explicit) return explicit;
 
-      // 2. Project section list
+      // 2. Second section in .project-section container
       const projectSections = document.querySelectorAll<HTMLElement>('.project-section > section');
       if (projectSections.length >= 2) return projectSections[1];
 
-      // 3. Main container sections
+      // 3. Second section in <main>
       const mainSections = document.querySelectorAll<HTMLElement>('main section');
       if (mainSections.length >= 2) return mainSections[1];
 
-      // 4. Any page sections
+      // 4. Second <section> on the page
       const allSections = document.querySelectorAll<HTMLElement>('section');
       if (allSections.length >= 2) return allSections[1];
 
@@ -83,30 +90,24 @@ export default function ScrollEnquiryPopup() {
       if (hasTriggeredRef.current) return;
       if (!isResetRequested && sessionStorage.getItem(SESSION_KEY) === 'true') return;
 
+      const scrollY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || 0;
+      // Guard: User must not be on the initial load or still in section 1
+      if (scrollY < 80) return;
+
       const section = findSecondSection();
       if (!section) return;
 
       const rect = section.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
-      if (viewportHeight <= 0 || rect.height <= 0) return;
+      const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+      if (vh <= 0 || rect.height <= 0) return;
 
-      // Calculate the portion of the section currently visible inside the viewport
+      // Calculate the visible intersection height of the second section within the viewport
       const visibleTop = Math.max(0, rect.top);
-      const visibleBottom = Math.min(viewportHeight, rect.bottom);
-      const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+      const visibleBottom = Math.min(vh, rect.bottom);
+      const visibleIntersectionHeight = Math.max(0, visibleBottom - visibleTop);
 
-      // Section is not in viewport or user is still completely in the first section above
-      if (visibleHeight <= 0) return;
-
-      // Calculate both:
-      // 1. Ratio of the section's total height that is visible
-      const sectionRatio = visibleHeight / rect.height;
-      // 2. Ratio of the viewport height that is occupied by the second section
-      const viewportRatio = visibleHeight / viewportHeight;
-
-      // Trigger when approximately half (>= 48%) of that section's height is visible
-      // OR when the second section occupies >= 48% of the viewport height
-      if (sectionRatio >= 0.48 || viewportRatio >= 0.48) {
+      // Check whether the second section occupies at least approximately 50% (>= 48%) of the viewport height
+      if (visibleIntersectionHeight >= vh * 0.48) {
         triggerPopup();
       }
     };
@@ -122,52 +123,28 @@ export default function ScrollEnquiryPopup() {
       }
     };
 
-    // Set up IntersectionObserver with multiple thresholds for immediate callback
-    let observer: IntersectionObserver | null = null;
-    const target = findSecondSection();
-    if (target && typeof IntersectionObserver !== 'undefined') {
-      observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            // Check intersection ratio of the section or viewport
-            if (entry.isIntersecting) {
-              const vh = window.innerHeight || document.documentElement.clientHeight || 0;
-              const rect = entry.boundingClientRect;
-              const visibleH = Math.max(0, Math.min(vh, rect.bottom) - Math.max(0, rect.top));
-              const sRatio = rect.height > 0 ? visibleH / rect.height : 0;
-              const vRatio = vh > 0 ? visibleH / vh : 0;
-
-              if (entry.intersectionRatio >= 0.48 || sRatio >= 0.48 || vRatio >= 0.48) {
-                triggerPopup();
-              }
-            }
-          }
-        },
-        {
-          threshold: [0.1, 0.25, 0.4, 0.48, 0.5, 0.6, 0.75],
-        }
-      );
-      observer.observe(target);
-    }
-
-    // Attach passive scroll and resize listeners (compatible with Lenis smooth scroll)
+    // Listen to scroll and resize on both window and document (compatible with Lenis smooth scroll)
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll, { passive: true });
+    document.addEventListener('scroll', onScroll, { passive: true });
 
-    // Initial check (in case page refreshed while already scrolled down)
+    // Initial check (in case page was reloaded while already scrolled into section 2)
     checkVisibility();
 
-    // Secondary check after dynamic layout stabilization (e.g. ScrollTrigger.refresh() after 150ms)
-    const timer = setTimeout(checkVisibility, 200);
+    // Secondary checks to handle layout changes, image loading, or GSAP ScrollTrigger.refresh()
+    const t1 = setTimeout(checkVisibility, 150);
+    const t2 = setTimeout(checkVisibility, 350);
 
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
-      if (observer) observer.disconnect();
-      clearTimeout(timer);
+      document.removeEventListener('scroll', onScroll);
+      clearTimeout(t1);
+      clearTimeout(t2);
     };
   }, [openModal, location.pathname]);
 
   return null;
 }
+
 
