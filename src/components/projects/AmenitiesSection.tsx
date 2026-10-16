@@ -6,23 +6,23 @@ gsap.registerPlugin(ScrollTrigger);
 
 const amenitiesList = [
   {
-    category: 'COMMUNITY & GATHERING',
-    title: 'Mountain View Coffee',
+    category: '',
+    title: 'The Cafe',
     image: '/Laughter Over Coffee with Mountain Views.png'
   },
   {
-    category: 'WELLNESS & RELAXATION',
-    title: 'Serene Head Massage',
-    image: '/Serene Head Massage in a Warm Spa.png'
+    category: '',
+    title: 'Swimming Pool With Cabana',
+    image: '/Swimming Pool With cabana.png'
   },
   {
-    category: 'OUTDOOR RECREATION',
-    title: 'Garden Cycling Trails',
-    image: '/Sunlit Cycling Through the Garden.png'
+    category: '',
+    title: 'Mini Golf',
+    image: '/Mini Golf.png'
   },
   {
-    category: 'INDOOR LEISURE',
-    title: 'Modern Billiards Lounge',
+    category: '',
+    title: 'Indoor Games',
     image: '/Sunlit Modern Billiards Lounge.png'
   },
   {
@@ -157,7 +157,7 @@ export default function AmenitiesSection() {
           {/* Main statement - Asymmetrical styling */}
           <div className="amenities-main flex flex-col md:flex-row md:items-baseline gap-2 md:gap-6 mb-8">
             <h2 className="font-veda-serif text-white leading-[0.9]">
-              <span className="text-[6rem] md:text-[8rem] lg:text-[10rem] tracking-tight block drop-shadow-md">27<span className="text-[4rem] md:text-[6rem] lg:text-[7rem] font-light align-top ml-2">+</span></span>
+              <span className="text-[6rem] md:text-[8rem] lg:text-[10rem] tracking-tight block drop-shadow-md">25</span>
             </h2>
             <h2 className="font-veda-sans text-3xl md:text-5xl lg:text-5xl tracking-[0.2em] uppercase font-light text-white/95 drop-shadow-sm mt-4 md:mt-0">
               AMENITIES
@@ -188,9 +188,11 @@ export default function AmenitiesSection() {
               </div>
               
               <div className="relative z-10 mt-auto p-5 md:p-6">
-                <span className="font-codec text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-white/75 mb-1.5 md:mb-2 block font-medium">
-                  {item.category}
-                </span>
+                {item.category ? (
+                  <span className="font-codec text-[9px] md:text-[10px] tracking-[0.25em] uppercase text-white/75 mb-1.5 md:mb-2 block font-medium">
+                    {item.category}
+                  </span>
+                ) : null}
                 <h3 className="font-codec text-lg md:text-xl lg:text-[22px] text-white tracking-wide font-normal leading-snug drop-shadow-sm">
                   {item.title}
                 </h3>

@@ -12,7 +12,7 @@ export default function EnquirySection() {
     name: '',
     mobile: '',
     email: '',
-    preferredVilla: ''
+    configuration: ''
   });
   const [status, setStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({ type: null, message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,8 +55,8 @@ export default function EnquirySection() {
       return;
     }
     
-    if (!formData.preferredVilla) {
-      setStatus({ type: 'error', message: 'Please select a preferred villa.' });
+    if (!formData.configuration) {
+      setStatus({ type: 'error', message: 'Please select your preferred configuration.' });
       return;
     }
 
@@ -68,7 +68,7 @@ export default function EnquirySection() {
         name: formData.name, 
         email: formData.email, 
         mobile: formData.mobile,
-        message: `Preferred Villa: ${formData.preferredVilla}`,
+        message: `Configuration: ${formData.configuration}`,
         source: 'Projects Page Enquiry Form' 
       });
 
@@ -76,7 +76,7 @@ export default function EnquirySection() {
 
       if (hubspotResult.success) {
         setStatus({ type: 'success', message: 'Thank you for your interest. Our team will contact you shortly to arrange your visit.' });
-        setFormData({ name: '', mobile: '', email: '', preferredVilla: '' });
+        setFormData({ name: '', mobile: '', email: '', configuration: '' });
       } else {
         setStatus({ type: 'error', message: hubspotResult.message });
       }
@@ -87,6 +87,7 @@ export default function EnquirySection() {
         Object.entries(formData).forEach(([key, value]) => {
           payload.append(key, value.toString());
         });
+        payload.append('preferredVilla', formData.configuration);
         payload.append('source', 'Projects Page Enquiry Form');
         await fetch('/api/createLead.php', {
           method: 'POST',
@@ -104,7 +105,7 @@ export default function EnquirySection() {
   };
 
   return (
-    <section ref={sectionRef} className="w-full bg-[#F4F1E8] py-24 md:py-32 relative z-20 overflow-hidden">
+    <section id="enquiry-section" ref={sectionRef} className="w-full bg-[#F4F1E8] py-24 md:py-32 relative z-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           
@@ -192,21 +193,20 @@ export default function EnquirySection() {
                   </div>
 
                   <div className="flex flex-col gap-2 relative">
-                    <label htmlFor="preferredVilla" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">Preferred Villa</label>
+                    <label htmlFor="configuration" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">Select Configuration</label>
                     <div className="relative">
                       <select
-                        id="preferredVilla"
-                        name="preferredVilla"
+                        id="configuration"
+                        name="configuration"
                         required
-                        value={formData.preferredVilla}
+                        value={formData.configuration}
                         onChange={handleChange}
                         className="w-full bg-transparent border-b border-[#2d2d2d]/20 text-[#2d2d2d] py-2 outline-none focus:border-[#b89a6b] font-veda-sans text-base transition-colors rounded-none appearance-none cursor-pointer"
                       >
-                        <option value="" disabled>Please select a villa</option>
-                        <option value="Villa Classic">Villa Classic</option>
-                        <option value="Villa Grande">Villa Grande</option>
-                        <option value="Villa Royale">Villa Royale</option>
-                        <option value="Not decided yet">Not decided yet</option>
+                        <option value="" disabled className="bg-[#FAF8F5] text-[#888]">Select your preferred configuration</option>
+                        <option value="1,500–1,800 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">1,500–1,800 sq. ft.</option>
+                        <option value="1,900–2,300 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">1,900–2,300 sq. ft.</option>
+                        <option value="2,300–5,000 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">2,300–5,000 sq. ft.</option>
                       </select>
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>

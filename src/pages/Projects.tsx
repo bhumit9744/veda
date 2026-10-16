@@ -7,6 +7,7 @@ import EnquirySection from '../components/projects/EnquirySection';
 import LandShowcaseSection from '../components/projects/LandShowcaseSection';
 import LocationSection from '../components/projects/LocationSection';
 import OwnershipJourneySection from '../components/projects/OwnershipJourneySection';
+import FAQSection from '../components/projects/FAQSection';
 import VideoSliderIntro from '../components/projects/VideoSliderIntro';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,35 +18,39 @@ export default function Projects() {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const ctx = gsap.context(() => {
+    // Refresh ScrollTrigger after all child components mount and layout their pin-spacings in DOM order
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
 
-    }, containerRef); // Scoped to the entire component
-
-    return () => ctx.revert();
+    return () => clearTimeout(refreshTimer);
   }, []);
 
   return (
     <div ref={containerRef} className="project-section font-codec w-full bg-[#0a0a0a] text-white font-sans min-h-screen">
 
-      {/* 01. Video Slider Sequence */}
+      {/* 01. Promotional image slider */}
       <VideoSliderIntro />
 
-      {/* 02. COMBINED EDITORIAL + DESIGN READY VILLAS */}
-      <DesignReadyVillas />
-
-      {/* 03. Premium Land Showcase */}
+      {/* 02. Plotted land background section (4 ACRES / 42 DISTINCTIVE PLOTS) */}
       <LandShowcaseSection />
 
-      {/* 04. Lifestyle & Amenities */}
+      {/* 03. Lifestyle & Amenities (6 amenity cards + horizontal GSAP scroll) */}
       <AmenitiesSection />
 
-      {/* 05. Premium Location & Connectivity */}
+      {/* 04. Villa Showcase (Villa Classic, Villa Grande, Villa Royale) */}
+      <DesignReadyVillas />
+
+      {/* 05. Project Location & Connectivity */}
       <LocationSection />
 
       {/* 06. Ownership Journey: BUY → BUILD → SELL */}
       <OwnershipJourneySection />
 
-      {/* 07. Enquiry Section */}
+      {/* 07. Frequently Asked Questions */}
+      <FAQSection />
+
+      {/* 08. Enquiry Section Form */}
       <EnquirySection />
     </div>
   );

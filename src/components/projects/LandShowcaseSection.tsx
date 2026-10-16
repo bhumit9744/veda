@@ -62,8 +62,8 @@ export default function LandShowcaseSection() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
         <img 
-          src="/assets/images/veda_project_bg.jpg" 
-          alt="Veda Life Spaces - 4 Acres"
+          src="/Plots.png" 
+          alt="Veda Life Spaces - 4 Acres - 42 Distinctive Plots"
           className="land-bg w-full h-[120%] object-cover absolute top-[-10%] left-0"
         />
         {/* Subtle, carefully controlled overlay to ensure typography remains readable */}

@@ -103,6 +103,7 @@ export default function DesignReadyVillas() {
           end: '+=400%', // Total scroll distance accommodates both phases
           pin: true,
           scrub: 1,
+          invalidateOnRefresh: true,
         }
       });
 
