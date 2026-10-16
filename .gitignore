@@ -31,3 +31,5 @@ dist-ssr
 *.mp4
 *.zip
 public/final_frames.zip
+.vercel
+.env*

@@ -1,0 +1,8 @@
+.git
+node_modules
+test_unzip
+*.zip
+main.zip
+*.py
+HUBSPOT_SETUP.md
+screenshot.cjs
