@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -508,7 +507,6 @@ export default function DesignReadyVillas() {
       {/* CARDS LAYER */}
       <div className="absolute top-[6vh] md:top-[8vh] lg:top-[10vh] left-0 w-full h-full pointer-events-none z-20">
          {villas.map((villa, i) => {
-           const villaName = i === 0 ? 'Villa Classic' : i === 1 ? 'Villa Grande' : 'Villa Royale';
            return (
              <div 
                key={i} 
@@ -520,16 +518,9 @@ export default function DesignReadyVillas() {
                    <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
                      VILLA CLASSIC
                    </h2>
-                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase mb-3">
+                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
                      1500 SQUARE FEET
                    </p>
-                   <div className="pointer-events-auto">
-                     <EnquireButton
-                       text="ENQUIRE ABOUT VILLA CLASSIC"
-                       villa="Villa Classic"
-                       variant="compact"
-                     />
-                   </div>
                  </div>
                )}
 
@@ -539,16 +530,9 @@ export default function DesignReadyVillas() {
                    <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
                      VILLA GRANDE
                    </h2>
-                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase mb-3">
+                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
                      2300 SQUARE FEET
                    </p>
-                   <div className="pointer-events-auto">
-                     <EnquireButton
-                       text="ENQUIRE ABOUT VILLA GRANDE"
-                       villa="Villa Grande"
-                       variant="compact"
-                     />
-                   </div>
                  </div>
                )}
 
@@ -558,16 +542,9 @@ export default function DesignReadyVillas() {
                    <h2 className="font-veda-serif text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight">
                      VILLA ROYALE
                    </h2>
-                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase mb-3">
+                   <p className="font-veda-sans text-[11px] md:text-xs text-[#666] font-medium tracking-[0.2em] uppercase">
                      3000 SQUARE FEET
                    </p>
-                   <div className="pointer-events-auto">
-                     <EnquireButton
-                       text="ENQUIRE ABOUT VILLA ROYALE"
-                       villa="Villa Royale"
-                       variant="compact"
-                     />
-                   </div>
                  </div>
                )}
 

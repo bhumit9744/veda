@@ -67,8 +67,8 @@ export default function MobileHome() {
       {/* RELATIVE CONTENT SECTIONS */}
       <div className="relative z-10 flex flex-col w-full">
         
-        {/* 1. HERO */}
-        <section className="relative w-full h-[100svh] flex flex-col items-center justify-center px-6 md:px-12 text-center">
+        {/* 1. HERO (Second section on mobile home after HeroVideoIntro) */}
+        <section data-section="second-section" className="relative w-full h-[100svh] flex flex-col items-center justify-center px-6 md:px-12 text-center">
           <div className="w-full pt-20 animate-on-scroll">
             <h1 className="font-light tracking-widest text-veda-forest uppercase leading-[1.1] md:leading-[1.1] text-2xl md:text-[32px] lg:text-[42px] xl:text-[54px] max-w-full break-words mx-auto">
               {vedaContent.hero.title.split('\n').map((line, i) => (

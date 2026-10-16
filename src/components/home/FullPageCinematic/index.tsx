@@ -6,8 +6,8 @@ import OwnershipJourneySection from '../../projects/OwnershipJourneySection';
 export default function FullPageCinematic() {
   return (
     <div className="relative w-full bg-white text-veda-forest">
-      {/* 01. HERO */}
-      <section className="relative w-full min-h-[calc(100vh-5rem)] flex items-center justify-center">
+      {/* 01. HERO (Second section on home page after HeroVideoIntro) */}
+      <section data-section="second-section" className="relative w-full min-h-[calc(100vh-5rem)] flex items-center justify-center">
         <FilledTextHover scrollProgress={0} />
       </section>
 

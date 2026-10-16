@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,11 +35,6 @@ export default function LandShowcaseSection() {
         { opacity: 0, y: 20 }, 
         { opacity: 1, y: 0, duration: 1, ease: 'power2.out' },
         '-=0.9'
-      )
-      .fromTo(q('.land-cta'),
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 1, ease: 'power2.out' },
-        '-=0.7'
       );
 
       // Parallax for the background
@@ -64,7 +58,12 @@ export default function LandShowcaseSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full h-[90vh] md:h-screen overflow-hidden bg-black z-20 flex items-center">
+    <section 
+      ref={sectionRef} 
+      id="land-showcase-section" 
+      data-section="second-section" 
+      className="relative w-full h-[90vh] md:h-screen overflow-hidden bg-black z-20 flex items-center"
+    >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
         <img 
@@ -107,14 +106,6 @@ export default function LandShowcaseSection() {
             <h3 className="font-veda-sans text-sm md:text-lg lg:text-xl tracking-[0.2em] md:tracking-[0.3em] uppercase text-white/95 border-l-2 border-[#b89a6b] pl-4 md:pl-6 py-1 leading-loose">
               42 DISTINCTIVE PLOTS FOR THE PRIVILEGED 42
             </h3>
-          </div>
-
-          {/* CTA */}
-          <div className="land-cta mt-8 md:mt-10">
-            <EnquireButton 
-              text="ENQUIRE ABOUT PLOTS"
-              variant="primary"
-            />
           </div>
         </div>
       </div>

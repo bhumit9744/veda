@@ -273,7 +273,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
       <div
         ref={modalRef}
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-lg bg-[#FAF8F5] text-[#1f1f1f] rounded-lg sm:rounded-xl border border-[#e5decb] shadow-[0_20px_50px_rgba(0,0,0,0.35)] overflow-hidden transition-all duration-300 transform scale-100 my-auto p-6 sm:p-8 max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-lg bg-[#FAF8F5] text-[#1f1f1f] rounded-lg sm:rounded-xl border border-[#e5decb] shadow-[0_20px_50px_rgba(0,0,0,0.35)] overflow-hidden transition-all duration-300 transform scale-100 my-auto p-5 sm:p-6 max-h-[94vh] overflow-y-auto"
         style={{
           boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(158, 113, 56, 0.15)',
         }}
@@ -300,8 +300,8 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
         {!isSubmitted ? (
           <>
             {/* Modal Header */}
-            <div className="pr-8 mb-6">
-              <span className="block text-[10px] sm:text-[11px] font-medium tracking-[0.22em] uppercase text-[#9e7138] mb-1.5">
+            <div className="pr-8 mb-3 sm:mb-4">
+              <span className="block text-[10px] sm:text-[11px] font-medium tracking-[0.22em] uppercase text-[#9e7138] mb-1">
                 Veda Life Spaces • Private Advisory
               </span>
               <h2
@@ -310,17 +310,17 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
               >
                 Let&apos;s Plan Your Visit
               </h2>
-              <div className="w-12 h-[1.5px] bg-[#9e7138]/60 my-2.5" />
-              <p className="text-xs sm:text-sm text-[#5f5a54] leading-relaxed">
+              <div className="w-12 h-[1.5px] bg-[#9e7138]/60 my-1.5" />
+              <p className="text-xs sm:text-[13px] text-[#5f5a54] leading-relaxed">
                 Share your details to receive customized pricing, architectural floor plans, or arrange a private site visit in Alibaug.
               </p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} noValidate className="space-y-4 sm:space-y-4.5">
+            <form onSubmit={handleSubmit} noValidate className="space-y-2.5 sm:space-y-3">
               {/* Name Field */}
               <div>
-                <label htmlFor="enquiry-name" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
+                <label htmlFor="enquiry-name" className="block text-[11px] uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1">
                   Full Name <span className="text-[#9e7138]">*</span>
                 </label>
                 <input
@@ -332,7 +332,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
                   onChange={handleChange}
                   onBlur={() => handleBlur('name')}
                   placeholder="Enter your full name"
-                  className={`w-full px-3.5 py-2.5 sm:py-3 text-sm bg-white text-[#1f1f1f] rounded border ${
+                  className={`w-full px-3.5 py-2 sm:py-2.5 text-sm bg-white text-[#1f1f1f] rounded border ${
                     touched.name && errors.name
                       ? 'border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500'
                       : 'border-[#d8d0c2] hover:border-[#b8ad9b] focus:border-[#9e7138] focus:ring-1 focus:ring-[#9e7138]'
@@ -448,18 +448,18 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
               </div>
 
               {/* Informational WhatsApp Notice */}
-              <div className="bg-[#f3ede3]/80 border border-[#e5decb] rounded p-3 text-[11px] sm:text-xs text-[#5e5850] leading-relaxed flex items-start gap-2">
+              <div className="bg-[#f3ede3]/80 border border-[#e5decb] rounded p-2.5 sm:p-3 text-[11px] sm:text-xs text-[#5e5850] leading-relaxed flex items-start gap-2">
                 <span className="text-[#9e7138] text-sm shrink-0">💬</span>
                 <span>
                   You will be redirected to WhatsApp with your prefilled enquiry details. Please press send in WhatsApp to submit to our advisory team.
                 </span>
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-2">
+              {/* Submit Button & Maybe Later */}
+              <div className="pt-1.5 flex flex-col items-center gap-2">
                 <button
                   type="submit"
-                  className="w-full py-3.5 px-6 rounded-full bg-[#9e7138] hover:bg-[#8b632f] active:bg-[#7a5628]
+                  className="w-full py-3 px-6 rounded-full bg-[#9e7138] hover:bg-[#8b632f] active:bg-[#7a5628]
                              text-white font-medium uppercase tracking-[0.16em] text-xs sm:text-sm
                              border border-[#d8b075]/70 shadow-[0_2px_8px_rgba(158,113,56,0.3)]
                              hover:shadow-[0_4px_16px_rgba(158,113,56,0.45)] hover:-translate-y-0.5 active:translate-y-0
@@ -470,6 +470,17 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
                   <span className="text-base leading-none transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
                     ↗
                   </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="text-xs text-[#7a746e] hover:text-[#1f1f1f] tracking-wide transition-colors cursor-pointer py-0.5"
+                >
+                  Maybe Later
                 </button>
               </div>
             </form>
