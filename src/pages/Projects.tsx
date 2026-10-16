@@ -7,7 +7,6 @@ import EnquirySection from '../components/projects/EnquirySection';
 import LandShowcaseSection from '../components/projects/LandShowcaseSection';
 import LocationSection from '../components/projects/LocationSection';
 import OwnershipJourneySection from '../components/projects/OwnershipJourneySection';
-import FAQSection from '../components/projects/FAQSection';
 import VideoSliderIntro from '../components/projects/VideoSliderIntro';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -47,10 +46,7 @@ export default function Projects() {
       {/* 06. Ownership Journey: BUY → BUILD → SELL */}
       <OwnershipJourneySection />
 
-      {/* 07. Frequently Asked Questions */}
-      <FAQSection />
-
-      {/* 08. Enquiry Section Form */}
+      {/* 07. Enquiry Section Form */}
       <EnquirySection />
     </div>
   );
