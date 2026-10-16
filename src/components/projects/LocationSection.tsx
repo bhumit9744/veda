@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import EnquireButton from '../common/EnquireButton';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -215,16 +214,6 @@ export default function LocationSection() {
             </div>
           </div>
 
-        </div>
-
-        {/* Location Enquiry CTA Banner */}
-        <div className="mt-12 md:mt-16 text-center loc-fade">
-          <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 bg-white/80 backdrop-blur-md px-6 sm:px-8 py-4 sm:py-5 rounded-2xl border border-black/[0.06] shadow-sm max-w-2xl mx-auto">
-            <span className="font-codec text-xs sm:text-sm text-[#444] font-medium tracking-wide text-center sm:text-left">
-              Plan your private visit to experience the scenic Alibaug location in person.
-            </span>
-            <EnquireButton text="ENQUIRE NOW" variant="primary" className="whitespace-nowrap flex-shrink-0" />
-          </div>
         </div>
 
       </div>

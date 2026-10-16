@@ -4,27 +4,27 @@ interface EnquiryModalProps {
   isOpen: boolean;
   onClose: () => void;
   preselectedVilla?: string;
+  preselectedPlotSize?: string;
 }
 
 interface FormState {
   name: string;
   email: string;
   mobile: string;
-  villa: string;
+  plotSize: string;
 }
 
 interface FormErrors {
   name?: string;
   email?: string;
   mobile?: string;
-  villa?: string;
+  plotSize?: string;
 }
 
-const VILLA_OPTIONS = [
-  'Villa Classic',
-  'Villa Grande',
-  'Villa Royale',
-  'Not Sure Yet',
+export const PLOT_SIZE_OPTIONS = [
+  'Plot Size (1,500–1,800 sq. ft.)',
+  'Plot Size (1,900–2,300 sq. ft.)',
+  'Plot Size (2,300–5,000 sq. ft.)',
 ] as const;
 
 export const validateIndianMobile = (value: string): { isValid: boolean; cleanNumber: string } => {
@@ -46,12 +46,12 @@ export const validateEmail = (value: string): boolean => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 };
 
-export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: EnquiryModalProps) {
+export default function EnquiryModal({ isOpen, onClose, preselectedVilla, preselectedPlotSize }: EnquiryModalProps) {
   const [formData, setFormData] = useState<FormState>({
     name: '',
     email: '',
     mobile: '',
-    villa: '',
+    plotSize: '',
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -62,18 +62,19 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
   const modalRef = useRef<HTMLDivElement>(null);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync preselected villa when modal opens or preselection changes
+  // Sync preselected plot size when modal opens or preselection changes
   useEffect(() => {
     if (isOpen) {
       setIsSubmitted(false);
       setWhatsappUrl(null);
       setErrors({});
       setTouched({});
-      if (preselectedVilla) {
-        setFormData(prev => ({ ...prev, villa: preselectedVilla }));
+      const initialPlotSize = preselectedPlotSize || preselectedVilla || '';
+      if (initialPlotSize) {
+        setFormData(prev => ({ ...prev, plotSize: initialPlotSize }));
       }
     }
-  }, [isOpen, preselectedVilla]);
+  }, [isOpen, preselectedPlotSize, preselectedVilla]);
 
   // Lock background scrolling and handle Escape key
   useEffect(() => {
@@ -149,9 +150,9 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
         }
         break;
 
-      case 'villa':
+      case 'plotSize':
         if (!value) {
-          error = 'Please select your preferred villa.';
+          error = 'Please select your preferred plot size.';
         }
         break;
     }
@@ -182,8 +183,8 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
       newErrors.mobile = 'Please enter a valid 10-digit mobile number.';
     }
 
-    if (!formData.villa) {
-      newErrors.villa = 'Please select your preferred villa.';
+    if (!formData.plotSize) {
+      newErrors.plotSize = 'Please select your preferred plot size.';
     }
 
     setErrors(newErrors);
@@ -191,7 +192,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
       name: true,
       email: true,
       mobile: true,
-      villa: true,
+      plotSize: true,
     });
 
     const isValid = Object.keys(newErrors).length === 0;
@@ -214,7 +215,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
       `Name: ${formData.name.trim()}`,
       `Phone: ${formattedMobile}`,
       `Email: ${formData.email.trim()}`,
-      `Preferred Villa: ${formData.villa}`,
+      `Preferred Plot Size: ${formData.plotSize}`,
       '',
       'I would like to receive the pricing, floor plans and details about scheduling a site visit.',
       '',
@@ -243,7 +244,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
       payload.append('name', formData.name.trim());
       payload.append('mobile', cleanMobile);
       payload.append('email', formData.email.trim());
-      payload.append('preferredVilla', formData.villa);
+      payload.append('preferredPlotSize', formData.plotSize);
       payload.append('source', 'Shared Site-wide Enquiry Modal');
       fetch('/api/createLead.php', {
         method: 'POST',
@@ -406,29 +407,29 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
                 )}
               </div>
 
-              {/* Preferred Villa Dropdown */}
+              {/* Plot Size Dropdown */}
               <div>
-                <label htmlFor="enquiry-villa" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
-                  Preferred Villa <span className="text-[#9e7138]">*</span>
+                <label htmlFor="enquiry-plot-size" className="block text-xs uppercase tracking-[0.14em] font-medium text-[#4a453f] mb-1.5">
+                  PLOT SIZE <span className="text-[#9e7138]">*</span>
                 </label>
                 <div className="relative">
                   <select
-                    id="enquiry-villa"
-                    name="villa"
-                    value={formData.villa}
+                    id="enquiry-plot-size"
+                    name="plotSize"
+                    value={formData.plotSize}
                     onChange={handleChange}
-                    onBlur={() => handleBlur('villa')}
+                    onBlur={() => handleBlur('plotSize')}
                     className={`w-full appearance-none px-3.5 py-2.5 sm:py-3 text-sm bg-white text-[#1f1f1f] rounded border ${
-                      touched.villa && errors.villa
+                      touched.plotSize && errors.plotSize
                         ? 'border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500'
                         : 'border-[#d8d0c2] hover:border-[#b8ad9b] focus:border-[#9e7138] focus:ring-1 focus:ring-[#9e7138]'
                     } focus:outline-none transition-colors cursor-pointer`}
                     required
                   >
                     <option value="" disabled className="text-[#a09a90]">
-                      Select your preferred villa
+                      Select your preferred plot size
                     </option>
-                    {VILLA_OPTIONS.map((opt) => (
+                    {PLOT_SIZE_OPTIONS.map((opt) => (
                       <option key={opt} value={opt} className="text-[#1f1f1f]">
                         {opt}
                       </option>
@@ -440,9 +441,9 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
                     </svg>
                   </div>
                 </div>
-                {touched.villa && errors.villa && (
+                {touched.plotSize && errors.plotSize && (
                   <p className="text-[11px] text-rose-600 mt-1 font-normal flex items-center gap-1">
-                    <span>⚠</span> {errors.villa}
+                    <span>⚠</span> {errors.plotSize}
                   </p>
                 )}
               </div>
@@ -500,7 +501,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla }: Enqu
             </h3>
             
             <p className="text-xs sm:text-sm text-[#5f5a54] max-w-sm mb-6 sm:mb-7 leading-relaxed">
-              Your enquiry has been prepared for <strong className="text-[#1f1f1f]">{formData.villa}</strong>. Please press send in WhatsApp to submit to our team.
+              Your enquiry has been prepared for <strong className="text-[#1f1f1f]">{formData.plotSize}</strong>. Please press send in WhatsApp to submit to our team.
             </p>
 
             {whatsappUrl && (

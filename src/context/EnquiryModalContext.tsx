@@ -3,7 +3,8 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 interface EnquiryModalContextType {
   isOpen: boolean;
   selectedVilla: string;
-  openModal: (villa?: string) => void;
+  selectedPlotSize: string;
+  openModal: (plotSizeOrVilla?: string) => void;
   closeModal: () => void;
 }
 
@@ -13,9 +14,9 @@ export const EnquiryModalProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedVilla, setSelectedVilla] = useState<string>('');
 
-  const openModal = useCallback((villa?: string) => {
-    if (villa) {
-      setSelectedVilla(villa);
+  const openModal = useCallback((plotSizeOrVilla?: string) => {
+    if (plotSizeOrVilla) {
+      setSelectedVilla(plotSizeOrVilla);
     } else {
       setSelectedVilla('');
     }
@@ -27,7 +28,15 @@ export const EnquiryModalProvider: React.FC<{ children: React.ReactNode }> = ({ 
   }, []);
 
   return (
-    <EnquiryModalContext.Provider value={{ isOpen, selectedVilla, openModal, closeModal }}>
+    <EnquiryModalContext.Provider
+      value={{
+        isOpen,
+        selectedVilla,
+        selectedPlotSize: selectedVilla,
+        openModal,
+        closeModal
+      }}
+    >
       {children}
     </EnquiryModalContext.Provider>
   );

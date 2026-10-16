@@ -86,12 +86,13 @@ function AppContent() {
 }
 
 function GlobalEnquiryModal() {
-  const { isOpen, closeModal, selectedVilla } = useEnquiryModal();
+  const { isOpen, closeModal, selectedVilla, selectedPlotSize } = useEnquiryModal();
   return (
     <EnquiryModal
       isOpen={isOpen}
       onClose={closeModal}
       preselectedVilla={selectedVilla}
+      preselectedPlotSize={selectedPlotSize || selectedVilla}
     />
   );
 }

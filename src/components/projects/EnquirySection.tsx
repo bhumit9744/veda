@@ -132,7 +132,7 @@ export default function EnquirySection() {
       `Name: ${formData.name.trim()}`,
       `Phone: ${formattedPhone}`,
       `Email: ${formData.email.trim()}`,
-      `Preferred Villa: ${formData.configuration}`,
+      `Preferred Plot Size: ${formData.configuration}`,
       '',
       'Please contact me to coordinate a convenient visit.',
       '',
@@ -326,7 +326,7 @@ export default function EnquirySection() {
                   {/* Select Configuration */}
                   <div className="flex flex-col gap-1.5 relative">
                     <label htmlFor="configuration" className="font-veda-sans text-[10px] tracking-widest uppercase text-[#888]">
-                      Select Configuration
+                      Plot Size
                     </label>
                     <div className="relative">
                       <select
@@ -340,10 +340,10 @@ export default function EnquirySection() {
                           touched.configuration && errors.configuration ? 'border-red-400 focus:border-red-500' : 'border-[#2d2d2d]/20 focus:border-[#b89a6b]'
                         } text-[#2d2d2d] py-2 outline-none font-veda-sans text-base transition-colors rounded-none appearance-none cursor-pointer`}
                       >
-                        <option value="" disabled className="bg-[#FAF8F5] text-[#888]">Select your preferred configuration</option>
-                        <option value="1,500–1,800 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">1,500–1,800 sq. ft.</option>
-                        <option value="1,900–2,300 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">1,900–2,300 sq. ft.</option>
-                        <option value="2,300–5,000 sq. ft." className="bg-[#FAF8F5] text-[#2d2d2d]">2,300–5,000 sq. ft.</option>
+                        <option value="" disabled className="bg-[#FAF8F5] text-[#888]">Select your preferred plot size</option>
+                        <option value="Plot Size (1,500–1,800 sq. ft.)" className="bg-[#FAF8F5] text-[#2d2d2d]">Plot Size (1,500–1,800 sq. ft.)</option>
+                        <option value="Plot Size (1,900–2,300 sq. ft.)" className="bg-[#FAF8F5] text-[#2d2d2d]">Plot Size (1,900–2,300 sq. ft.)</option>
+                        <option value="Plot Size (2,300–5,000 sq. ft.)" className="bg-[#FAF8F5] text-[#2d2d2d]">Plot Size (2,300–5,000 sq. ft.)</option>
                       </select>
                       <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
