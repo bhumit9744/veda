@@ -196,7 +196,7 @@ export default function EnquirySection() {
             </div>
             
             <h2 className="enq-fade font-veda-serif text-4xl md:text-5xl lg:text-6xl text-[#2d2d2d] leading-[1.1] tracking-tight mb-8">
-              Your European<br className="hidden md:block"/> Villa Awaits.
+              Your European<br className="hidden md:block"/> Plot Awaits.
             </h2>
             
             <p className="enq-fade font-veda-sans text-base md:text-lg text-[#555] leading-relaxed font-light mb-8 max-w-md">
