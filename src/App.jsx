@@ -23,13 +23,13 @@ import ScrollEnquiryPopup from './components/common/ScrollEnquiryPopup';
 import { EnquiryModalProvider, useEnquiryModal } from './context/EnquiryModalContext';
 import EnquiryModal from './components/projects/EnquiryModal';
 import FloatingEnquireButton from './components/common/FloatingEnquireButton';
+import MahaReraDisclaimerSection from './components/common/MahaReraDisclaimerSection';
 
 gsap.registerPlugin(ScrollTrigger);
 
 function AppContent() {
   const location = useLocation();
-  const isHome = location.pathname === '/' || location.pathname === '/index.php';
-  const isProjectSection = location.pathname.startsWith('/projects') || location.pathname.startsWith('/codename-bellagio');
+  const isProjectSection = location.pathname.startsWith('/projects') || location.pathname.startsWith('/codename-bellagio') || location.pathname.startsWith('/veda-monteza');
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -70,6 +70,8 @@ function AppContent() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/codename-bellagio.php" element={<Bellagio />} />
             <Route path="/codename-bellagio-v2.php" element={<Bellagio />} />
+            <Route path="/veda-monteza" element={<Projects />} />
+            <Route path="/veda-monteza.php" element={<Projects />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects.php" element={<Projects />} />
             <Route path="/thank-you.php" element={<ThankYou />} />
@@ -78,6 +80,7 @@ function AppContent() {
             <Route path="*" element={<div className="min-h-screen flex items-center justify-center pt-24 text-white"><h1 className="text-3xl">404 Not Found</h1></div>} />
           </Routes>
         </main>
+        <MahaReraDisclaimerSection />
         <Footer />
         <ScrollEnquiryPopup />
       </div>

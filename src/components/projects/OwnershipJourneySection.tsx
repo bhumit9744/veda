@@ -301,11 +301,11 @@ export default function OwnershipJourneySection() {
                   />
                 </div>
                 <h3 className="font-codec text-2xl xl:text-3xl text-[#1C1D1A] font-normal tracking-wide mb-2 uppercase">
-                  SELL
+                  RESELL
                 </h3>
                 <span className="w-8 h-[1.5px] bg-[#9E7750] mb-3" />
                 <p className="font-codec text-sm xl:text-[15px] text-[#555] leading-relaxed font-light max-w-[240px]">
-                  Support to help you realise your plot’s value.
+                  Assistance to resell your land
                 </p>
               </div>
 
@@ -378,11 +378,11 @@ export default function OwnershipJourneySection() {
               </div>
 
               <h3 className="font-codec text-2xl text-[#1C1D1A] font-normal mb-1 uppercase tracking-wide">
-                SELL
+                RESELL
               </h3>
               <span className="w-6 h-[1.5px] bg-[#9E7750] mb-2" />
               <p className="font-codec text-sm text-[#555] leading-relaxed font-light max-w-xs mb-3">
-                Support to help you realise your plot’s value.
+                Assistance to resell your land
               </p>
             </div>
 

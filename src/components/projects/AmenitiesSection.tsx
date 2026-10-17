@@ -34,6 +34,27 @@ const amenitiesList = [
     category: '',
     title: 'Library',
     image: '/Library.png'
+  },
+  {
+    category: '',
+    title: 'Senior Citizens Area',
+    image: '/Senior Citizens Area.png',
+    objectPosition: '25% center'
+  },
+  {
+    category: '',
+    title: 'Pet Area',
+    image: '/Pet Area.png'
+  },
+  {
+    category: '',
+    title: 'Gymnasium',
+    image: '/Gymnasium.png'
+  },
+  {
+    category: '',
+    title: 'Spa - Managed by Spa Me',
+    image: '/Spa - Managed by Spa Me.png'
   }
 ];
 
@@ -99,7 +120,7 @@ export default function AmenitiesSection() {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=300%', // Pin for a long enough distance to scroll through 6 cards
+          end: '+=500%', // Pin for a long enough distance to scroll comfortably through 10 cards
           pin: true,
           scrub: 1,
           invalidateOnRefresh: true, // Recalculate x-distance if window is resized
@@ -119,11 +140,11 @@ export default function AmenitiesSection() {
       pinTl.to(track, {
         x: () => {
           // Calculate the horizontal travel distance needed to show the last card.
-          // Add some right-side padding (e.g., 60px) so the last card doesn't hit the absolute edge.
-          const paddingRight = window.innerWidth > 768 ? 96 : 24; 
+          // Add generous right-side padding so the last card finishes cleanly in view.
+          const paddingRight = window.innerWidth >= 1024 ? 160 : window.innerWidth > 768 ? 90 : 48; 
           return -(track.scrollWidth - window.innerWidth + paddingRight); 
         },
-        duration: 7, 
+        duration: 11, 
         ease: 'none' // Linear horizontal scroll
       }, 3); 
 
@@ -133,7 +154,7 @@ export default function AmenitiesSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative w-full h-[90vh] md:h-screen overflow-hidden bg-black z-20 flex flex-col justify-start">
+    <section id="amenities-section" ref={sectionRef} className="relative w-full h-[90vh] md:h-screen overflow-hidden bg-black z-20 flex flex-col justify-start">
       
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
@@ -182,8 +203,15 @@ export default function AmenitiesSection() {
         >
           {amenitiesList.map((item, idx) => (
             <div key={idx} className="w-[80vw] sm:w-[60vw] md:w-[40vw] lg:w-[25vw] aspect-[4/5] md:aspect-square lg:aspect-[3/4] bg-white/5 backdrop-blur-md rounded-sm overflow-hidden border border-white/10 relative flex flex-col group shadow-2xl">
-              <div className="absolute inset-0 w-full h-full">
-                <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105" />
+              <div className="absolute inset-0 w-full h-full overflow-hidden">
+                <img 
+                  src={item.image} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105" 
+                  style={{
+                    objectPosition: item.objectPosition || 'center'
+                  }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent transition-opacity duration-500 group-hover:opacity-90"></div>
               </div>
               

@@ -5,19 +5,45 @@ import { useEnquiryModal } from '../../context/EnquiryModalContext';
 interface SlideItem {
   id: string;
   src: string;
+  poster?: string;
   title: string;
+  type: 'image' | 'video';
+  aspectRatio: string;
+  ctaPosition: {
+    left: string;
+    width: string;
+    top: string;
+    height: string;
+  };
 }
 
 const slides: SlideItem[] = [
   { 
     id: '01', 
-    src: '/veda-project01.jpeg', 
-    title: 'The Privileged 42 • Veda Monteza'
+    src: '/Veda-project02vedio.mp4', 
+    poster: '/veda-project01.jpeg',
+    title: 'The Privileged 42 • Veda Monteza',
+    type: 'video',
+    aspectRatio: '1920 / 1080',
+    ctaPosition: {
+      left: '66.3%',
+      width: '22.4%',
+      top: '79.2%',
+      height: '5.1%',
+    }
   },
   { 
     id: '02', 
     src: '/veda-project02.jpeg', 
-    title: "Who's Next Door? • Veda Monteza"
+    title: "Who's Next Door? • Veda Monteza",
+    type: 'image',
+    aspectRatio: '1920 / 1080',
+    ctaPosition: {
+      left: '66.5%',
+      width: '22.4%',
+      top: '75.2%',
+      height: '5.1%',
+    }
   }
 ];
 
@@ -27,6 +53,7 @@ export default function VideoSliderIntro() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const containerRef = useRef<HTMLElement>(null);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   // Setup initial GSAP states
   useEffect(() => {
@@ -40,16 +67,63 @@ export default function VideoSliderIntro() {
     return () => ctx.revert();
   }, []);
 
+  // Ensure active video plays reliably across all browsers
+  useEffect(() => {
+    videoRefs.current.forEach((v, idx) => {
+      if (!v) return;
+      if (idx === activeIndex) {
+        v.muted = true;
+        v.defaultMuted = true;
+        v.playsInline = true;
+        const playPromise = v.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay policy fallback: resume on user gesture
+          });
+        }
+      } else {
+        v.pause();
+      }
+    });
+  }, [activeIndex]);
+
+  // First user interaction unlock listener in case of strict autoplay policies
+  useEffect(() => {
+    const unlockAutoplay = () => {
+      const activeVideo = videoRefs.current[activeIndex];
+      if (activeVideo && activeVideo.paused) {
+        activeVideo.muted = true;
+        activeVideo.play().catch(() => {});
+      }
+    };
+
+    window.addEventListener('click', unlockAutoplay, { once: true });
+    window.addEventListener('touchstart', unlockAutoplay, { once: true });
+    return () => {
+      window.removeEventListener('click', unlockAutoplay);
+      window.removeEventListener('touchstart', unlockAutoplay);
+    };
+  }, [activeIndex]);
+
   const goToSlide = (newIndex: number) => {
     if (isTransitioning || newIndex === activeIndex) return;
     setIsTransitioning(true);
 
     const currentSlide = slideRefs.current[activeIndex];
     const nextSlide = slideRefs.current[newIndex];
+    const nextVideo = videoRefs.current[newIndex];
 
     if (!currentSlide || !nextSlide) {
       setIsTransitioning(false);
       return;
+    }
+
+    // Immediately start playing incoming video so crossfade is seamless
+    if (nextVideo) {
+      nextVideo.muted = true;
+      nextVideo.defaultMuted = true;
+      nextVideo.currentTime = 0;
+      nextVideo.play().catch(() => {});
     }
 
     // Prepare next slide
@@ -59,6 +133,10 @@ export default function VideoSliderIntro() {
       onComplete: () => {
         gsap.set(currentSlide, { zIndex: 1, opacity: 0 });
         gsap.set(nextSlide, { zIndex: 10 });
+        const prevVideo = videoRefs.current[activeIndex];
+        if (prevVideo && prevVideo !== nextVideo) {
+          prevVideo.pause();
+        }
         setActiveIndex(newIndex);
         setIsTransitioning(false);
       }
@@ -87,36 +165,60 @@ export default function VideoSliderIntro() {
             className="absolute inset-0 w-full h-full bg-[#ffffff] flex items-center justify-center overflow-hidden"
             style={{ opacity: idx === 0 ? 1 : 0 }}
           >
-            {/* Aspect-ratio matched container ensuring CTA button tracks image layout across all screen sizes */}
+            {/* Aspect-ratio matched container ensuring CTA button tracks image/video layout across all screen sizes */}
             <div 
               className="relative flex items-center justify-center select-none"
               style={{
-                aspectRatio: '1200 / 628',
+                aspectRatio: slide.aspectRatio,
                 maxWidth: '100%',
                 maxHeight: '100%',
-                width: 'calc(100vh * (1200 / 628))',
+                width: `calc(100vh * (${slide.aspectRatio}))`,
                 height: 'auto',
               }}
             >
-              <img
-                src={slide.src}
-                alt={slide.title}
-                loading={idx === 0 ? "eager" : "lazy"}
-                decoding="async"
-                className="w-full h-full object-contain select-none block"
-                style={{
-                  imageRendering: '-webkit-optimize-contrast',
-                }}
-              />
+              {slide.type === 'video' ? (
+                <video
+                  ref={el => {
+                    if (el) {
+                      el.muted = true;
+                      el.defaultMuted = true;
+                      el.playsInline = true;
+                      videoRefs.current[idx] = el;
+                      if (idx === 0) {
+                        el.play().catch(() => {});
+                      }
+                    }
+                  }}
+                  src={slide.src}
+                  poster={slide.poster}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="w-full h-full object-contain select-none block"
+                />
+              ) : (
+                <img
+                  src={slide.src}
+                  alt={slide.title}
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  className="w-full h-full object-contain select-none block"
+                  style={{
+                    imageRendering: '-webkit-optimize-contrast',
+                  }}
+                />
+              )}
 
               {/* GET PRICE & FLOOR PLANS CTA Button */}
               <div
                 className="absolute z-20 pointer-events-auto flex items-center justify-center"
                 style={{
-                  left: '64.9%',
-                  width: '27.0%',
-                  top: '75.3%',
-                  height: '6.6%',
+                  left: slide.ctaPosition.left,
+                  width: slide.ctaPosition.width,
+                  top: slide.ctaPosition.top,
+                  height: slide.ctaPosition.height,
                 }}
               >
                 <button
@@ -125,22 +227,22 @@ export default function VideoSliderIntro() {
                     e.stopPropagation();
                     openModal();
                   }}
-                  className="w-full h-full flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-1.5 sm:px-3
+                  className="w-full h-full flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-1 sm:px-2 md:px-2.5
                              bg-[#9e7138] hover:bg-[#aa7d39] active:bg-[#94692f]
-                             text-white font-medium uppercase tracking-[0.08em] sm:tracking-[0.11em] md:tracking-[0.13em]
-                             text-[6px] xs:text-[7.5px] sm:text-[9px] md:text-[10px] lg:text-[11px] xl:text-[11.5px]
-                             rounded-[6px] sm:rounded-[8px] md:rounded-[10px]
+                             text-white font-medium uppercase tracking-[0.06em] sm:tracking-[0.09em] md:tracking-[0.11em]
+                             text-[5.5px] xs:text-[7px] sm:text-[8px] md:text-[9.5px] lg:text-[10px] xl:text-[10.5px]
+                             rounded-[5px] sm:rounded-[6px] md:rounded-[8px]
                              border border-[#edd5a4]/75
-                             shadow-[0_3px_14px_rgba(164,119,52,0.22)]
-                             hover:shadow-[0_5px_18px_rgba(164,119,52,0.38)]
-                             hover:-translate-y-[1.5px] active:translate-y-0
+                             shadow-[0_2px_10px_rgba(164,119,52,0.20)]
+                             hover:shadow-[0_4px_14px_rgba(164,119,52,0.35)]
+                             hover:-translate-y-[1px] active:translate-y-0
                              focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9e7138] focus-visible:ring-offset-2
                              transition-all duration-300 ease-out select-none cursor-pointer group"
                   aria-label="Get Price & Floor Plans"
                 >
                   <span className="truncate">GET PRICE &amp; FLOOR PLANS</span>
                   <svg
-                    className="w-1.5 h-1.5 sm:w-2 sm:h-2 md:w-2.5 md:h-2.5 lg:w-3 lg:h-3 transition-transform duration-300 ease-out group-hover:translate-x-0.5 shrink-0"
+                    className="w-1.5 h-1.5 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 lg:w-2.5 lg:h-2.5 transition-transform duration-300 ease-out group-hover:translate-x-0.5 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"

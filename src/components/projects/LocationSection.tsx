@@ -58,7 +58,7 @@ export default function LocationSection() {
             <span className="italic font-light text-[#555]">For the Privileged 42.</span>
           </h2>
           <p className="font-codec text-sm md:text-base text-[#666] max-w-xl mx-auto leading-relaxed font-light">
-            Secluded in Mapgaon, Alibaug — positioned with effortless proximity to tranquil beaches, luxury resorts, and key transit hubs.
+            Nestled in Mapgaon, Alibaug, with tranquil beaches, luxury resorts and key transit hubs just within easy reach.
           </p>
         </div>
 
@@ -75,7 +75,7 @@ export default function LocationSection() {
                   Destinations & Distance
                 </h3>
                 <p className="font-codec text-xs md:text-sm text-[#777] mt-1 font-light">
-                  Travel times calculated from Codename Bellagio
+                  Travel times calculated from Veda Monteza
                 </p>
               </div>
 
@@ -172,7 +172,7 @@ export default function LocationSection() {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#9b7b5a]"></span>
                 </span>
                 <span className="font-codec text-xs font-medium text-[#2d2d2d] tracking-wide">
-                  Codename Bellagio • Mapgaon, Alibaug
+                  Veda Monteza • Mapgaon, Alibaug
                 </span>
               </div>
 

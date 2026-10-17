@@ -68,13 +68,13 @@ export default function LandShowcaseSection() {
       <div className="absolute inset-0 w-full h-full pointer-events-none">
         <img 
           src="/Plots.png" 
-          alt="Veda Life Spaces - 4 Acres - 42 Distinctive Plots"
+          alt="Veda Life Spaces - 4 Acres - 42 Branded Villa Plots"
           className="land-bg w-full h-[120%] object-cover absolute top-[-10%] left-0"
         />
-        {/* Subtle, carefully controlled overlay to ensure typography remains readable */}
-        <div className="absolute inset-0 bg-black/40"></div>
-        {/* Soft gradient from left so text is crisp and editorial */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-transparent"></div>
+        {/* Subtle, carefully controlled overlay to ensure aerial plots and landscape remain vivid */}
+        <div className="absolute inset-0 bg-black/25"></div>
+        {/* Soft gradient from left for crisp, legible typography */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent"></div>
       </div>
 
       {/* Editorial Content Container */}
@@ -104,7 +104,7 @@ export default function LandShowcaseSection() {
           {/* Secondary statement */}
           <div className="land-secondary max-w-full">
             <h3 className="font-veda-sans text-sm md:text-lg lg:text-xl tracking-[0.2em] md:tracking-[0.3em] uppercase text-white/95 border-l-2 border-[#b89a6b] pl-4 md:pl-6 py-1 leading-loose">
-              42 DISTINCTIVE PLOTS FOR THE PRIVILEGED 42
+              42 Branded Villa Plots for the Privileged 42
             </h3>
           </div>
         </div>

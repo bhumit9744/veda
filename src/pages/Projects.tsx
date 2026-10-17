@@ -31,7 +31,7 @@ export default function Projects() {
       {/* 01. Promotional image slider */}
       <VideoSliderIntro />
 
-      {/* 02. Plotted land background section (4 ACRES / 42 DISTINCTIVE PLOTS) */}
+      {/* 02. Plotted land background section (4 ACRES / 42 BRANDED VILLA PLOTS) */}
       <LandShowcaseSection />
 
       {/* 03. Lifestyle & Amenities (6 amenity cards + horizontal GSAP scroll) */}
@@ -43,7 +43,7 @@ export default function Projects() {
       {/* 05. Project Location & Connectivity */}
       <LocationSection />
 
-      {/* 06. Ownership Journey: BUY → BUILD → SELL */}
+      {/* 06. Ownership Journey: BUY → BUILD → RESELL */}
       <OwnershipJourneySection />
 
       {/* 07. Enquiry Section Form */}

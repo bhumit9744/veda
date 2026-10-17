@@ -496,7 +496,7 @@ export default function DesignReadyVillas() {
         </h2>
         
         <p className="text-[#555] font-codec text-sm md:text-base lg:text-[17px] font-light tracking-wide max-w-[640px] mx-auto leading-relaxed mt-1 md:mt-2">
-          Choose the plot that feels right to you, and discover a European-inspired design that complements your space and your vision.
+          Choose from our branded villa plots and discover European-inspired designs that complement your plot and reflect your vision.
         </p>
 
         <p className="text-[#777] font-codec text-xs md:text-sm lg:text-[15px] font-light tracking-wide max-w-[600px] mx-auto leading-relaxed">
@@ -514,8 +514,11 @@ export default function DesignReadyVillas() {
              >
                {/* Typography for Villa Classic (i === 0) */}
                {i === 0 && (
-                 <div className="villa-a-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight uppercase">
+                 <div className="villa-a-text absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
+                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
+                     Proposed Villa Design
+                   </p>
+                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
                      VILLA CLASSIC
                    </h2>
                    <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
@@ -526,8 +529,11 @@ export default function DesignReadyVillas() {
 
                {/* Typography for Villa Grande (i === 1) */}
                {i === 1 && (
-                 <div className="villa-b-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight uppercase">
+                 <div className="villa-b-text absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
+                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
+                     Proposed Villa Design
+                   </p>
+                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
                      VILLA GRANDE
                    </h2>
                    <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
@@ -538,8 +544,11 @@ export default function DesignReadyVillas() {
 
                {/* Typography for Villa Royale (i === 2) */}
                {i === 2 && (
-                 <div className="villa-c-text absolute -top-28 md:-top-36 lg:-top-42 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-2 font-normal tracking-tight uppercase">
+                 <div className="villa-c-text absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
+                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
+                     Proposed Villa Design
+                   </p>
+                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
                      VILLA ROYALE
                    </h2>
                    <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
