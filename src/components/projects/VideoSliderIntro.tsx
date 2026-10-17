@@ -20,28 +20,28 @@ interface SlideItem {
 const slides: SlideItem[] = [
   { 
     id: '01', 
+    src: '/veda-project01.jpeg', 
+    title: 'The Privileged 42 • Veda Monteza',
+    type: 'image',
+    aspectRatio: '1920 / 1080',
+    ctaPosition: {
+      left: '67.2%',
+      width: '21.6%',
+      top: '75.2%',
+      height: '4.8%',
+    }
+  },
+  { 
+    id: '02', 
     src: '/Veda-project02vedio.mp4', 
     poster: '/veda-project01.jpeg',
-    title: 'The Privileged 42 • Veda Monteza',
+    title: "25 Amenities Here? • Veda Monteza",
     type: 'video',
     aspectRatio: '1920 / 1080',
     ctaPosition: {
       left: '66.3%',
       width: '22.4%',
       top: '79.2%',
-      height: '5.1%',
-    }
-  },
-  { 
-    id: '02', 
-    src: '/veda-project02.jpeg', 
-    title: "Who's Next Door? • Veda Monteza",
-    type: 'image',
-    aspectRatio: '1920 / 1080',
-    ctaPosition: {
-      left: '66.5%',
-      width: '22.4%',
-      top: '75.2%',
       height: '5.1%',
     }
   }
@@ -184,7 +184,7 @@ export default function VideoSliderIntro() {
                       el.defaultMuted = true;
                       el.playsInline = true;
                       videoRefs.current[idx] = el;
-                      if (idx === 0) {
+                      if (idx === activeIndex) {
                         el.play().catch(() => {});
                       }
                     }
