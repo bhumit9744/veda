@@ -28,7 +28,7 @@ const slides: SlideItem[] = [
     ctaPosition: {
       left: '67.9%',
       width: '21.0%',
-      top: '75.3%',
+      top: '78.6%',
       height: '5.2%',
     }
   },
@@ -41,7 +41,7 @@ const slides: SlideItem[] = [
     ctaPosition: {
       left: '67.9%',
       width: '21.0%',
-      top: '75.3%',
+      top: '78.6%',
       height: '5.2%',
     }
   }
