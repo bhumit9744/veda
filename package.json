@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:hostinger": "vite build --base=/vedamonteza/ --outDir=dist && node scripts/prepare-hostinger-build.cjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },

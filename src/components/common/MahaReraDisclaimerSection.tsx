@@ -1,4 +1,5 @@
 import React from 'react';
+import { assetUrl } from '../../utils/assetUrl';
 
 export default function MahaReraDisclaimerSection() {
   const mahareraUrl = "https://maharerait.maharashtra.gov.in/project/view/67238";
@@ -8,7 +9,7 @@ export default function MahaReraDisclaimerSection() {
     <section 
       id="maharera-disclaimer" 
       aria-label="MahaRERA Disclaimer & Registration Information"
-      className="w-full bg-[#FAF7F2] text-[#484743] py-10 sm:py-12 md:py-16 px-4 sm:px-6 md:px-10 lg:px-12 relative overflow-hidden font-codec z-40 border-t border-[#D1C0AF]/50"
+      className="w-full bg-[#FAF7F2] text-[#484743] py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-10 lg:px-12 relative overflow-hidden font-codec z-40 border-t border-[#D1C0AF]/50"
     >
       {/* Decorative Botanical Palm Fronds (Subtle low-opacity luxury accents in corners) */}
       <div 
@@ -31,15 +32,15 @@ export default function MahaReraDisclaimerSection() {
       </div>
 
       {/* Main Elegant Disclaimer Panel */}
-      <div className="max-w-7xl mx-auto relative bg-[#FAF7F2] p-6 sm:p-8 md:p-12 lg:p-14">
+      <div className="max-w-7xl mx-auto relative bg-[#FAF7F2] p-4 sm:p-8 md:p-12 lg:p-14">
         
         {/* Antique Gold Frame with Refined Concave Corners */}
         <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
           {/* Straight frame lines */}
-          <div className="absolute top-2 sm:top-3 left-8 sm:left-9 right-8 sm:right-9 h-[1px] bg-[#D1C0AF]" />
-          <div className="absolute bottom-2 sm:bottom-3 left-8 sm:left-9 right-8 sm:right-9 h-[1px] bg-[#D1C0AF]" />
-          <div className="absolute left-2 sm:left-3 top-8 sm:top-9 bottom-8 sm:bottom-9 w-[1px] bg-[#D1C0AF]" />
-          <div className="absolute right-2 sm:right-3 top-8 sm:top-9 bottom-8 sm:bottom-9 w-[1px] bg-[#D1C0AF]" />
+          <div className="absolute top-2 sm:top-3 left-6 sm:left-9 right-6 sm:right-9 h-[1px] bg-[#D1C0AF]" />
+          <div className="absolute bottom-2 sm:bottom-3 left-6 sm:left-9 right-6 sm:right-9 h-[1px] bg-[#D1C0AF]" />
+          <div className="absolute left-2 sm:left-3 top-6 sm:top-9 bottom-6 sm:bottom-9 w-[1px] bg-[#D1C0AF]" />
+          <div className="absolute right-2 sm:right-3 top-6 sm:top-9 bottom-6 sm:bottom-9 w-[1px] bg-[#D1C0AF]" />
 
           {/* Top-Left Concave Corner */}
           <svg 
@@ -79,7 +80,7 @@ export default function MahaReraDisclaimerSection() {
         </div>
 
         {/* Content Layout: 2-Column Desktop Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center relative z-10">
           
           {/* Left Column — ~75% Width */}
           <div className="lg:col-span-8 xl:col-span-9 flex flex-col justify-between">
@@ -96,25 +97,25 @@ export default function MahaReraDisclaimerSection() {
             </div>
 
             {/* Exact Legal Disclaimer Paragraph */}
-            <p className="text-[12px] sm:text-[12.5px] md:text-[13px] text-[#484743] leading-relaxed font-light text-justify sm:text-left">
+            <p className="text-[11.5px] sm:text-[12.5px] md:text-[13px] text-[#484743] leading-relaxed font-light text-left break-words">
               Disclaimer: This advertisement is for informational and promotional purposes only. All images, illustrations, layouts and specifications are indicative and for representational purposes only. The project shall be developed in accordance with approved plans and applicable statutory approvals. Actual development, amenities and specifications shall be as per the applicable project documents. This advertisement pertains only to the project registered under the MahaRERA registration number mentioned below. Any future phases or additional developments, including on adjoining land, shall be subject to applicable statutory approvals and separate MahaRERA registration, wherever required.
             </p>
 
             {/* MahaRERA Website Link */}
-            <p className="mt-3 sm:mt-3.5 text-[12px] sm:text-[12.5px] md:text-[13px] text-[#484743]">
+            <p className="mt-3 sm:mt-3.5 text-[11.5px] sm:text-[12.5px] md:text-[13px] text-[#484743]">
               For complete details, please visit{' '}
               <a 
                 href={portalUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-[#98795A] hover:text-[#7A5B3E] underline underline-offset-4 decoration-[#98795A]/50 hover:decoration-[#7A5B3E] font-medium transition-colors"
+                className="text-[#98795A] hover:text-[#7A5B3E] underline underline-offset-4 decoration-[#98795A]/50 hover:decoration-[#7A5B3E] font-medium transition-colors break-all sm:break-normal"
               >
                 https://maharera.maharashtra.gov.in
               </a>.
             </p>
 
             {/* Thin Gold Divider */}
-            <div className="w-full h-[1px] bg-[#D1C0AF]/60 my-5 sm:my-6" aria-hidden="true" />
+            <div className="w-full h-[1px] bg-[#D1C0AF]/60 my-4 sm:my-6" aria-hidden="true" />
 
             {/* Three Project Information Blocks in Horizontal Row */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-0 sm:divide-x divide-[#D1C0AF]/60">
@@ -176,7 +177,7 @@ export default function MahaReraDisclaimerSection() {
               >
                 <div className="w-32 h-32 sm:w-36 sm:h-36 bg-white p-2 rounded-lg flex items-center justify-center overflow-hidden">
                   <img 
-                    src="/maharera-qr.png" 
+                    src={assetUrl('/maharera-qr.png')} 
                     alt="QR code for MahaRERA project information" 
                     width={160}
                     height={160}

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { assetUrl } from '../../utils/assetUrl';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -171,7 +172,7 @@ export default function OwnershipJourneySection() {
         className="absolute inset-0 w-full h-full pointer-events-none z-0"
         style={{
           backgroundColor: '#FAF8F5',
-          backgroundImage: "url('/images/veda-journey-bg.png')",
+          backgroundImage: `url('${assetUrl('/images/veda-journey-bg.png')}')`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center bottom'
@@ -186,7 +187,7 @@ export default function OwnershipJourneySection() {
       */}
       <div
         ref={pinContainerRef}
-        className="relative z-10 w-full min-h-screen flex flex-col justify-between py-16 md:py-24 px-6 md:px-12 max-w-7xl mx-auto"
+        className="relative z-10 w-full min-h-screen flex flex-col justify-between pt-8 sm:pt-12 md:pt-16 pb-12 sm:pb-16 md:pb-24 px-4 sm:px-6 md:px-12 max-w-7xl mx-auto"
       >
         {/* --- 1. SECTION HEADER --- */}
         <div className="journey-header text-center max-w-3xl mx-auto mb-8 lg:mb-10">
@@ -259,7 +260,7 @@ export default function OwnershipJourneySection() {
               <div className="journey-stage-1 flex flex-col items-center text-center px-4 font-codec">
                 <div className="relative w-56 h-56 xl:w-64 xl:h-64 mb-6 flex items-center justify-center">
                   <img
-                    src="/images/token-buy-clean.png"
+                    src={assetUrl('/images/token-buy-clean.png')}
                     alt="Veda Ownership - Buy"
                     className="w-full h-full object-contain select-none pointer-events-none"
                   />
@@ -277,7 +278,7 @@ export default function OwnershipJourneySection() {
               <div className="journey-stage-2 flex flex-col items-center text-center px-4 font-codec">
                 <div className="relative w-56 h-56 xl:w-64 xl:h-64 mb-6 flex items-center justify-center">
                   <img
-                    src="/images/token-build-clean.png"
+                    src={assetUrl('/images/token-build-clean.png')}
                     alt="Veda Ownership - Build"
                     className="w-full h-full object-contain select-none pointer-events-none"
                   />
@@ -295,7 +296,7 @@ export default function OwnershipJourneySection() {
               <div className="journey-stage-3 flex flex-col items-center text-center px-4 font-codec">
                 <div className="relative w-56 h-56 xl:w-64 xl:h-64 mb-6 flex items-center justify-center">
                   <img
-                    src="/images/token-sell-clean.png"
+                    src={assetUrl('/images/token-sell-clean.png')}
                     alt="Veda Ownership - Sell"
                     className="w-full h-full object-contain select-none pointer-events-none"
                   />
@@ -316,23 +317,23 @@ export default function OwnershipJourneySection() {
         </div>
 
         {/* --- 3. MOBILE RESPONSIVE TIMELINE (Shown on Mobile / Tablet) --- */}
-        <div className="block lg:hidden relative w-full my-8">
+        <div className="block lg:hidden relative w-full my-4 sm:my-6">
           
           {/* Continuous vertical timeline connector line */}
-          <div className="absolute left-8 top-12 bottom-12 w-[1.5px] bg-gradient-to-b from-[#9E7750] via-[#9E7750]/60 to-[#9E7750]" />
+          <div className="absolute left-6 sm:left-8 top-12 bottom-12 w-[1.5px] bg-gradient-to-b from-[#9E7750] via-[#9E7750]/60 to-[#9E7750]" />
 
           <div className="flex flex-col gap-12 font-codec">
             
             {/* Stage 1: BUY */}
-            <div className="journey-stage-1 relative pl-20 flex flex-col items-start font-codec">
+            <div className="journey-stage-1 relative pl-14 sm:pl-20 flex flex-col items-start font-codec">
               {/* Node indicator */}
-              <div className="absolute left-[26px] top-4 w-4 h-4 rounded-full border-2 border-[#9E7750] bg-[#FAF8F5] flex items-center justify-center">
+              <div className="absolute left-[18px] sm:left-[26px] top-4 w-4 h-4 rounded-full border-2 border-[#9E7750] bg-[#FAF8F5] flex items-center justify-center">
                 <span className="w-2 h-2 rounded-full bg-[#9E7750]" />
               </div>
 
               {/* Visual circle token */}
               <div className="w-20 h-20 rounded-full overflow-hidden border border-[#D5C7B0] shadow-xs mb-3">
-                <img src="/images/token-buy-clean.png" alt="Buy" className="w-full h-full object-cover" />
+                <img src={assetUrl('/images/token-buy-clean.png')} alt="Buy" className="w-full h-full object-cover" />
               </div>
 
               <h3 className="font-codec text-2xl text-[#1C1D1A] font-normal mb-1 uppercase tracking-wide">
@@ -345,15 +346,15 @@ export default function OwnershipJourneySection() {
             </div>
 
             {/* Stage 2: BUILD */}
-            <div className="journey-stage-2 relative pl-20 flex flex-col items-start font-codec">
+            <div className="journey-stage-2 relative pl-14 sm:pl-20 flex flex-col items-start font-codec">
               {/* Node indicator */}
-              <div className="absolute left-[26px] top-4 w-4 h-4 rounded-full border-2 border-[#9E7750] bg-[#FAF8F5] flex items-center justify-center">
+              <div className="absolute left-[18px] sm:left-[26px] top-4 w-4 h-4 rounded-full border-2 border-[#9E7750] bg-[#FAF8F5] flex items-center justify-center">
                 <span className="w-2 h-2 rounded-full bg-[#9E7750]" />
               </div>
 
               {/* Visual circle token */}
               <div className="w-20 h-20 rounded-full overflow-hidden border border-[#D5C7B0] shadow-xs mb-3">
-                <img src="/images/token-build-clean.png" alt="Build" className="w-full h-full object-cover" />
+                <img src={assetUrl('/images/token-build-clean.png')} alt="Build" className="w-full h-full object-cover" />
               </div>
 
               <h3 className="font-codec text-2xl text-[#1C1D1A] font-normal mb-1 uppercase tracking-wide">
@@ -366,15 +367,15 @@ export default function OwnershipJourneySection() {
             </div>
 
             {/* Stage 3: SELL */}
-            <div className="journey-stage-3 relative pl-20 flex flex-col items-start font-codec">
+            <div className="journey-stage-3 relative pl-14 sm:pl-20 flex flex-col items-start font-codec">
               {/* Node indicator */}
-              <div className="absolute left-[26px] top-4 w-4 h-4 rounded-full border-2 border-[#9E7750] bg-[#FAF8F5] flex items-center justify-center">
+              <div className="absolute left-[18px] sm:left-[26px] top-4 w-4 h-4 rounded-full border-2 border-[#9E7750] bg-[#FAF8F5] flex items-center justify-center">
                 <span className="w-2 h-2 rounded-full bg-[#9E7750]" />
               </div>
 
               {/* Visual circle token */}
               <div className="w-20 h-20 rounded-full overflow-hidden border border-[#D5C7B0] shadow-xs mb-3">
-                <img src="/images/token-sell-clean.png" alt="Sell" className="w-full h-full object-cover" />
+                <img src={assetUrl('/images/token-sell-clean.png')} alt="Sell" className="w-full h-full object-cover" />
               </div>
 
               <h3 className="font-codec text-2xl text-[#1C1D1A] font-normal mb-1 uppercase tracking-wide">

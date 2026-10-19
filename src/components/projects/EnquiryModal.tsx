@@ -313,7 +313,7 @@ export default function EnquiryModal({ isOpen, onClose, preselectedVilla, presel
               </h2>
               <div className="w-12 h-[1.5px] bg-[#9e7138]/60 my-1.5" />
               <p className="text-xs sm:text-[13px] text-[#5f5a54] leading-relaxed">
-                Share your details to receive customized pricing, architectural floor plans, or arrange a private site visit in Alibaug.
+                Share your details to receive customized pricing, architectural floor plans, or arrange a site visit in Alibaug.
               </p>
             </div>
 

@@ -29,7 +29,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 function AppContent() {
   const location = useLocation();
-  const isProjectSection = location.pathname.startsWith('/projects') || location.pathname.startsWith('/codename-bellagio') || location.pathname.startsWith('/veda-monteza');
+  const isSubdirectory = Boolean(import.meta.env.BASE_URL && import.meta.env.BASE_URL !== '/');
+  const isProjectSection = isSubdirectory || location.pathname.startsWith('/projects') || location.pathname.startsWith('/codename-bellagio') || location.pathname.startsWith('/veda-monteza');
 
   useEffect(() => {
     const lenis = new Lenis({
@@ -60,8 +61,9 @@ function AppContent() {
         {!isProjectSection && <Navbar />}
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/index.php" element={<Home />} />
+            <Route path="/" element={isSubdirectory ? <Projects /> : <Home />} />
+            <Route path="/index.html" element={<Projects />} />
+            <Route path="/index.php" element={isSubdirectory ? <Projects /> : <Home />} />
             <Route path="/aboutus.php" element={<About />} />
             <Route path="/contact-us.php" element={<Contact />} />
             <Route path="/our-team.php" element={<OurTeam />} />
@@ -101,8 +103,11 @@ function GlobalEnquiryModal() {
 }
 
 function App() {
+  const rawBase = import.meta.env.BASE_URL || '/vedamonteza/';
+  const basename = rawBase.length > 1 && rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+
   return (
-    <Router>
+    <Router basename={basename}>
       <EnquiryModalProvider>
         <AppContent />
         <GlobalEnquiryModal />

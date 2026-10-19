@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { useEnquiryModal } from '../context/EnquiryModalContext';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function Navbar() {
   const { openModal } = useEnquiryModal();
@@ -92,7 +93,7 @@ export default function Navbar() {
             className="h-full flex items-center drop-shadow-md hover:opacity-80 transition-opacity duration-300"
           >
             <img 
-              src="/assets/images/logo.png" 
+              src={assetUrl('/assets/images/logo.png')} 
               className="h-full object-contain" 
               alt="Veda Lifespaces" 
               style={{ filter: 'invert(1) brightness(0.2)' }}
@@ -174,7 +175,7 @@ export default function Navbar() {
           className="pointer-events-auto h-6 drop-shadow-md z-[10000]"
         >
           <img 
-            src="/assets/images/logo.png" 
+            src={assetUrl('/assets/images/logo.png')} 
             className="h-full object-contain" 
             alt="Veda" 
             style={{ filter: isHome ? 'none' : 'invert(1) hue-rotate(180deg) brightness(1.2)' }}

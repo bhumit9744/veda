@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { assetUrl } from '../../utils/assetUrl';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const amenitiesList = [
@@ -158,11 +160,14 @@ export default function AmenitiesSection() {
       
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <img 
-          src="/club-house.png" 
-          alt="Veda Life Spaces - Clubhouse"
-          className="amenities-bg w-full h-[110%] object-cover absolute top-[-5%] left-0"
-        />
+        <picture>
+          <source media="(max-width: 767px)" srcSet={assetUrl('/club-house-mobile.png')} />
+          <img 
+            src={assetUrl('/club-house.png')} 
+            alt="Veda Life Spaces - Clubhouse"
+            className="amenities-bg w-full h-[110%] object-cover absolute top-[-5%] left-0"
+          />
+        </picture>
         {/* Subtle, carefully controlled overlay to ensure typography remains readable */}
         <div className="absolute inset-0 bg-black/30"></div>
         {/* Soft gradient from left so text is crisp and editorial */}
@@ -205,7 +210,7 @@ export default function AmenitiesSection() {
             <div key={idx} className="w-[80vw] sm:w-[60vw] md:w-[40vw] lg:w-[25vw] aspect-[4/5] md:aspect-square lg:aspect-[3/4] bg-white/5 backdrop-blur-md rounded-sm overflow-hidden border border-white/10 relative flex flex-col group shadow-2xl">
               <div className="absolute inset-0 w-full h-full overflow-hidden">
                 <img 
-                  src={item.image} 
+                  src={assetUrl(item.image)} 
                   alt={item.title} 
                   className="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105" 
                   style={{

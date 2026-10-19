@@ -2,6 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { assetUrl } from '../../utils/assetUrl';
+
 gsap.registerPlugin(ScrollTrigger);
 
 export default function LandShowcaseSection() {
@@ -66,11 +68,15 @@ export default function LandShowcaseSection() {
     >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <img 
-          src="/Plots.png" 
-          alt="Veda Life Spaces - 4 Acres - 42 Branded Villa Plots"
-          className="land-bg w-full h-[120%] object-cover absolute top-[-10%] left-0"
-        />
+        <picture className="w-full h-full">
+          <source media="(max-width: 767px)" srcSet={assetUrl('/Plots-mobile.png')} />
+          <source media="(min-width: 768px)" srcSet={assetUrl('/Plots.png')} />
+          <img 
+            src={assetUrl('/Plots.png')} 
+            alt="Veda Life Spaces - 4 Acres - 42 Branded Villa Plots"
+            className="land-bg w-full h-[120%] object-cover absolute top-[-10%] left-0"
+          />
+        </picture>
         {/* Subtle, carefully controlled overlay to ensure aerial plots and landscape remain vivid */}
         <div className="absolute inset-0 bg-black/25"></div>
         {/* Soft gradient from left for crisp, legible typography */}

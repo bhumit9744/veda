@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function OurTeam() {
   const teamMembers = [
@@ -103,7 +104,7 @@ export default function OurTeam() {
                   className="w-full h-full"
                 >
                   <img 
-                    src={member.image} 
+                    src={assetUrl(member.image)} 
                     alt={member.name} 
                     className="w-full h-full object-cover object-top" 
                   />

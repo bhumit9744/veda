@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { assetUrl } from '../utils/assetUrl';
 
 export default function ThankYou() {
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ export default function ThankYou() {
     <div className="w-full font-sans bg-[#0f365eeb] h-screen flex items-center justify-center text-white">
       <div className="container mx-auto px-4 text-center">
         <div className="flex justify-center mb-6">
-          <img src="/assets/images/logo.png" alt="Veda Life Spaces" draggable="false" className="max-w-[200px]" />
+          <img src={assetUrl('/assets/images/logo.png')} alt="Veda Life Spaces" draggable="false" className="max-w-[200px]" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold uppercase mb-4 text-[#b89a6b]">Thank you !</h1>
         <p className="text-xl md:text-2xl mb-8">We have received your enquiry. Our team will get back to you soon.</p>

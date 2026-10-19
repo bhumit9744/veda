@@ -182,28 +182,28 @@ export default function EnquirySection() {
   };
 
   return (
-    <section id="enquiry-section" ref={sectionRef} className="w-full bg-[#F4F1E8] py-24 md:py-32 relative z-20 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+    <section id="enquiry-section" ref={sectionRef} className="w-full bg-[#F4F1E8] pt-12 pb-14 sm:pt-16 sm:pb-20 md:py-24 lg:py-28 relative z-20 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-24 items-start lg:items-center">
           
           {/* Text Column */}
           <div className="flex flex-col justify-center">
-            <div className="enq-fade flex items-center gap-4 mb-6 md:mb-8">
+            <div className="enq-fade flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4 md:mb-6">
               <span className="font-veda-sans text-xs tracking-[0.2em] uppercase text-[#666]">
                 YOUR NEXT CHAPTER BEGINS HERE
               </span>
               <div className="h-px w-12 bg-[#b89a6b]/50"></div>
             </div>
             
-            <h2 className="enq-fade font-veda-serif text-4xl md:text-5xl lg:text-6xl text-[#2d2d2d] leading-[1.1] tracking-tight mb-8">
+            <h2 className="enq-fade font-veda-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-[#2d2d2d] leading-[1.15] tracking-tight mb-4 sm:mb-6">
               Your Privileged<br className="hidden md:block"/> Address Awaits.
             </h2>
             
-            <p className="enq-fade font-veda-sans text-base md:text-lg text-[#555] leading-relaxed font-light mb-8 max-w-md">
+            <p className="enq-fade font-veda-sans text-sm sm:text-base md:text-lg text-[#555] leading-relaxed font-light mb-6 md:mb-8 max-w-md">
               Discover branded villa plots created for a privileged way of life, where ownership becomes the beginning of a lasting legacy.
             </p>
 
-            <div className="enq-fade mb-10">
+            <div className="enq-fade mb-6 sm:mb-8 lg:mb-10">
               <EnquireButton text="ENQUIRE NOW" variant="primary" />
             </div>
             
@@ -213,7 +213,7 @@ export default function EnquirySection() {
 
           {/* Form Column */}
           <div className="flex flex-col justify-center">
-            <div className="enq-fade bg-white/40 p-8 md:p-12 rounded-sm border border-[#2d2d2d]/5 backdrop-blur-sm shadow-sm">
+            <div className="enq-fade bg-white/60 sm:bg-white/40 p-5 sm:p-8 md:p-12 rounded-xl sm:rounded-sm border border-[#2d2d2d]/10 sm:border-[#2d2d2d]/5 backdrop-blur-sm shadow-sm w-full">
               {isSubmitted ? (
                 <div className="flex flex-col items-center justify-center text-center py-8">
                   <div className="w-14 h-14 rounded-full border border-[#b89a6b] flex items-center justify-center mb-5 text-[#b89a6b]">
@@ -245,7 +245,7 @@ export default function EnquirySection() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6 md:gap-8">
+                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5 sm:gap-6 md:gap-8 w-full">
                   
                   {/* Full Name */}
                   <div className="flex flex-col gap-1.5 relative">
@@ -359,7 +359,7 @@ export default function EnquirySection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="group mt-4 bg-[#1a1a1a] text-[#F8F7F4] hover:bg-[#2a2a2a] px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-medium flex items-center justify-between transition-all duration-300 w-full sm:w-auto self-start shadow-sm disabled:opacity-70 cursor-pointer"
+                    className="group mt-2 sm:mt-4 bg-[#1a1a1a] text-[#F8F7F4] hover:bg-[#2a2a2a] px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-xs tracking-[0.14em] uppercase font-medium flex items-center justify-between transition-all duration-300 w-full sm:w-auto self-start shadow-sm disabled:opacity-70 cursor-pointer min-h-[48px]"
                   >
                     <span>{isSubmitting ? 'PREPARING WHATSAPP...' : 'SCHEDULE YOUR VISIT'}</span>
                     <span className="transition-transform duration-300 group-hover:translate-x-1">↗</span>

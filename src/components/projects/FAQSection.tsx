@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEnquiryModal } from '../../context/EnquiryModalContext';
+import { assetUrl } from '../../utils/assetUrl';
 
 interface FAQItem {
   id: string;
@@ -279,7 +280,7 @@ export default function FAQSection() {
               {/* Supporting Villa Image */}
               <div className="relative w-full aspect-[16/10] sm:aspect-[16/11] rounded-sm overflow-hidden mb-5 bg-[#ede8dc]">
                 <img
-                  src="/villa 1.png"
+                  src={assetUrl('/villa 1.png')}
                   alt="Veda Life Spaces European Villa Architecture"
                   className="w-full h-full object-cover select-none"
                   loading="lazy"

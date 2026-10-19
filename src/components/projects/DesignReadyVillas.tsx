@@ -2,12 +2,35 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import { assetUrl } from '../../utils/assetUrl';
+
 gsap.registerPlugin(ScrollTrigger);
 
 const villas = [
-  { id: '01', title: 'VILLA CLASSIC', image: '/villa 1 cutout.png' },
-  { id: '02', title: 'VILLA GRANDE', image: '/villa 2 cutout.png' },
-  { id: '03', title: 'VILLA ROYALE', image: '/villa 3 cutout.png' },
+  {
+    id: '01',
+    title: 'VILLA CLASSIC',
+    subtitle: 'Proposed Villa Design',
+    plotSize: 'Plot Size (1,500–1,800 sq. ft.)',
+    image: '/villa 1 cutout.png',
+    textClass: 'villa-a-text',
+  },
+  {
+    id: '02',
+    title: 'VILLA ROYALE',
+    subtitle: 'Proposed Villa Design',
+    plotSize: 'Plot Size (1,900–2,300 sq. ft.)',
+    image: '/villa 3 cutout.png',
+    textClass: 'villa-b-text',
+  },
+  {
+    id: '03',
+    title: 'VILLA GRANDE',
+    subtitle: 'Proposed Villa Design',
+    plotSize: 'Plot Size (2,300–5,000 sq. ft.)',
+    image: '/villa 2 cutout.png',
+    textClass: 'villa-c-text',
+  },
 ];
 
 export default function DesignReadyVillas() {
@@ -509,57 +532,24 @@ export default function DesignReadyVillas() {
          {villas.map((villa, i) => {
            return (
              <div 
-               key={i} 
+               key={villa.id} 
                className={`villa-card-${i} absolute w-[85vw] md:w-[60vw] max-w-[900px] aspect-video flex flex-col`}
              >
-               {/* Typography for Villa Classic (i === 0) */}
-               {i === 0 && (
-                 <div className="villa-a-text absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
-                     Proposed Villa Design
-                   </p>
-                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
-                     VILLA CLASSIC
-                   </h2>
-                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
-                     Plot Size (1,500–1,800 sq. ft.)
-                   </p>
-                 </div>
-               )}
-
-               {/* Typography for Villa Grande (i === 1) */}
-               {i === 1 && (
-                 <div className="villa-b-text absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
-                     Proposed Villa Design
-                   </p>
-                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
-                     VILLA GRANDE
-                   </h2>
-                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
-                     Plot Size (2,300–5,000 sq. ft.)
-                   </p>
-                 </div>
-               )}
-
-               {/* Typography for Villa Royale (i === 2) */}
-               {i === 2 && (
-                 <div className="villa-c-text absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4">
-                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
-                     Proposed Villa Design
-                   </p>
-                   <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
-                     VILLA ROYALE
-                   </h2>
-                   <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
-                     Plot Size (1,900–2,300 sq. ft.)
-                   </p>
-                 </div>
-               )}
+               <div className={`${villa.textClass} absolute -top-32 md:-top-40 lg:-top-44 left-0 w-full flex flex-col items-center text-center pointer-events-none pt-2 md:pt-4`}>
+                 <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider mb-1">
+                   {villa.subtitle}
+                 </p>
+                 <h2 className="font-codec text-3xl md:text-4xl lg:text-5xl text-[#2d2d2d] mb-1.5 font-normal tracking-tight uppercase">
+                   {villa.title}
+                 </h2>
+                 <p className="font-codec text-xs md:text-sm text-[#666] font-normal tracking-wider">
+                   {villa.plotSize}
+                 </p>
+               </div>
 
                <div className="relative w-full h-full flex items-center justify-center">
                  <img 
-                   src={villa.image} 
+                   src={assetUrl(villa.image)} 
                    alt={villa.title} 
                    className="w-full h-full object-contain" 
                  />

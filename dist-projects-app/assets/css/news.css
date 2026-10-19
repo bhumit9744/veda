@@ -1,0 +1,370 @@
+
+/* ─── PAGE WRAPPER (remove this when embedding into site) ─── */
+body {
+  margin: 0;
+  background: #f0ece4;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ════════════════════════════════════════════
+   NEWS & REWARDS SECTION — START HERE
+════════════════════════════════════════════ */
+
+.veda-news-section {
+  background: #f0ece4;
+  padding: 200px 60px 100px;
+  font-family: 'Montserrat', sans-serif;
+  width: 100%;
+  float: left;
+}
+
+/* ─── SECTION HEADING ─── */
+.veda-news-section .section-heading {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.veda-news-section .section-heading h2 {
+  font-family: "Montserrat", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: capitalize;
+  color: #B8964E;
+  margin: 0 0 14px 0;
+}
+
+.veda-news-section .section-heading p {
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #7a7060;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* ─── GOLD UNDERLINE (like team page) ─── */
+.veda-news-section .gold-line {
+  width: 40px;
+  height: 2px;
+  background: #B8964E;
+  margin: 16px auto 0;
+}
+
+/* ─── NEWS GRID ─── */
+.veda-news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* ─── INDIVIDUAL CARD ─── */
+.veda-news-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.32s ease, box-shadow 0.32s ease;
+}
+
+.veda-news-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+}
+
+/* ─── THUMBNAIL ─── */
+.veda-news-card .card-thumb {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: #d9d2c5;
+}
+
+.veda-news-card .card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+  filter: brightness(0.95);
+}
+
+.veda-news-card:hover .card-thumb img {
+  transform: scale(1.05);
+}
+
+/* Source badge top-left */
+.veda-news-card .source-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: #B8964E;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  z-index: 2;
+}
+
+/* Overlay on hover */
+.veda-news-card .card-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(184,150,78,0.14);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.veda-news-card:hover .card-thumb::after {
+  opacity: 1;
+}
+
+/* Arrow icon top-right on hover */
+.veda-news-card .card-link-icon {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  background: #B8964E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.28s ease;
+  z-index: 3;
+}
+.veda-news-card:hover .card-link-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+.veda-news-card .card-link-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ─── CARD BODY ─── */
+.veda-news-card .card-body {
+  padding: 24px 28px 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-top: 3px solid #B8964E;
+}
+
+/* Gold rule under thumb — matches team card style */
+.veda-news-card .card-gold-rule {
+  width: 32px;
+  height: 2px;
+  background: #B8964E;
+  margin-bottom: 14px;
+}
+
+.veda-news-card .card-source-name {
+  font-size: 0.62rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #B8964E;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.veda-news-card .card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #1a1714;
+  text-transform: uppercase;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  flex: 1;
+}
+
+.veda-news-card .card-desc {
+  font-size: 0.8rem;
+  color: #6e6556;
+  line-height: 1.75;
+  font-weight: 300;
+  margin-bottom: 20px;
+}
+
+.veda-news-card .card-read {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #B8964E;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: auto;
+  transition: gap 0.2s ease;
+}
+.veda-news-card:hover .card-read {
+  gap: 14px;
+}
+.veda-news-card .card-read svg {
+  width: 14px;
+  height: 14px;
+  stroke: #B8964E;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* ─── AWARDS STRIP (below news cards) ─── */
+.veda-awards-strip {
+  max-width: 1280px;
+  margin: 70px auto 0;
+  border-top: 1px solid rgba(184,150,78,0.3);
+  padding-top: 60px;
+}
+
+.veda-awards-strip .awards-heading {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.veda-awards-strip .awards-heading h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #B8964E;
+  margin: 0 0 10px;
+}
+.veda-awards-strip .awards-heading p {
+  font-size: 0.75rem;
+  color: #7a7060;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.veda-awards-strip .gold-line {
+  width: 40px; height: 2px;
+  background: #B8964E;
+  margin: 14px auto 0;
+}
+
+.veda-awards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid rgba(184,150,78,0.2);
+}
+
+.award-item {
+  padding: 36px 30px;
+  border-right: 1px solid rgba(184,150,78,0.2);
+  transition: background 0.28s ease;
+  position: relative;
+}
+.award-item:last-child { border-right: none; }
+.award-item:hover { background: rgba(184,150,78,0.05); }
+.award-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: #B8964E;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+.award-item:hover::before { transform: scaleX(1); }
+
+.award-item .award-icon {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(184,150,78,0.4);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.award-item .award-icon svg {
+  width: 20px; height: 20px;
+  stroke: #B8964E; fill: none; stroke-width: 1.4;
+}
+
+.award-item .award-year {
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #B8964E;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.award-item .award-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #1a1714;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+.award-item .award-org {
+  font-size: 0.72rem;
+  color: #7a7060;
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+footer {
+    padding: 80px 5% 40px;
+    float: left;
+    width: 100%;
+}
+
+/* ─── MOBILE RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .veda-news-section { padding: 60px 40px 80px; }
+  .veda-news-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .veda-awards-grid { grid-template-columns: repeat(2, 1fr); }
+  .award-item { border-bottom: 1px solid rgba(184,150,78,0.2); }
+  .award-item:nth-child(2) { border-right: none; }
+  .award-item:nth-child(3) { border-right: 1px solid rgba(184,150,78,0.2); }
+  .award-item:nth-child(3),
+  .award-item:nth-child(4) { border-bottom: none; }
+}
+
+@media (max-width: 680px) {
+  .veda-news-section { padding: 100px 20px 70px; }
+
+  .veda-news-section .section-heading h2 { letter-spacing: 0.1em; }
+
+  .veda-news-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .veda-news-section .section-heading h2 {
+    font-size: 22px;
+}
+
+  .veda-news-card .card-body { padding: 20px 22px 24px; }
+
+  .veda-awards-grid {
+    grid-template-columns: 1fr;
+  }
+  .award-item {
+    border-right: none;
+    border-bottom: 1px solid rgba(184,150,78,0.2);
+  }
+  .award-item:last-child { border-bottom: none; }
+
+  .veda-awards-strip { margin-top: 50px; padding-top: 40px; }
+}
+/* ════════════════════════════════════════════
+   NEWS & REWARDS SECTION — END HERE
+════════════════════════════════════════════ */

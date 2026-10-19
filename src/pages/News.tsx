@@ -1,6 +1,7 @@
 import React, { useRef, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { assetUrl } from '../utils/assetUrl';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -286,7 +287,7 @@ export default function News() {
             <div className="w-full lg:w-1/2 order-2 lg:order-1 relative z-10">
               <a href={featured.link} target="_blank" rel="noreferrer" className="group block">
                 <div className="featured-image-container relative aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-sm bg-[#f0f0f0] shadow-sm">
-                  <img src={featured.img} alt={featured.tag} className="parallax-img w-full h-full object-cover transform scale-[1.03] group-hover:scale-100 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)]" />
+                  <img src={assetUrl(featured.img)} alt={featured.tag} className="parallax-img w-full h-full object-cover transform scale-[1.03] group-hover:scale-100 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)]" />
                   <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md border border-black/5 text-[#121212] text-[0.65rem] uppercase font-bold tracking-widest px-5 py-3 rounded-sm shadow-sm transition-transform duration-700 ease-out group-hover:-translate-y-1">
                     Featured
                   </div>
@@ -331,7 +332,7 @@ export default function News() {
             <div className="w-full lg:w-[45%] order-2 lg:order-1 relative z-10">
               <a href={secondary.link} target="_blank" rel="noreferrer" className="group block">
                 <div className="featured-image-container relative aspect-[3/4] md:aspect-[4/3] overflow-hidden rounded-sm bg-[#f0f0f0] shadow-sm">
-                  <img src={secondary.img} alt={secondary.tag} className="parallax-img w-full h-full object-cover transform scale-[1.03] group-hover:scale-100 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)]" />
+                  <img src={assetUrl(secondary.img)} alt={secondary.tag} className="parallax-img w-full h-full object-cover transform scale-[1.03] group-hover:scale-100 transition-transform duration-[1.5s] ease-[cubic-bezier(0.25,1,0.5,1)]" />
                 </div>
               </a>
             </div>
@@ -394,7 +395,7 @@ export default function News() {
                 >
                   <div className="flex flex-col md:flex-row gap-8 items-start md:items-center px-4 relative z-10">
                     <div className="md:w-1/3 w-full relative aspect-video overflow-hidden rounded-sm bg-[#f0f0f0]">
-                      <img src={item.img} alt={item.tag} className="w-full h-full object-cover transform scale-[1.03] group-hover:scale-100 transition-transform duration-[1.5s] ease-out" />
+                      <img src={assetUrl(item.img)} alt={item.tag} className="w-full h-full object-cover transform scale-[1.03] group-hover:scale-100 transition-transform duration-[1.5s] ease-out" />
                     </div>
                     
                     <div className="md:w-2/3 flex flex-col justify-center">

@@ -29,6 +29,8 @@ dist-ssr
 
 # Ignore large video files
 *.mp4
+!public/veda-project-hero.mp4
+!public/veda-project-hero-mobile.mp4
 *.zip
 public/final_frames.zip
 .vercel

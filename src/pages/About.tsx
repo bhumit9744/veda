@@ -2,6 +2,7 @@ import React, { useRef, useLayoutEffect, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { assetUrl } from '../utils/assetUrl';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -255,7 +256,7 @@ export default function About() {
 
             const renderImage = () => (
               <div className={`node-img-wrap-${i} relative overflow-hidden aspect-[4/3] w-full max-w-md lg:max-w-xl rounded-sm mb-6 md:mb-0`} style={{ clipPath: 'inset(0 100% 0 0)' }}>
-                <img src={node.content.img} className={`node-img-${i} w-full h-full object-cover scale-[1.05]`} alt="Veda" />
+                <img src={assetUrl(node.content.img)} className={`node-img-${i} w-full h-full object-cover scale-[1.05]`} alt="Veda" />
               </div>
             );
 
